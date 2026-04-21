@@ -1,10 +1,10 @@
-# Bước 1: Build ứng dụng bằng Maven
-FROM maven:3.8.5-openjdk-17 AS build
+# Bước 1: Build bằng Maven với JDK 21
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Bước 2: Chạy ứng dụng bằng OpenJDK
-FROM openjdk:17.0.1-jdk-slim
+# Bước 2: Chạy bằng OpenJDK 21 bản nhẹ (slim)
+FROM eclipse-temurin:21-jre-jammy
 COPY --from=build /target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
