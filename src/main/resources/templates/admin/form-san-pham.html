@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form sản phẩm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand fw-bold">Admin - Van & Bơm Nước Quy</span>
+    <div>
+        <a href="/admin/san-pham" class="text-white me-3">Sản phẩm</a>
+        <a href="/admin/yeu-cau" class="text-white me-3">Yêu cầu</a>
+        <a href="/logout" class="text-white">Đăng xuất</a>
+    </div>
+</nav>
+
+<div class="container mt-4" style="max-width: 600px;">
+    <h2 class="mb-4" th:text="${sp.id == null} ? 'Thêm sản phẩm' : 'Sửa sản phẩm'"></h2>
+
+    <form th:action="@{/admin/san-pham/luu}" method="post"
+          th:object="${sp}" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="mb-3">
+            <label class="form-label">Tên sản phẩm *</label>
+            <input type="text" th:field="*{ten}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Danh mục</label>
+            <select th:field="*{danhMuc}" class="form-select">
+                <option value="Van cổng">Van cổng</option>
+                <option value="Van bi">Van bi</option>
+                <option value="Van bướm">Van bướm</option>
+                <option value="Bơm nước">Bơm nước</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mô tả</label>
+            <textarea th:field="*{moTa}" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Giá (để trống nếu thương lượng)</label>
+            <input type="number" th:field="*{gia}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Hình ảnh</label>
+            <input type="file" name="hinhAnhFile" class="form-control" accept="image/*">
+            <img th:if="${sp.hinhAnh != null and sp.hinhAnh != ''}"
+                 th:src="@{/uploads/{file}(file=${sp.hinhAnh})}"
+                 class="mt-2 img-thumbnail" style="max-width:200px;">
+        </div>
+        <button type="submit" class="btn btn-dark w-100">Lưu sản phẩm</button>
+        <a href="/admin/san-pham" class="btn btn-outline-secondary w-100 mt-2">Hủy</a>
+    </form>
+</div>
+
+</body>
+</html>

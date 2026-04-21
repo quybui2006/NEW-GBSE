@@ -1,0 +1,137 @@
+package demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import demo.model.SanPham;
+import demo.model.YeuCau;
+import demo.repository.SanPhamRepository;
+import demo.repository.YeuCauRepository;
+import demo.service.EmailService;
+import demo.service.FileUploadService;
+
+@Controller
+public class SanPhamController {
+
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
+
+    @Autowired
+    private YeuCauRepository yeuCauRepository;
+
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @GetMapping("/")
+    public String trangChu() {
+        return "index";
+    }
+
+    @GetMapping("/san-pham")
+    public String danhSachSanPham(@RequestParam(required = false) String keyword, Model model) {
+        List<SanPham> danhSach;
+        if (keyword != null && !keyword.isEmpty()) {
+            danhSach = sanPhamRepository.timKiem(keyword);
+            model.addAttribute("keyword", keyword);
+        } else {
+            danhSach = sanPhamRepository.findAll();
+        }
+        model.addAttribute("danhSach", danhSach);
+        return "san-pham";
+    }
+
+    @GetMapping("/lien-he")
+    public String trangLienHe() {
+        return "lien-he";
+    }
+
+    @GetMapping("/san-pham/{id}")
+    public String chiTietSanPham(@PathVariable Long id, Model model) {
+        SanPham sp = sanPhamRepository.findById(id).orElse(null);
+        model.addAttribute("sp", sp);
+        return "chi-tiet-san-pham";
+    }
+
+    @GetMapping("/login")
+    public String trangLogin() {
+        return "login";
+    }
+
+    @PostMapping("/lien-he")
+    public String guiYeuCau(@ModelAttribute YeuCau yeuCau, Model model) {
+        yeuCauRepository.save(yeuCau);
+        try {
+            emailService.guiThongBao(yeuCau);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("thanhCong", true);
+        return "lien-he";
+    }
+
+    @GetMapping("/admin")
+    public String adminDashboard(Model model) {
+        model.addAttribute("tongSanPham", sanPhamRepository.count());
+        model.addAttribute("tongYeuCau", yeuCauRepository.count());
+        model.addAttribute("yeuCauMoi", yeuCauRepository.findAll());
+        return "admin/index";
+    }
+
+    @GetMapping("/admin/yeu-cau")
+    public String danhSachYeuCau(Model model) {
+        model.addAttribute("danhSachYeuCau", yeuCauRepository.findAll());
+        return "admin/yeu-cau";
+    }
+
+    @GetMapping("/admin/san-pham")
+    public String adminDanhSachSanPham(Model model) {
+        model.addAttribute("danhSach", sanPhamRepository.findAll());
+        return "admin/san-pham";
+    }
+
+    @GetMapping("/admin/san-pham/them")
+    public String adminThemSanPham(Model model) {
+        model.addAttribute("sp", new SanPham());
+        return "admin/form-san-pham";
+    }
+
+    @GetMapping("/admin/san-pham/sua/{id}")
+    public String adminSuaSanPham(@PathVariable Long id, Model model) {
+        SanPham sp = sanPhamRepository.findById(id).orElse(null);
+        model.addAttribute("sp", sp);
+        return "admin/form-san-pham";
+    }
+
+    @PostMapping("/admin/san-pham/luu")
+    public String adminLuuSanPham(@ModelAttribute SanPham sp,
+            @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile) {
+        try {
+            if (!hinhAnhFile.isEmpty()) {
+                String tenFile = fileUploadService.luuFile(hinhAnhFile);
+                sp.setHinhAnh(tenFile);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        sanPhamRepository.save(sp);
+        return "redirect:/admin/san-pham";
+    }
+
+    @GetMapping("/admin/san-pham/xoa/{id}")
+    public String adminXoaSanPham(@PathVariable Long id) {
+        sanPhamRepository.deleteById(id);
+        return "redirect:/admin/san-pham";
+    }
+}
