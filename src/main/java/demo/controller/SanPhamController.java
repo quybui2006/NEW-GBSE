@@ -71,14 +71,9 @@ public class SanPhamController {
 
     @PostMapping("/lien-he")
     public String guiYeuCau(@ModelAttribute YeuCau yeuCau, Model model) {
-        yeuCauRepository.save(yeuCau);
-        try {
-            emailService.guiThongBao(yeuCau);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("thanhCong", true);
-        return "lien-he";
+    yeuCauRepository.save(yeuCau);
+    model.addAttribute("thanhCong", true);
+    return "lien-he";
     }
 
     @GetMapping("/admin")
