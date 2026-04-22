@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên hệ - Van & Bơm Nước Quy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* CSS để tạo dấu sao đỏ */
+        .required-label::after {
+            content: " *";
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
@@ -28,25 +36,30 @@
 
             <form action="/lien-he" method="post">
                 <div class="mb-3">
-                    <label class="form-label">Họ tên *</label>
-                    <input type="text" name="hoTen" class="form-control" required>
+                    <label class="form-label required-label">Họ tên</label>
+                    <input type="text" name="hoTen" class="form-control" placeholder="Nhập họ và tên" required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Số điện thoại *</label>
-                    <input type="text" name="soDienThoai" class="form-control" required>
+                    <label class="form-label required-label">Số điện thoại</label>
+                    <input type="tel" name="soDienThoai" class="form-control" placeholder="Nhập số điện thoại" required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control">
+                    <label class="form-label required-label">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="email@vi-du.com" required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Sản phẩm quan tâm</label>
-                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van bi DN25, Bơm ly tâm...">
+                    <label class="form-label required-label">Sản phẩm quan tâm</label>
+                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van bi DN25, Bơm ly tâm..." required>
                 </div>
+
                 <div class="mb-3">
-                    <label class="form-label">Nội dung yêu cầu</label>
-                    <textarea name="noiDung" class="form-control" rows="4"></textarea>
+                    <label class="form-label">Nội dung yêu cầu (Ghi chú)</label>
+                    <textarea name="noiDung" class="form-control" rows="4" placeholder="Nhập thêm chi tiết nếu có..."></textarea>
                 </div>
+
                 <button type="submit" class="btn btn-dark w-100">Gửi yêu cầu</button>
             </form>
         </div>
