@@ -6,11 +6,34 @@
     <title>Liên hệ - Van & Bơm Nước Quy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* CSS để tạo dấu sao đỏ */
+        /* Dấu sao đỏ sau nhãn */
         .required-label::after {
             content: " *";
-            color: red;
+            color: #dc3545;
             font-weight: bold;
+        }
+
+        /* Viền đỏ cho các ô bắt buộc ngay từ đầu */
+        input[required] {
+            border: 1px solid #ffc1cc;
+        }
+
+        /* CHỈ bôi đỏ đậm khi ô đó bị trống/sai sau khi nhấn Gửi */
+        /* Loại bỏ mọi hiệu ứng màu xanh của Bootstrap */
+        .was-validated .form-control:invalid {
+            border-color: #dc3545 !important;
+            background-image: none !important; /* Bỏ icon dấu X của Bootstrap */
+        }
+
+        .was-validated .form-control:valid {
+            border-color: #dee2e6 !important; /* Giữ màu viền xám bình thường khi đã điền đúng */
+            background-image: none !important; /* Bỏ icon tích xanh của Bootstrap */
+            box-shadow: none !important;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.85rem;
         }
     </style>
 </head>
@@ -34,33 +57,38 @@
                 Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất có thể.
             </div>
 
-            <form action="/lien-he" method="post">
+            <form action="/lien-he" method="post" class="needs-validation" novalidate>
+                
                 <div class="mb-3">
                     <label class="form-label required-label">Họ tên</label>
                     <input type="text" name="hoTen" class="form-control" placeholder="Nhập họ và tên" required>
+                    <div class="invalid-feedback">Vui lòng nhập họ tên.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Số điện thoại</label>
                     <input type="tel" name="soDienThoai" class="form-control" placeholder="Nhập số điện thoại" required>
+                    <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Email</label>
                     <input type="email" name="email" class="form-control" placeholder="email@vi-du.com" required>
+                    <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Sản phẩm quan tâm</label>
-                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van bi DN25, Bơm ly tâm..." required>
+                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van cổng DN50..." required>
+                    <div class="invalid-feedback">Vui lòng nhập sản phẩm cần báo giá.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Nội dung yêu cầu (Ghi chú)</label>
-                    <textarea name="noiDung" class="form-control" rows="4" placeholder="Nhập thêm chi tiết nếu có..."></textarea>
+                    <textarea name="noiDung" class="form-control" rows="4" placeholder="Ghi chú thêm (không bắt buộc)"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100">Gửi yêu cầu</button>
+                <button type="submit" class="btn btn-dark w-100 py-2">GỬI YÊU CẦU</button>
             </form>
         </div>
     </div>
@@ -69,6 +97,22 @@
 <footer class="bg-dark text-white text-center py-3 mt-5">
     <small>© 2026 Van & Bơm Nước Quy. All rights reserved.</small>
 </footer>
+
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
 
 </body>
 </html>
