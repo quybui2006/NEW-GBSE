@@ -6,28 +6,28 @@
     <title>Liên hệ - Van & Bơm Nước Quy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Dấu sao đỏ sau nhãn */
+        /* Dấu sao đỏ sau nhãn để khách biết đây là mục cần điền */
         .required-label::after {
             content: " *";
             color: #dc3545;
             font-weight: bold;
         }
 
-        /* Viền đỏ cho các ô bắt buộc ngay từ đầu */
-        input[required] {
-            border: 1px solid #ffc1cc;
+        /* Khi mới bật lên: Các ô bắt buộc có viền xám bình thường */
+        .form-control {
+            border: 1px solid #dee2e6;
         }
 
-        /* CHỈ bôi đỏ đậm khi ô đó bị trống/sai sau khi nhấn Gửi */
-        /* Loại bỏ mọi hiệu ứng màu xanh của Bootstrap */
+        /* CHỈ khi nhấn nút Gửi (was-validated), ô nào thiếu mới bôi đỏ */
         .was-validated .form-control:invalid {
             border-color: #dc3545 !important;
-            background-image: none !important; /* Bỏ icon dấu X của Bootstrap */
+            background-image: none !important; /* Tắt icon X của Bootstrap */
         }
 
+        /* Ô điền đúng thì giữ nguyên viền xám, không hiện màu xanh */
         .was-validated .form-control:valid {
-            border-color: #dee2e6 !important; /* Giữ màu viền xám bình thường khi đã điền đúng */
-            background-image: none !important; /* Bỏ icon tích xanh của Bootstrap */
+            border-color: #dee2e6 !important;
+            background-image: none !important; /* Tắt icon tích xanh của Bootstrap */
             box-shadow: none !important;
         }
 
@@ -62,33 +62,33 @@
                 <div class="mb-3">
                     <label class="form-label required-label">Họ tên</label>
                     <input type="text" name="hoTen" class="form-control" placeholder="Nhập họ và tên" required>
-                    <div class="invalid-feedback">Vui lòng nhập họ tên.</div>
+                    <div class="invalid-feedback">Vui lòng cho biết tên của bạn.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Số điện thoại</label>
                     <input type="tel" name="soDienThoai" class="form-control" placeholder="Nhập số điện thoại" required>
-                    <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
+                    <div class="invalid-feedback">Vui lòng nhập số điện thoại để báo giá.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Email</label>
                     <input type="email" name="email" class="form-control" placeholder="email@vi-du.com" required>
-                    <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label required-label">Sản phẩm quan tâm</label>
-                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van cổng DN50..." required>
-                    <div class="invalid-feedback">Vui lòng nhập sản phẩm cần báo giá.</div>
+                    <input type="text" name="sanPhamQuanTam" class="form-control" placeholder="Ví dụ: Van cổng DN50, Bơm ly tâm..." required>
+                    <div class="invalid-feedback">Hãy nhập tên sản phẩm bạn đang cần.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Nội dung yêu cầu (Ghi chú)</label>
-                    <textarea name="noiDung" class="form-control" rows="4" placeholder="Ghi chú thêm (không bắt buộc)"></textarea>
+                    <textarea name="noiDung" class="form-control" rows="4" placeholder="Ghi chú thêm về số lượng, địa điểm... (không bắt buộc)"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100 py-2">GỬI YÊU CẦU</button>
+                <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">GỬI YÊU CẦU</button>
             </form>
         </div>
     </div>
