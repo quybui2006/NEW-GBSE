@@ -49,8 +49,8 @@
 </div>
 
 <div class="container mt-4">
-    <h5 class="mb-4" th:if="${keyword}" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></h5>
-    <h5 class="mb-4" th:if="${!keyword}">Danh sách sản phẩm</h5>
+    <h5 class="mb-4" th:if="${keyword != null and keyword != ''}" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></h5>
+    <h5 class="mb-4" th:if="${keyword == null or keyword == ''}">Danh sách sản phẩm</h5>
 
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div class="col" th:each="sp : ${danhSach}">
@@ -78,11 +78,14 @@
 </footer>
 
 <script th:inline="javascript">
-    const danhSach = /*[[${danhSach}]]*/ [];
+    /* Lọc lấy các trường cần thiết để tránh lỗi Serialization (vòng lặp hoặc Lazy loading JPA) 
+    */
+    const danhSach = /*[[${danhSach.![{'ten': ten, 'danhMuc': danhMuc}]}]]*/ [];
     const input = document.getElementById('searchInput');
     const suggestBox = document.getElementById('suggestBox');
 
     function removeAccents(str) {
+        if (!str) return '';
         return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     }
 
@@ -104,12 +107,16 @@
             return;
         }
 
-        suggestBox.innerHTML = matches.map(sp => `
-            <div class="suggest-item" onclick="chonGợiY('${sp.ten.replace(/'/g, "\\'")}')">
-                <span class="me-2">🔍</span>${sp.ten}
-                <small class="text-muted ms-2">${sp.danhMuc}</small>
-            </div>
-        `).join('');
+        suggestBox.innerHTML = matches.map(sp => {
+            // Xử lý dấu nháy đơn để tránh lỗi cú pháp JS khi click
+            const safeTen = sp.ten.replace(/'/g, "\\'");
+            return `
+                <div class="suggest-item" onclick="chonGợiY('${safeTen}')">
+                    <span class="me-2">🔍</span>${sp.ten}
+                    <small class="text-muted ms-2">${sp.danhMuc}</small>
+                </div>
+            `;
+        }).join('');
         suggestBox.classList.add('show');
     });
 
