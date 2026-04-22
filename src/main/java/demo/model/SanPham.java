@@ -15,16 +15,16 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "nvarchar(255)")
+@Column(columnDefinition = "varchar(255)")
 private String ten;
 
-@Column(columnDefinition = "nvarchar(500)")
+@Column(columnDefinition = "varchar(500)")
 private String moTa;
 
-@Column(columnDefinition = "nvarchar(255)")
+@Column(columnDefinition = "varchar(255)")
 private String hinhAnh;
 
-@Column(columnDefinition = "nvarchar(100)")
+@Column(columnDefinition = "varchar(100)")
 private String danhMuc;
     private Double gia;
 

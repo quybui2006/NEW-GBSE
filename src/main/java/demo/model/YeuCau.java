@@ -18,20 +18,20 @@ public class YeuCau {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "nvarchar(255)")
-    private String hoTen;
+@Column(columnDefinition = "varchar(255)")
+private String hoTen;
 
-    @Column(columnDefinition = "nvarchar(20)")
-    private String soDienThoai;
+@Column(columnDefinition = "varchar(20)")
+private String soDienThoai;
 
-    @Column(columnDefinition = "nvarchar(255)")
-    private String email;
+@Column(columnDefinition = "varchar(255)")
+private String email;
 
-    @Column(columnDefinition = "nvarchar(255)")
-    private String sanPhamQuanTam;
+@Column(columnDefinition = "varchar(255)")
+private String sanPhamQuanTam;
 
-    @Column(columnDefinition = "nvarchar(1000)")
-    private String noiDung;
+@Column(columnDefinition = "varchar(1000)")
+private String noiDung;
 
     private LocalDateTime thoiGian;
 
