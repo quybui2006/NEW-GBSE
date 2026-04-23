@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import demo.config.VisitCounterFilter;
 import demo.model.SanPham;
 import demo.model.VisitLog;
 import demo.model.YeuCau;
@@ -27,6 +25,7 @@ import demo.repository.SanPhamRepository;
 import demo.repository.VisitLogRepository;
 import demo.repository.YeuCauRepository;
 import demo.service.FileUploadService;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class SanPhamController {
@@ -134,19 +133,24 @@ public class SanPhamController {
         long tongSanPham = sanPhamRepository.count();
         
         // Đếm yêu cầu trong khoảng thời gian
-        long tongYeuCauTrongKhoang = allYeuCau.stream()
-            .filter(yc -> yc.getThoiGian() != null 
+        long tongYeuCauTrongKhoang = 0;
+        for (YeuCau yc : allYeuCau) {
+            if (yc.getThoiGian() != null 
                 && !yc.getThoiGian().isBefore(startDateTime) 
-                && yc.getThoiGian().isBefore(endDateTime))
-            .count();
+                && yc.getThoiGian().isBefore(endDateTime)) {
+                tongYeuCauTrongKhoang++;
+            }
+        }
         
         // Đếm lượt truy cập trong khoảng thời gian
-        long tongTruyCapTrongKhoang = allVisitLogs.stream()
-            .filter(vl -> vl.getVisitDate() != null
+        long tongTruyCapTrongKhoang = 0;
+        for (VisitLog vl : allVisitLogs) {
+            if (vl.getVisitDate() != null
                 && !vl.getVisitDate().isBefore(fromDate)
-                && !vl.getVisitDate().isAfter(toDate))
-            .mapToInt(VisitLog::getVisitCount)
-            .sum();
+                && !vl.getVisitDate().isAfter(toDate)) {
+                tongTruyCapTrongKhoang += vl.getVisitCount();
+            }
+        }
         
         // Tạo labels và data cho biểu đồ
         List<String> chartLabels = new ArrayList<>();
@@ -159,23 +163,28 @@ public class SanPhamController {
             chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
             
             // Đếm yêu cầu trong ngày
-            final LocalDate dateForRequest = currentDate;
+            LocalDate dateForRequest = currentDate;
             LocalDateTime startOfDay = dateForRequest.atStartOfDay();
             LocalDateTime endOfDay = dateForRequest.plusDays(1).atStartOfDay();
             
-            long requestCount = allYeuCau.stream()
-                .filter(yc -> yc.getThoiGian() != null 
+            long requestCount = 0;
+            for (YeuCau yc : allYeuCau) {
+                if (yc.getThoiGian() != null 
                     && !yc.getThoiGian().isBefore(startOfDay) 
-                    && yc.getThoiGian().isBefore(endOfDay))
-                .count();
+                    && yc.getThoiGian().isBefore(endOfDay)) {
+                    requestCount++;
+                }
+            }
             chartRequestData.add((int) requestCount);
             
             // Đếm lượt truy cập trong ngày
-            final LocalDate dateForVisit = currentDate;
-            int visitCount = allVisitLogs.stream()
-                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(dateForVisit))
-                .mapToInt(VisitLog::getVisitCount)
-                .sum();
+            LocalDate dateForVisit = currentDate;
+            int visitCount = 0;
+            for (VisitLog vl : allVisitLogs) {
+                if (vl.getVisitDate() != null && vl.getVisitDate().equals(dateForVisit)) {
+                    visitCount += vl.getVisitCount();
+                }
+            }
             chartAccessData.add(visitCount);
             
             currentDate = currentDate.plusDays(1);
