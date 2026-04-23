@@ -159,8 +159,9 @@ public class SanPhamController {
             chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
             
             // Đếm yêu cầu trong ngày
-            LocalDateTime startOfDay = currentDate.atStartOfDay();
-            LocalDateTime endOfDay = currentDate.plusDays(1).atStartOfDay();
+            final LocalDate dateForRequest = currentDate;
+            LocalDateTime startOfDay = dateForRequest.atStartOfDay();
+            LocalDateTime endOfDay = dateForRequest.plusDays(1).atStartOfDay();
             
             long requestCount = allYeuCau.stream()
                 .filter(yc -> yc.getThoiGian() != null 
@@ -170,9 +171,9 @@ public class SanPhamController {
             chartRequestData.add((int) requestCount);
             
             // Đếm lượt truy cập trong ngày
-            LocalDate finalCurrentDate = currentDate;
+            final LocalDate dateForVisit = currentDate;
             int visitCount = allVisitLogs.stream()
-                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(finalCurrentDate))
+                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(dateForVisit))
                 .mapToInt(VisitLog::getVisitCount)
                 .sum();
             chartAccessData.add(visitCount);
