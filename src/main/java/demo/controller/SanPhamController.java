@@ -21,8 +21,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import demo.config.VisitCounterFilter;
 import demo.model.SanPham;
+import demo.model.VisitLog;
 import demo.model.YeuCau;
 import demo.repository.SanPhamRepository;
+import demo.repository.VisitLogRepository;
 import demo.repository.YeuCauRepository;
 import demo.service.FileUploadService;
 
@@ -34,6 +36,9 @@ public class SanPhamController {
 
     @Autowired
     private YeuCauRepository yeuCauRepository;
+    
+    @Autowired
+    private VisitLogRepository visitLogRepository;
 
     @Autowired
     private FileUploadService fileUploadService;
@@ -84,13 +89,8 @@ public class SanPhamController {
     public String adminDashboard(@RequestParam(required = false) String from,
                                  @RequestParam(required = false) String to,
                                  Model model) {
-        // Tổng số (không filter)
-        model.addAttribute("tongSanPham", sanPhamRepository.count());
-        model.addAttribute("tongYeuCau", yeuCauRepository.count());
-        model.addAttribute("yeuCauMoi", yeuCauRepository.findAll());
-        model.addAttribute("luotTruyCap", VisitCounterFilter.totalVisits.get());
         
-        // Xử lý dữ liệu cho biểu đồ
+        // Xử lý date range
         LocalDate fromDate = null;
         LocalDate toDate = null;
         
@@ -122,13 +122,36 @@ public class SanPhamController {
             toDate = temp;
         }
         
+        // Lấy tất cả dữ liệu
+        List<YeuCau> allYeuCau = yeuCauRepository.findAll();
+        List<VisitLog> allVisitLogs = visitLogRepository.findAll();
+        
+        // Tính toán dữ liệu trong khoảng thời gian
+        LocalDateTime startDateTime = fromDate.atStartOfDay();
+        LocalDateTime endDateTime = toDate.plusDays(1).atStartOfDay();
+        
+        // Tổng sản phẩm (không phụ thuộc thời gian)
+        long tongSanPham = sanPhamRepository.count();
+        
+        // Đếm yêu cầu trong khoảng thời gian
+        long tongYeuCauTrongKhoang = allYeuCau.stream()
+            .filter(yc -> yc.getThoiGian() != null 
+                && !yc.getThoiGian().isBefore(startDateTime) 
+                && yc.getThoiGian().isBefore(endDateTime))
+            .count();
+        
+        // Đếm lượt truy cập trong khoảng thời gian
+        long tongTruyCapTrongKhoang = allVisitLogs.stream()
+            .filter(vl -> vl.getVisitDate() != null
+                && !vl.getVisitDate().isBefore(fromDate)
+                && !vl.getVisitDate().isAfter(toDate))
+            .mapToInt(VisitLog::getVisitCount)
+            .sum();
+        
         // Tạo labels và data cho biểu đồ
         List<String> chartLabels = new ArrayList<>();
         List<Integer> chartAccessData = new ArrayList<>();
         List<Integer> chartRequestData = new ArrayList<>();
-        
-        // Lấy tất cả yêu cầu để filter
-        List<YeuCau> allYeuCau = yeuCauRepository.findAll();
         
         LocalDate currentDate = fromDate;
         while (!currentDate.isAfter(toDate)) {
@@ -136,7 +159,6 @@ public class SanPhamController {
             chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
             
             // Đếm yêu cầu trong ngày
-            LocalDate finalCurrentDate = currentDate;
             LocalDateTime startOfDay = currentDate.atStartOfDay();
             LocalDateTime endOfDay = currentDate.plusDays(1).atStartOfDay();
             
@@ -147,18 +169,31 @@ public class SanPhamController {
                 .count();
             chartRequestData.add((int) requestCount);
             
-            // TODO: Đếm lượt truy cập theo ngày
-            // Hiện tại VisitCounterFilter.totalVisits chỉ là tổng, không phân theo ngày
-            // Bạn cần implement thêm logic lưu log truy cập để có dữ liệu chính xác
-            // Tạm thời set = 0
-            chartAccessData.add(0);
+            // Đếm lượt truy cập trong ngày
+            LocalDate finalCurrentDate = currentDate;
+            int visitCount = allVisitLogs.stream()
+                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(finalCurrentDate))
+                .mapToInt(VisitLog::getVisitCount)
+                .sum();
+            chartAccessData.add(visitCount);
             
             currentDate = currentDate.plusDays(1);
         }
         
+        // Kiểm tra có dữ liệu không
+        boolean hasData = tongYeuCauTrongKhoang > 0 || tongTruyCapTrongKhoang > 0;
+        
+        // Đưa dữ liệu vào model
+        model.addAttribute("tongSanPham", tongSanPham);
+        model.addAttribute("tongYeuCau", tongYeuCauTrongKhoang);
+        model.addAttribute("tongTruyCap", tongTruyCapTrongKhoang);
+        model.addAttribute("yeuCauMoi", yeuCauRepository.findAll());
         model.addAttribute("chartLabels", chartLabels);
         model.addAttribute("chartAccessData", chartAccessData);
         model.addAttribute("chartRequestData", chartRequestData);
+        model.addAttribute("hasData", hasData);
+        model.addAttribute("fromDate", fromDate.toString());
+        model.addAttribute("toDate", toDate.toString());
         
         return "admin/index";
     }
