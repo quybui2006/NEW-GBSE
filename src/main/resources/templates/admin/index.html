@@ -9,33 +9,51 @@
     <style>
         .admin-nav { background: #1a1a2e; }
         
-        /* --- STYLE BOX HIGHLIGHT (KHÔNG GẠCH CHÂN) --- */
+        /* --- STYLE MENU ITEMS --- */
         .admin-nav a { 
             color: #ccc !important; 
-            text-decoration: none !important; /* Xóa gạch chân mặc định */
+            text-decoration: none !important;
             padding: 8px 16px; 
             border-radius: 6px; 
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: inline-block;
+            font-weight: 500;
         }
         
-        /* Khi di chuột vào hoặc mục đang chọn: Hiện nền trắng mờ & chữ trắng */
-        .admin-nav a:hover, 
+        /* Khi di chuột: sáng lên */
+        .admin-nav a:hover { 
+            background: rgba(255, 255, 255, 0.15) !important; 
+            color: #ffffff !important; 
+        }
+        
+        /* Khi active: màu chữ nhạt hơn + nền mờ */
         .admin-nav a.active { 
-            background: rgba(255, 255, 255, 0.2) !important; 
-            color: white !important; 
-            border-bottom: none !important; /* Đảm bảo không bị hiện gạch chân */
+            background: rgba(255, 255, 255, 0.25) !important; 
+            color: #b8b8d0 !important; 
+            font-weight: 600;
         }
 
         /* Mobile Offcanvas Style */
         .admin-offcanvas { background-color: #1a1a2e !important; }
+        .admin-offcanvas .offcanvas-header {
+            border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+        }
         .admin-offcanvas .nav-link { 
             color: #ccc !important; 
             padding: 15px 20px; 
             text-decoration: none !important;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
         }
-        .admin-offcanvas .nav-link:hover { background: rgba(255,255,255,0.1); color: white !important; }
+        .admin-offcanvas .nav-link:hover { 
+            background: rgba(255,255,255,0.15); 
+            color: #ffffff !important; 
+        }
+        .admin-offcanvas .nav-link.active {
+            background: rgba(255,255,255,0.25) !important;
+            color: #b8b8d0 !important;
+            font-weight: 600;
+        }
 
         /* Các thành phần nội dung */
         .stat-card { background: #1a1a2e; color: white; border-radius: 12px; padding: 25px; height: 100%; border: none; }
@@ -50,6 +68,17 @@
         .btn-reset:hover { background: #eee; }
         
         .chart-box { background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; height: 100%; }
+        
+        /* Loading state */
+        .loading-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
@@ -71,13 +100,13 @@
         </button>
 
         <div class="offcanvas offcanvas-end admin-offcanvas d-lg-none" tabindex="-1" id="adminMenu">
-            <div class="offcanvas-header border-bottom border-secondary text-white">
+            <div class="offcanvas-header text-white">
                 <h5 class="offcanvas-title fw-bold">QUẢN TRỊ</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="offcanvas-body p-0">
                 <div class="navbar-nav">
-                    <a href="/admin" class="nav-link">Dashboard</a>
+                    <a href="/admin" class="nav-link active">Dashboard</a>
                     <a href="/admin/san-pham" class="nav-link">Sản phẩm</a>
                     <a href="/admin/yeu-cau" class="nav-link">Yêu cầu</a>
                     <a href="/" class="nav-link text-info">Xem web</a>
@@ -132,13 +161,13 @@
 
     <div class="row g-4">
         <div class="col-md-6">
-            <div class="chart-box shadow-sm">
+            <div class="chart-box shadow-sm position-relative">
                 <h6 class="fw-bold mb-3">Lượt truy cập</h6>
                 <canvas id="accessChart" style="max-height: 300px;"></canvas>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="chart-box shadow-sm">
+            <div class="chart-box shadow-sm position-relative">
                 <h6 class="fw-bold mb-3">Số lượt yêu cầu báo giá</h6>
                 <canvas id="requestChart" style="max-height: 300px;"></canvas>
             </div>
@@ -149,32 +178,101 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script th:inline="javascript">
-    const labels = /*[[${chartLabels}]]*/ ['20/04', '21/04', '22/04', '23/04', '24/04', '25/04', '26/04'];
-    const accessData = /*[[${chartAccessData}]]*/ [120, 200, 150, 280, 190, 310, 450];
-    const requestData = /*[[${chartRequestData}]]*/ [5, 12, 8, 20, 15, 18, 35];
+    /*<![CDATA[*/
+    // Dữ liệu từ controller
+    const chartLabels = /*[[${chartLabels}]]*/ [];
+    const chartAccessData = /*[[${chartAccessData}]]*/ [];
+    const chartRequestData = /*[[${chartRequestData}]]*/ [];
+    
+    console.log('Chart Labels:', chartLabels);
+    console.log('Access Data:', chartAccessData);
+    console.log('Request Data:', chartRequestData);
 
+    // Cấu hình chung cho biểu đồ
     const commonOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        animation: {
+            duration: 800,
+            easing: 'easeInOutQuart'
+        },
+        plugins: { 
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: '#1a1a2e',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                cornerRadius: 8,
+                padding: 12,
+                displayColors: false
+            }
+        },
         scales: {
-            y: { beginAtZero: true, grid: { color: '#f5f5f5' } },
-            x: { grid: { display: false } }
+            y: { 
+                beginAtZero: true, 
+                grid: { color: '#f0f0f0' },
+                ticks: { 
+                    font: { size: 12 },
+                    stepSize: 1
+                }
+            },
+            x: { 
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+            }
         }
     };
 
-    new Chart(document.getElementById('accessChart'), {
-        type: 'bar',
-        data: { labels: labels, datasets: [{ data: accessData, backgroundColor: '#1a1a2e', borderRadius: 4 }] },
-        options: commonOptions
-    });
+    // Kiểm tra và render biểu đồ nếu có dữ liệu
+    function renderCharts() {
+        if (chartLabels && chartLabels.length > 0 && chartAccessData && chartRequestData) {
+            // Biểu đồ lượt truy cập
+            new Chart(document.getElementById('accessChart'), {
+                type: 'bar',
+                data: { 
+                    labels: chartLabels, 
+                    datasets: [{ 
+                        label: 'Lượt truy cập',
+                        data: chartAccessData, 
+                        backgroundColor: '#1a1a2e', 
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#2d2d44',
+                        maxBarThickness: 50
+                    }] 
+                },
+                options: commonOptions
+            });
 
-    new Chart(document.getElementById('requestChart'), {
-        type: 'bar',
-        data: { labels: labels, datasets: [{ data: requestData, backgroundColor: '#4e4e6a', borderRadius: 4 }] },
-        options: commonOptions
-    });
+            // Biểu đồ yêu cầu báo giá
+            new Chart(document.getElementById('requestChart'), {
+                type: 'bar',
+                data: { 
+                    labels: chartLabels, 
+                    datasets: [{ 
+                        label: 'Yêu cầu',
+                        data: chartRequestData, 
+                        backgroundColor: '#4e4e6a', 
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#6b6b8a',
+                        maxBarThickness: 50
+                    }] 
+                },
+                options: commonOptions
+            });
+        } else {
+            console.warn('No chart data available');
+            // Hiển thị thông báo không có dữ liệu
+            document.querySelectorAll('canvas').forEach(canvas => {
+                const ctx = canvas.getContext('2d');
+                ctx.font = '16px Arial';
+                ctx.fillStyle = '#999';
+                ctx.textAlign = 'center';
+                ctx.fillText('Không có dữ liệu trong khoảng thời gian này', canvas.width/2, canvas.height/2);
+            });
+        }
+    }
 
+    // Hàm xử lý filter
     function setToday() {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('fromDate').value = today;
@@ -185,19 +283,35 @@
     function applyFilter() {
         const from = document.getElementById('fromDate').value;
         const to = document.getElementById('toDate').value;
-        if (!from && !to) return;
-        window.location.href = `/admin?from=${from}&to=${to}`;
+        
+        if (!from && !to) {
+            alert('Vui lòng chọn ít nhất một ngày!');
+            return;
+        }
+        
+        // Luôn gửi cả 2 tham số để backend xử lý
+        let url = '/admin?';
+        if (from) url += `from=${from}&`;
+        if (to) url += `to=${to}`;
+        
+        window.location.href = url;
     }
 
     function resetFilter() {
         window.location.href = '/admin';
     }
 
+    // Khởi tạo
     window.onload = function() {
+        // Điền ngày từ URL parameters
         const params = new URLSearchParams(window.location.search);
         if (params.has('from')) document.getElementById('fromDate').value = params.get('from');
         if (params.has('to')) document.getElementById('toDate').value = params.get('to');
+        
+        // Render biểu đồ
+        renderCharts();
     };
+    /*]]>*/
 </script>
 
 </body>

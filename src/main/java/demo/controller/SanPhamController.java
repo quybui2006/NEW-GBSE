@@ -1,6 +1,9 @@
 package demo.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,11 +81,85 @@ public class SanPhamController {
     }
 
     @GetMapping("/admin")
-    public String adminDashboard(Model model) {
+    public String adminDashboard(@RequestParam(required = false) String from,
+                                 @RequestParam(required = false) String to,
+                                 Model model) {
+        // Tổng số (không filter)
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", yeuCauRepository.count());
         model.addAttribute("yeuCauMoi", yeuCauRepository.findAll());
         model.addAttribute("luotTruyCap", VisitCounterFilter.totalVisits.get());
+        
+        // Xử lý dữ liệu cho biểu đồ
+        LocalDate fromDate = null;
+        LocalDate toDate = null;
+        
+        try {
+            if (from != null && !from.isEmpty()) {
+                fromDate = LocalDate.parse(from);
+            }
+            if (to != null && !to.isEmpty()) {
+                toDate = LocalDate.parse(to);
+            }
+        } catch (Exception e) {
+            // Parse error, để null
+        }
+        
+        // Nếu không có filter, mặc định 7 ngày gần nhất
+        if (fromDate == null && toDate == null) {
+            toDate = LocalDate.now();
+            fromDate = toDate.minusDays(6);
+        } else if (fromDate != null && toDate == null) {
+            toDate = LocalDate.now();
+        } else if (fromDate == null && toDate != null) {
+            fromDate = toDate.minusDays(6);
+        }
+        
+        // Đảm bảo fromDate không sau toDate
+        if (fromDate.isAfter(toDate)) {
+            LocalDate temp = fromDate;
+            fromDate = toDate;
+            toDate = temp;
+        }
+        
+        // Tạo labels và data cho biểu đồ
+        List<String> chartLabels = new ArrayList<>();
+        List<Integer> chartAccessData = new ArrayList<>();
+        List<Integer> chartRequestData = new ArrayList<>();
+        
+        // Lấy tất cả yêu cầu để filter
+        List<YeuCau> allYeuCau = yeuCauRepository.findAll();
+        
+        LocalDate currentDate = fromDate;
+        while (!currentDate.isAfter(toDate)) {
+            // Format label: dd/MM
+            chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
+            
+            // Đếm yêu cầu trong ngày
+            LocalDate finalCurrentDate = currentDate;
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.plusDays(1).atStartOfDay();
+            
+            long requestCount = allYeuCau.stream()
+                .filter(yc -> yc.getThoiGian() != null 
+                    && !yc.getThoiGian().isBefore(startOfDay) 
+                    && yc.getThoiGian().isBefore(endOfDay))
+                .count();
+            chartRequestData.add((int) requestCount);
+            
+            // TODO: Đếm lượt truy cập theo ngày
+            // Hiện tại VisitCounterFilter.totalVisits chỉ là tổng, không phân theo ngày
+            // Bạn cần implement thêm logic lưu log truy cập để có dữ liệu chính xác
+            // Tạm thời set = 0
+            chartAccessData.add(0);
+            
+            currentDate = currentDate.plusDays(1);
+        }
+        
+        model.addAttribute("chartLabels", chartLabels);
+        model.addAttribute("chartAccessData", chartAccessData);
+        model.addAttribute("chartRequestData", chartRequestData);
+        
         return "admin/index";
     }
 
