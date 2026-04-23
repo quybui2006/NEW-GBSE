@@ -2,36 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${sp.ten}">Chi tiết sản phẩm</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark px-4">
+<nav class="navbar navbar-dark bg-dark px-3">
     <span class="navbar-brand fw-bold">Van & Bơm Nước Quy</span>
     <div>
-        <a href="/" class="text-white me-3">Trang chủ</a>
-        <a href="/san-pham" class="text-white me-3">Sản phẩm</a>
+        <a href="/" class="text-white me-2">Trang chủ</a>
+        <a href="/san-pham" class="text-white me-2">Sản phẩm</a>
         <a href="/lien-he" class="text-white">Liên hệ</a>
     </div>
 </nav>
 
-<div class="container mt-5" style="max-width: 700px;">
-    <a href="/san-pham" class="btn btn-outline-secondary btn-sm mb-4">← Quay lại</a>
-
-    <span class="badge bg-secondary mb-2" th:text="${sp.danhMuc}"></span>
-    <h2 th:text="${sp.ten}"></h2>
-    <img th:if="${sp.hinhAnh != null and sp.hinhAnh != ''}"
-     th:src="@{/uploads/{file}(file=${sp.hinhAnh})}"
-     class="img-fluid rounded mb-3" style="aspect-ratio:16/9; object-fit:cover; width:100%;">
-    <p class="text-muted mt-3" th:text="${sp.moTa}"></p>
-
-    <div class="alert alert-warning mt-4">
-        Sản phẩm này cần tư vấn giá — vui lòng liên hệ để được báo giá tốt nhất!
+<div class="container mt-4 px-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <a href="/san-pham" class="btn btn-outline-secondary btn-sm mb-3">← Quay lại</a>
+            <span class="badge bg-secondary mb-2 d-block" th:text="${sp.danhMuc}"></span>
+            <h4 th:text="${sp.ten}"></h4>
+            <img th:if="${sp.hinhAnh != null and sp.hinhAnh != ''}"
+                 th:src="@{/uploads/{file}(file=${sp.hinhAnh})}"
+                 class="img-fluid rounded mb-3 w-100" style="aspect-ratio:16/9; object-fit:cover;">
+            <img th:if="${sp.hinhAnh == null or sp.hinhAnh == ''}"
+                 src="https://placehold.co/800x450?text=Chua+co+anh"
+                 class="img-fluid rounded mb-3 w-100" style="aspect-ratio:16/9; object-fit:cover;">
+            <p class="text-muted" th:text="${sp.moTa}"></p>
+            <div class="alert alert-warning">
+                Sản phẩm này cần tư vấn giá — vui lòng liên hệ để được báo giá tốt nhất!
+            </div>
+            <a href="/lien-he" class="btn btn-dark w-100">Yêu cầu báo giá ngay</a>
+        </div>
     </div>
-
-    <a th:href="@{/lien-he}" class="btn btn-dark mt-2">Yêu cầu báo giá ngay</a>
 </div>
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <small>© 2026 Van & Bơm Nước Quy. All rights reserved.</small>
+</footer>
 
 </body>
 </html>

@@ -1,7 +1,10 @@
 package demo.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import demo.config.VisitCounterFilter;
 import demo.model.SanPham;
 import demo.model.YeuCau;
 import demo.repository.SanPhamRepository;
 import demo.repository.YeuCauRepository;
-import demo.service.EmailService;
 import demo.service.FileUploadService;
 
 @Controller
@@ -30,9 +34,6 @@ public class SanPhamController {
 
     @Autowired
     private FileUploadService fileUploadService;
-
-    @Autowired
-    private EmailService emailService;
 
     @GetMapping("/")
     public String trangChu() {
@@ -71,9 +72,9 @@ public class SanPhamController {
 
     @PostMapping("/lien-he")
     public String guiYeuCau(@ModelAttribute YeuCau yeuCau, Model model) {
-    yeuCauRepository.save(yeuCau);
-    model.addAttribute("thanhCong", true);
-    return "lien-he";
+        yeuCauRepository.save(yeuCau);
+        model.addAttribute("thanhCong", true);
+        return "lien-he";
     }
 
     @GetMapping("/admin")
@@ -81,6 +82,7 @@ public class SanPhamController {
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", yeuCauRepository.count());
         model.addAttribute("yeuCauMoi", yeuCauRepository.findAll());
+        model.addAttribute("luotTruyCap", VisitCounterFilter.totalVisits.get());
         return "admin/index";
     }
 
@@ -128,5 +130,48 @@ public class SanPhamController {
     public String adminXoaSanPham(@PathVariable Long id) {
         sanPhamRepository.deleteById(id);
         return "redirect:/admin/san-pham";
+    }
+
+    @GetMapping("/admin/bao-cao/excel")
+    public void xuatExcel(@RequestParam(defaultValue = "all") String period,
+                          HttpServletResponse response) throws Exception {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=bao-cao-yeu-cau.xlsx");
+
+        List<YeuCau> data = locTheoThoiGian(period);
+
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            var sheet = workbook.createSheet("Yeu Cau");
+            var header = sheet.createRow(0);
+            String[] cols = {"STT", "Họ tên", "SĐT", "Email", "Sản phẩm quan tâm", "Nội dung", "Thời gian"};
+            for (int i = 0; i < cols.length; i++) {
+                header.createCell(i).setCellValue(cols[i]);
+            }
+            for (int i = 0; i < data.size(); i++) {
+                var row = sheet.createRow(i + 1);
+                YeuCau yc = data.get(i);
+                row.createCell(0).setCellValue(i + 1);
+                row.createCell(1).setCellValue(yc.getHoTen());
+                row.createCell(2).setCellValue(yc.getSoDienThoai());
+                row.createCell(3).setCellValue(yc.getEmail());
+                row.createCell(4).setCellValue(yc.getSanPhamQuanTam());
+                row.createCell(5).setCellValue(yc.getNoiDung());
+                row.createCell(6).setCellValue(yc.getThoiGian() != null ? yc.getThoiGian().toString() : "");
+            }
+            workbook.write(response.getOutputStream());
+        }
+    }
+
+    private List<YeuCau> locTheoThoiGian(String period) {
+        LocalDateTime from = switch (period) {
+            case "day" -> LocalDateTime.now().toLocalDate().atStartOfDay();
+            case "week" -> LocalDateTime.now().minusWeeks(1);
+            case "month" -> LocalDateTime.now().minusMonths(1);
+            case "year" -> LocalDateTime.now().minusYears(1);
+            default -> LocalDateTime.of(2000, 1, 1, 0, 0);
+        };
+        return yeuCauRepository.findAll().stream()
+            .filter(yc -> yc.getThoiGian() != null && yc.getThoiGian().isAfter(from))
+            .collect(Collectors.toList());
     }
 }

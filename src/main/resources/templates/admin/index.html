@@ -9,6 +9,8 @@
         .admin-nav { background: #1a1a2e; }
         .admin-nav a { color: #ccc; text-decoration: none; padding: 8px 16px; border-radius: 6px; }
         .admin-nav a:hover, .admin-nav a.active { background: #ffffff20; color: white; }
+        .stat-card { background: #1a1a2e; color: white; border-radius: 12px; padding: 20px; }
+        .period-btn.active { background: #1a1a2e; color: white; }
     </style>
 </head>
 <body>
@@ -27,21 +29,48 @@
 <div class="container-fluid p-4">
     <h5 class="mb-4">Dashboard</h5>
 
+    <!-- Bộ lọc thời gian -->
+    <div class="mb-4">
+        <div class="btn-group" id="periodGroup">
+            <button class="btn btn-outline-dark btn-sm period-btn active" onclick="setPeriod('day', this)">Hôm nay</button>
+            <button class="btn btn-outline-dark btn-sm period-btn" onclick="setPeriod('week', this)">Tuần này</button>
+            <button class="btn btn-outline-dark btn-sm period-btn" onclick="setPeriod('month', this)">Tháng này</button>
+            <button class="btn btn-outline-dark btn-sm period-btn" onclick="setPeriod('year', this)">Năm nay</button>
+            <button class="btn btn-outline-dark btn-sm period-btn" onclick="setPeriod('all', this)">Tất cả</button>
+        </div>
+    </div>
+
+    <!-- Thống kê -->
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
-            <div class="card border-0 p-3 text-white" style="background:#1a1a2e;">
+            <div class="stat-card">
                 <div class="small mb-1" style="color:#aaa;">Tổng sản phẩm</div>
                 <div class="fs-2 fw-bold" th:text="${tongSanPham}">0</div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card border-0 p-3 text-white" style="background:#1a1a2e;">
+            <div class="stat-card">
                 <div class="small mb-1" style="color:#aaa;">Yêu cầu báo giá</div>
-                <div class="fs-2 fw-bold" th:text="${tongYeuCau}">0</div>
+                <div class="fs-2 fw-bold" id="soYeuCau" th:text="${tongYeuCau}">0</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-card">
+                <div class="small mb-1" style="color:#aaa;">Lượt truy cập</div>
+                <div class="fs-2 fw-bold" id="luotTruyCap" th:text="${luotTruyCap}">0</div>
             </div>
         </div>
     </div>
 
+    <!-- Xuất báo cáo -->
+    <div class="mb-4 d-flex gap-2 align-items-center">
+        <span class="text-muted small">Xuất báo cáo:</span>
+        <a id="exportBtn" href="/admin/bao-cao/excel?period=day" class="btn btn-success btn-sm">
+            Xuất Excel
+        </a>
+    </div>
+
+    <!-- Bảng yêu cầu -->
     <h6 class="mb-3">Yêu cầu mới nhất</h6>
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
@@ -65,6 +94,17 @@
     </div>
     <p class="text-muted" th:if="${#lists.isEmpty(yeuCauMoi)}">Chưa có yêu cầu nào!</p>
 </div>
+
+<script>
+let currentPeriod = 'day';
+
+function setPeriod(period, btn) {
+    currentPeriod = period;
+    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('exportBtn').href = '/admin/bao-cao/excel?period=' + period;
+}
+</script>
 
 </body>
 </html>
