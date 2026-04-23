@@ -9,6 +9,14 @@
         .admin-nav { background: #1a1a2e; }
         .admin-nav a { color: #ccc; text-decoration: none; padding: 8px 16px; border-radius: 6px; }
         .admin-nav a:hover, .admin-nav a.active { background: #ffffff20; color: white; }
+        .filter-bar { background: #f8f9fa; border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+        input[type="date"] { border: 1px solid #ced4da; border-radius: 8px; padding: 6px 12px; font-size: 14px; }
+        input[type="date"]:focus { outline: none; border-color: #1a1a2e; box-shadow: 0 0 0 2px rgba(26,26,46,0.15); }
+        .btn-filter { background: #1a1a2e; color: white; border: none; border-radius: 8px; padding: 7px 18px; }
+        .btn-filter:hover { background: #2d2d44; color: white; }
+        .btn-reset { background: transparent; border: 1px solid #aaa; border-radius: 8px; padding: 7px 18px; color: #555; }
+        .btn-reset:hover { background: #eee; }
+        .badge-count { background: #1a1a2e; color: white; border-radius: 20px; padding: 4px 12px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -25,12 +33,44 @@
 </nav>
 
 <div class="container-fluid p-4">
-    <h5 class="mb-4">Danh sách yêu cầu báo giá</h5>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Danh sách yêu cầu báo giá</h5>
+        <a id="exportBtn" href="/admin/bao-cao/excel?period=all" class="btn btn-success btn-sm">Xuất Excel</a>
+    </div>
+
+    <!-- Bộ lọc lịch -->
+    <div class="filter-bar">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-auto">
+                <label class="form-label small text-muted mb-1">Từ ngày</label>
+                <input type="date" id="fromDate" min="2026-01-01" max="2099-12-31">
+            </div>
+            <div class="col-12 col-md-auto">
+                <label class="form-label small text-muted mb-1">Đến ngày</label>
+                <input type="date" id="toDate" min="2026-01-01" max="2099-12-31">
+            </div>
+            <div class="col-12 col-md-auto d-flex gap-2">
+                <button class="btn-filter" onclick="applyFilter()">Lọc</button>
+                <button class="btn-reset" onclick="resetFilter()">Xóa lọc</button>
+            </div>
+            <div class="col-12 col-md-auto">
+                <span class="badge-count" id="countBadge">0 yêu cầu</span>
+            </div>
+        </div>
+        <div class="mt-2 d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-secondary btn-sm" onclick="setQuick('today')">Hôm nay</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="setQuick('week')">Tuần này</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="setQuick('month')">Tháng này</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="setQuick('year')">Năm nay</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="setQuick('all')">Tất cả</button>
+        </div>
+    </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover" id="yeuCauTable">
             <thead class="table-dark">
                 <tr>
+                    <th>STT</th>
                     <th>Họ tên</th>
                     <th>SĐT</th>
                     <th>Email</th>
@@ -39,8 +79,10 @@
                     <th>Thời gian</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="yc : ${danhSachYeuCau}">
+            <tbody id="tableBody">
+                <tr th:each="yc, stat : ${danhSachYeuCau}"
+                    th:data-time="${yc.thoiGian}">
+                    <td th:text="${stat.index + 1}"></td>
                     <td th:text="${yc.hoTen}"></td>
                     <td th:text="${yc.soDienThoai}"></td>
                     <td th:text="${yc.email}"></td>
@@ -51,8 +93,72 @@
             </tbody>
         </table>
     </div>
+    <p class="text-muted" id="emptyMsg" style="display:none;">Không có yêu cầu nào trong khoảng thời gian này!</p>
     <p class="text-muted" th:if="${#lists.isEmpty(danhSachYeuCau)}">Chưa có yêu cầu nào!</p>
 </div>
+
+<script>
+function getToday() {
+    return new Date().toISOString().split('T')[0];
+}
+
+function setQuick(type) {
+    const today = new Date();
+    let from, to = getToday();
+    if (type === 'today') {
+        from = to;
+    } else if (type === 'week') {
+        const d = new Date(today);
+        d.setDate(today.getDate() - today.getDay());
+        from = d.toISOString().split('T')[0];
+    } else if (type === 'month') {
+        from = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-01`;
+    } else if (type === 'year') {
+        from = `${today.getFullYear()}-01-01`;
+    } else {
+        from = '';
+        to = '';
+    }
+    document.getElementById('fromDate').value = from;
+    document.getElementById('toDate').value = to;
+    applyFilter();
+}
+
+function applyFilter() {
+    const from = document.getElementById('fromDate').value;
+    const to = document.getElementById('toDate').value;
+    const rows = document.querySelectorAll('#tableBody tr');
+    let count = 0;
+
+    rows.forEach(row => {
+        const timeStr = row.getAttribute('data-time');
+        if (!timeStr) { row.style.display = ''; count++; return; }
+        const rowDate = timeStr.substring(0, 10);
+        let show = true;
+        if (from && rowDate < from) show = false;
+        if (to && rowDate > to) show = false;
+        row.style.display = show ? '' : 'none';
+        if (show) count++;
+    });
+
+    document.getElementById('countBadge').textContent = count + ' yêu cầu';
+    document.getElementById('emptyMsg').style.display = count === 0 ? 'block' : 'none';
+
+    const period = from && to ? 'custom&from=' + from + '&to=' + to : 'all';
+    document.getElementById('exportBtn').href = '/admin/bao-cao/excel?period=' + (from ? 'all' : 'all');
+}
+
+function resetFilter() {
+    document.getElementById('fromDate').value = '';
+    document.getElementById('toDate').value = '';
+    applyFilter();
+}
+
+window.onload = function() {
+    const rows = document.querySelectorAll('#tableBody tr');
+    document.getElementById('countBadge').textContent = rows.length + ' yêu cầu';
+};
+</script>
 
 </body>
 </html>

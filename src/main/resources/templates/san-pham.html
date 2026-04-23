@@ -49,8 +49,8 @@
 </div>
 
 <div class="container mt-4">
-    <h5 class="mb-4" th:if="${keyword}" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></h5>
-    <h5 class="mb-4" th:if="${!keyword}">Danh sách sản phẩm</h5>
+    <h5 class="mb-4" th:if="${keyword != null and keyword != ''}" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></h5>
+    <h5 class="mb-4" th:if="${keyword == null or keyword == ''}">Danh sách sản phẩm</h5>
 
     <div class="row row-cols-1 row-cols-md-4 g-4">
         <div class="col" th:each="sp : ${danhSach}">
