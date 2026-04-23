@@ -106,7 +106,7 @@
 
         suggestBox.innerHTML = matches.map(sp => `
             <div class="suggest-item" onclick="chonGợiY('${sp.ten.replace(/'/g, "\\'")}')">
-                <span class="me-2">🔍</span>${sp.ten}
+                ${sp.ten}
                 <small class="text-muted ms-2">${sp.danhMuc}</small>
             </div>
         `).join('');
