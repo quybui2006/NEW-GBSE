@@ -140,7 +140,6 @@
                 <div class="small mb-1" style="color:#aaa;">Yêu cầu báo giá</div>
                 <div th:if="${hasData}" class="fs-1 fw-bold" th:text="${tongYeuCau}">0</div>
                 <div th:unless="${hasData}" class="no-data-message">Không có dữ liệu</div>
-                <div class="small mt-2" th:if="${hasData}" style="color:#aaa;" th:text="'Từ ' + ${fromDate} + ' đến ' + ${toDate}"></div>
             </div>
         </div>
         <div class="col-md-4">
