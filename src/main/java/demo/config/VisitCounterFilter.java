@@ -1,52 +1,48 @@
 package demo.config;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import demo.model.VisitLog;
+import demo.repository.VisitLogRepository;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import demo.model.VisitLog;
-import demo.repository.VisitLogRepository;
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class VisitCounterFilter implements Filter {
-    
-    public static AtomicInteger totalVisits = new AtomicInteger(0);
-    
+
+    public static final AtomicLong totalVisits = new AtomicLong(0);
+
     @Autowired
     private VisitLogRepository visitLogRepository;
-    
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String path = httpRequest.getRequestURI();
-        
-        // Chỉ đếm các request vào trang web (không đếm static resources và admin)
-        if (!path.contains(".") && !path.startsWith("/admin")) {
+        HttpServletRequest request = (HttpServletRequest) req;
+        String path = request.getRequestURI();
+        if (!path.startsWith("/admin") && !path.startsWith("/uploads")
+                && !path.contains(".css") && !path.contains(".js")
+                && !path.contains(".png") && !path.contains(".ico")) {
             totalVisits.incrementAndGet();
-            
-            // Lưu log theo ngày
             try {
                 LocalDate today = LocalDate.now();
-                VisitLog visitLog = visitLogRepository.findByVisitDate(today)
-                    .orElse(new VisitLog(today, 0));
-                visitLog.setVisitCount(visitLog.getVisitCount() + 1);
-                visitLogRepository.save(visitLog);
+                Optional<VisitLog> existing = visitLogRepository.findByVisitDate(today);
+                if (existing.isPresent()) {
+                    VisitLog log = existing.get();
+                    log.setVisitCount(log.getVisitCount() + 1);
+                    visitLogRepository.save(log);
+                } else {
+                    visitLogRepository.save(new VisitLog(today, 1));
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                // Không làm crash app nếu DB lỗi
             }
         }
-        
-        chain.doFilter(request, response);
+        chain.doFilter(req, res);
     }
 }
