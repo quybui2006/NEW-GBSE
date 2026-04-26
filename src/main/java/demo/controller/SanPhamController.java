@@ -130,28 +130,25 @@ public class SanPhamController {
         List<Integer> chartRequestData = new ArrayList<>();
 
         LocalDate current = fromDate;
-        while (!current.isAfter(toDate)) {
-            chartLabels.add(current.format(DateTimeFormatter.ofPattern("dd/MM")));
+for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
+    chartLabels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
 
-            LocalDateTime dayStart = current.atStartOfDay();
-            LocalDateTime dayEnd = current.plusDays(1).atStartOfDay();
+    LocalDateTime dayStart = d.atStartOfDay();
+    LocalDateTime dayEnd = d.plusDays(1).atStartOfDay();
 
-            int reqCount = (int) allYeuCau.stream()
-                .filter(yc -> yc.getThoiGian() != null
-                    && !yc.getThoiGian().isBefore(dayStart)
-                    && yc.getThoiGian().isBefore(dayEnd))
-                .count();
-            chartRequestData.add(reqCount);
+    int reqCount = (int) allYeuCau.stream()
+        .filter(yc -> yc.getThoiGian() != null
+            && !yc.getThoiGian().isBefore(dayStart)
+            && yc.getThoiGian().isBefore(dayEnd))
+        .count();
+    chartRequestData.add(reqCount);
 
-            LocalDate finalCurrent = current;
-            int visitCount = allVisitLogs.stream()
-                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(finalCurrent))
-                .mapToInt(VisitLog::getVisitCount)
-                .sum();
-            chartAccessData.add(visitCount);
-
-            current = current.plusDays(1);
-        }
+    int visitCount = allVisitLogs.stream()
+        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(d))
+        .mapToInt(VisitLog::getVisitCount)
+        .sum();
+    chartAccessData.add(visitCount);
+}
 
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", tongYeuCau);
