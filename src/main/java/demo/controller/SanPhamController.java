@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import demo.config.VisitCounterFilter;
 import demo.model.SanPham;
 import demo.model.VisitLog;
 import demo.model.YeuCau;
@@ -105,6 +104,8 @@ public class SanPhamController {
             fromDate = toDate;
             toDate = temp;
         }
+        final LocalDate start = fromDate;
+        final LocalDate end = toDate;
 
         List<YeuCau> allYeuCau = yeuCauRepository.findAll();
         List<VisitLog> allVisitLogs = visitLogRepository.findAll();
@@ -120,8 +121,8 @@ public class SanPhamController {
 
         long tongTruyCap = allVisitLogs.stream()
             .filter(vl -> vl.getVisitDate() != null
-                && !vl.getVisitDate().isBefore(fromDate)
-                && !vl.getVisitDate().isAfter(toDate))
+                && !vl.getVisitDate().isBefore(start)
+                && !vl.getVisitDate().isAfter(end))
             .mapToLong(VisitLog::getVisitCount)
             .sum();
 
@@ -131,10 +132,11 @@ public class SanPhamController {
 
         LocalDate current = fromDate;
 for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-    chartLabels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
+    final LocalDate currentDay = d;
+    chartLabels.add(currentDay.format(DateTimeFormatter.ofPattern("dd/MM")));
 
-    LocalDateTime dayStart = d.atStartOfDay();
-    LocalDateTime dayEnd = d.plusDays(1).atStartOfDay();
+    LocalDateTime dayStart = currentDay.atStartOfDay();
+    LocalDateTime dayEnd = currentDay.plusDays(1).atStartOfDay();
 
     int reqCount = (int) allYeuCau.stream()
         .filter(yc -> yc.getThoiGian() != null
@@ -144,7 +146,7 @@ for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
     chartRequestData.add(reqCount);
 
     int visitCount = allVisitLogs.stream()
-        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(d))
+        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(currentDay))
         .mapToInt(VisitLog::getVisitCount)
         .sum();
     chartAccessData.add(visitCount);
