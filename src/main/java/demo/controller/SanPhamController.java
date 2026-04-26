@@ -129,26 +129,28 @@ public class SanPhamController {
         List<Integer> chartAccessData = new ArrayList<>();
         List<Integer> chartRequestData = new ArrayList<>();
 
-        LocalDate current = fromDate;
-for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-    chartLabels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
+        // Vòng lặp đã được sửa lỗi lambda expression
+        for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
+            final LocalDate currentDate = d; // Khai báo final để dùng trong lambda
+            
+            chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
 
-    LocalDateTime dayStart = d.atStartOfDay();
-    LocalDateTime dayEnd = d.plusDays(1).atStartOfDay();
+            final LocalDateTime dayStart = currentDate.atStartOfDay();
+            final LocalDateTime dayEnd = currentDate.plusDays(1).atStartOfDay();
 
-    int reqCount = (int) allYeuCau.stream()
-        .filter(yc -> yc.getThoiGian() != null
-            && !yc.getThoiGian().isBefore(dayStart)
-            && yc.getThoiGian().isBefore(dayEnd))
-        .count();
-    chartRequestData.add(reqCount);
+            int reqCount = (int) allYeuCau.stream()
+                .filter(yc -> yc.getThoiGian() != null
+                    && !yc.getThoiGian().isBefore(dayStart)
+                    && yc.getThoiGian().isBefore(dayEnd))
+                .count();
+            chartRequestData.add(reqCount);
 
-    int visitCount = allVisitLogs.stream()
-        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(d))
-        .mapToInt(VisitLog::getVisitCount)
-        .sum();
-    chartAccessData.add(visitCount);
-}
+            int visitCount = allVisitLogs.stream()
+                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(currentDate))
+                .mapToInt(VisitLog::getVisitCount)
+                .sum();
+            chartAccessData.add(visitCount);
+        }
 
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", tongYeuCau);
