@@ -129,39 +129,26 @@ public class SanPhamController {
         List<Integer> chartAccessData = new ArrayList<>();
         List<Integer> chartRequestData = new ArrayList<>();
 
-        // Cách viết AN TOÀN NHẤT - không dùng lambda trong vòng lặp
-        LocalDate currentDate = fromDate;
-        while (!currentDate.isAfter(toDate)) {
-            // Thêm label
-            chartLabels.add(currentDate.format(DateTimeFormatter.ofPattern("dd/MM")));
-            
-            // Tạo biến cho đầu và cuối ngày
-            LocalDateTime startOfDay = currentDate.atStartOfDay();
-            LocalDateTime endOfDay = currentDate.plusDays(1).atStartOfDay();
-            
-            // Đếm số yêu cầu - dùng vòng lặp for thay vì lambda
-            int yeuCauCount = 0;
-            for (YeuCau yc : allYeuCau) {
-                if (yc.getThoiGian() != null 
-                    && !yc.getThoiGian().isBefore(startOfDay) 
-                    && yc.getThoiGian().isBefore(endOfDay)) {
-                    yeuCauCount++;
-                }
-            }
-            chartRequestData.add(yeuCauCount);
-            
-            // Đếm số lượt truy cập - dùng vòng lặp for thay vì lambda
-            int visitCount = 0;
-            for (VisitLog vl : allVisitLogs) {
-                if (vl.getVisitDate() != null && vl.getVisitDate().equals(currentDate)) {
-                    visitCount += vl.getVisitCount();
-                }
-            }
-            chartAccessData.add(visitCount);
-            
-            // Chuyển sang ngày tiếp theo
-            currentDate = currentDate.plusDays(1);
-        }
+        LocalDate current = fromDate;
+for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
+    chartLabels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
+
+    LocalDateTime dayStart = d.atStartOfDay();
+    LocalDateTime dayEnd = d.plusDays(1).atStartOfDay();
+
+    int reqCount = (int) allYeuCau.stream()
+        .filter(yc -> yc.getThoiGian() != null
+            && !yc.getThoiGian().isBefore(dayStart)
+            && yc.getThoiGian().isBefore(dayEnd))
+        .count();
+    chartRequestData.add(reqCount);
+
+    int visitCount = allVisitLogs.stream()
+        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(d))
+        .mapToInt(VisitLog::getVisitCount)
+        .sum();
+    chartAccessData.add(visitCount);
+}
 
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", tongYeuCau);
