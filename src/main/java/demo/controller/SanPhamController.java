@@ -131,26 +131,26 @@ public class SanPhamController {
         List<Integer> chartRequestData = new ArrayList<>();
 
         LocalDate current = fromDate;
-for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-    final LocalDate currentDay = d;
-    chartLabels.add(currentDay.format(DateTimeFormatter.ofPattern("dd/MM")));
+        for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
+            final LocalDate currentDay = d;
+            chartLabels.add(currentDay.format(DateTimeFormatter.ofPattern("dd/MM")));
 
-    LocalDateTime dayStart = currentDay.atStartOfDay();
-    LocalDateTime dayEnd = currentDay.plusDays(1).atStartOfDay();
+            LocalDateTime dayStart = currentDay.atStartOfDay();
+            LocalDateTime dayEnd = currentDay.plusDays(1).atStartOfDay();
 
-    int reqCount = (int) allYeuCau.stream()
-        .filter(yc -> yc.getThoiGian() != null
-            && !yc.getThoiGian().isBefore(dayStart)
-            && yc.getThoiGian().isBefore(dayEnd))
-        .count();
-    chartRequestData.add(reqCount);
+            int reqCount = (int) allYeuCau.stream()
+                .filter(yc -> yc.getThoiGian() != null
+                    && !yc.getThoiGian().isBefore(dayStart)
+                    && yc.getThoiGian().isBefore(dayEnd))
+                .count();
+            chartRequestData.add(reqCount);
 
-    int visitCount = allVisitLogs.stream()
-        .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(currentDay))
-        .mapToInt(VisitLog::getVisitCount)
-        .sum();
-    chartAccessData.add(visitCount);
-}
+            int visitCount = allVisitLogs.stream()
+                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(currentDay))
+                .mapToInt(VisitLog::getVisitCount)
+                .sum();
+            chartAccessData.add(visitCount);
+        }
 
         model.addAttribute("tongSanPham", sanPhamRepository.count());
         model.addAttribute("tongYeuCau", tongYeuCau);
@@ -204,19 +204,23 @@ for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
         return "redirect:/admin/san-pham";
     }
 
-    @GetMapping("/admin/san-pham/xoa/{id}")
+    // ✅ ĐÃ SỬA: GetMapping → PostMapping (khớp với form POST có CSRF)
+    @PostMapping("/admin/san-pham/xoa/{id}")
     public String adminXoaSanPham(@PathVariable Long id) {
         sanPhamRepository.deleteById(id);
         return "redirect:/admin/san-pham";
     }
 
-    @GetMapping("/admin/bao-cao/excel")
+    // ✅ ĐÃ SỬA: GetMapping → PostMapping + thêm tham số from, to
+    @PostMapping("/admin/bao-cao/excel")
     public void xuatExcel(@RequestParam(defaultValue = "all") String period,
+                          @RequestParam(required = false) String from,
+                          @RequestParam(required = false) String to,
                           HttpServletResponse response) throws Exception {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=bao-cao-yeu-cau.xlsx");
 
-        List<YeuCau> data = locTheoThoiGian(period);
+        List<YeuCau> data = locTheoThoiGian(period, from, to);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             var sheet = workbook.createSheet("Yeu Cau");
@@ -240,16 +244,33 @@ for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
         }
     }
 
-    private List<YeuCau> locTheoThoiGian(String period) {
-        LocalDateTime from = switch (period) {
-            case "day" -> LocalDateTime.now().toLocalDate().atStartOfDay();
-            case "week" -> LocalDateTime.now().minusWeeks(1);
-            case "month" -> LocalDateTime.now().minusMonths(1);
-            case "year" -> LocalDateTime.now().minusYears(1);
-            default -> LocalDateTime.of(2000, 1, 1, 0, 0);
-        };
+    // ✅ ĐÃ SỬA: Hỗ trợ lọc theo from/to từ form export
+    private List<YeuCau> locTheoThoiGian(String period, String from, String to) {
+        LocalDateTime fromDateTime;
+        
+        if ("custom".equals(period) && from != null && !from.isEmpty()) {
+            fromDateTime = LocalDate.parse(from).atStartOfDay();
+        } else {
+            fromDateTime = switch (period) {
+                case "day" -> LocalDateTime.now().toLocalDate().atStartOfDay();
+                case "week" -> LocalDateTime.now().minusWeeks(1);
+                case "month" -> LocalDateTime.now().minusMonths(1);
+                case "year" -> LocalDateTime.now().minusYears(1);
+                default -> LocalDateTime.of(2000, 1, 1, 0, 0);
+            };
+        }
+        
+        LocalDateTime toDateTime = null;
+        if ("custom".equals(period) && to != null && !to.isEmpty()) {
+            toDateTime = LocalDate.parse(to).plusDays(1).atStartOfDay();
+        }
+        
+        final LocalDateTime finalFrom = fromDateTime;
+        final LocalDateTime finalTo = toDateTime;
+        
         return yeuCauRepository.findAll().stream()
-            .filter(yc -> yc.getThoiGian() != null && yc.getThoiGian().isAfter(from))
+            .filter(yc -> yc.getThoiGian() != null && !yc.getThoiGian().isBefore(finalFrom))
+            .filter(yc -> finalTo == null || yc.getThoiGian().isBefore(finalTo))
             .collect(Collectors.toList());
     }
 }

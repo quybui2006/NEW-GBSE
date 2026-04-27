@@ -69,26 +69,58 @@
         
         .chart-box { background: white; padding: 20px; border-radius: 12px; border: 1px solid #eee; height: 100%; }
         .no-data-message { color: #999; font-size: 16px; padding: 40px 0; }
+        
+        /* Style cho link logout dạng form */
+        .logout-link {
+            color: #ff6b6b !important;
+            cursor: pointer;
+            text-decoration: none !important;
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: inherit;
+            font-family: inherit;
+        }
+        .logout-link:hover {
+            background: rgba(255, 107, 107, 0.2) !important;
+            color: #ff4444 !important;
+        }
     </style>
 </head>
 <body>
+
+<!-- Form ẩn chứa CSRF token cho các request bằng JavaScript -->
+<form id="csrfForm" style="display: none;">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</form>
 
 <nav class="navbar px-3 py-2 admin-nav sticky-top shadow">
     <div class="container-fluid">
         <span class="navbar-brand fw-bold text-white">Van & Bơm Nước Quy — Admin</span>
         
-        <div class="d-none d-lg-flex flex-wrap gap-1">
+        <!-- Desktop Menu -->
+        <div class="d-none d-lg-flex flex-wrap gap-1 align-items-center">
             <a href="/admin" class="active">Dashboard</a>
             <a href="/admin/san-pham">Sản phẩm</a>
             <a href="/admin/yeu-cau">Yêu cầu</a>
             <a href="/" target="_blank">Xem web</a>
-            <a href="/logout" style="color:#ff6b6b !important;">Đăng xuất</a>
+            
+            <!-- ✅ SỬA: Logout Desktop - Form POST có CSRF -->
+            <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="logout-link">Đăng xuất</button>
+            </form>
         </div>
 
+        <!-- Mobile Toggle Button -->
         <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- Mobile Offcanvas Menu -->
         <div class="offcanvas offcanvas-end admin-offcanvas d-lg-none" tabindex="-1" id="adminMenu">
             <div class="offcanvas-header text-white">
                 <h5 class="offcanvas-title fw-bold">QUẢN TRỊ</h5>
@@ -100,7 +132,15 @@
                     <a href="/admin/san-pham" class="nav-link">Sản phẩm</a>
                     <a href="/admin/yeu-cau" class="nav-link">Yêu cầu</a>
                     <a href="/" class="nav-link text-info">Xem web</a>
-                    <a href="/logout" class="nav-link text-danger">Đăng xuất</a>
+                    
+                    <!-- ✅ SỬA: Logout Mobile - Form POST có CSRF -->
+                    <form th:action="@{/logout}" method="post" style="margin: 0;">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button type="submit" class="nav-link text-danger w-100 text-start" 
+                                style="background: none; border: none; cursor: pointer; font-size: inherit;">
+                            Đăng xuất
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -110,6 +150,7 @@
 <div class="container-fluid p-4">
     <h5 class="mb-4 fw-bold">Tổng quan hệ thống</h5>
 
+    <!-- Filter Bar -->
     <div class="filter-bar shadow-sm">
         <div class="row g-3 align-items-end">
             <div class="col-12 col-md-auto">
@@ -128,6 +169,7 @@
         </div>
     </div>
 
+    <!-- Stat Cards -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="stat-card shadow-sm text-center">
@@ -151,6 +193,7 @@
         </div>
     </div>
 
+    <!-- Charts -->
     <div class="row g-4">
         <div class="col-md-6">
             <div class="chart-box shadow-sm">
@@ -185,6 +228,15 @@
     const chartAccessData = /*[[${chartAccessData}]]*/ [];
     const chartRequestData = /*[[${chartRequestData}]]*/ [];
     const hasData = /*[[${hasData}]]*/ false;
+
+    // Hàm lấy CSRF token từ form ẩn
+    function getCsrfParam() {
+        const csrfInput = document.querySelector('#csrfForm input');
+        return {
+            name: csrfInput.name,
+            value: csrfInput.value
+        };
+    }
 
     if (hasData) {
         const commonOptions = {
@@ -257,15 +309,20 @@
         applyFilter();
     }
 
+    // ✅ SỬA: Thêm CSRF token vào URL khi lọc
     function applyFilter() {
         const from = document.getElementById('fromDate').value;
         const to = document.getElementById('toDate').value;
         if (!from && !to) return;
-        window.location.href = `/admin?from=${from}&to=${to}`;
+        
+        const csrf = getCsrfParam();
+        window.location.href = `/admin?from=${from}&to=${to}&${csrf.name}=${encodeURIComponent(csrf.value)}`;
     }
 
+    // ✅ SỬA: Thêm CSRF token vào URL khi reset
     function resetFilter() {
-        window.location.href = '/admin';
+        const csrf = getCsrfParam();
+        window.location.href = `/admin?${csrf.name}=${encodeURIComponent(csrf.value)}`;
     }
 
     window.onload = function() {

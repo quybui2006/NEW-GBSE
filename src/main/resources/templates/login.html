@@ -16,6 +16,7 @@
         </div>
 
         <form action="/login" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="mb-3">
                 <label class="form-label">Tài khoản</label>
                 <input type="text" name="username" class="form-control" required>
