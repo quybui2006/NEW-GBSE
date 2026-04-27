@@ -8,8 +8,17 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        /* COLOR VARIABLES - ELEMENTOR KIT-10 */
+        :root {
+            --e-global-color-primary: #729AFF;
+            --e-global-color-secondary: #03337B;
+            --e-global-color-text: #54595F;
+            --e-global-color-accent: #61CE70;
+            --e-global-color-white: #FFFFFF;
+        }
+
         /* NAVBAR */
-        .navbar { background: #0a2342; }
+        .navbar { background: var(--e-global-color-secondary); }
         .nav-desktop-link {
             color: white !important;
             text-decoration: none;
@@ -21,12 +30,12 @@
             border-bottom: 2px solid transparent;
             transition: all 0.2s;
         }
-        .nav-desktop-link:hover { border-bottom: 2px solid #4db8ff; color: #4db8ff !important; }
-        .nav-link-mobile { font-weight: 500; color: #0a2342 !important; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .nav-desktop-link:hover { border-bottom: 2px solid var(--e-global-color-primary); color: var(--e-global-color-primary) !important; }
+        .nav-link-mobile { font-weight: 500; color: var(--e-global-color-secondary) !important; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid #eee; }
 
         /* HERO */
         .hero {
-            background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 50%, #0d3a6e 100%);
+            background: linear-gradient(135deg, var(--e-global-color-secondary) 0%, #1a4a7a 50%, #0d3a6e 100%);
             color: white;
             min-height: 85vh;
             display: flex;
@@ -41,9 +50,9 @@
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="40" fill="rgba(255,255,255,0.03)"/><circle cx="80" cy="80" r="60" fill="rgba(255,255,255,0.02)"/></svg>');
         }
         .hero-badge {
-            background: rgba(77,184,255,0.2);
-            border: 1px solid rgba(77,184,255,0.4);
-            color: #4db8ff;
+            background: rgba(114,154,255,0.2);
+            border: 1px solid rgba(114,154,255,0.4);
+            color: var(--e-global-color-primary);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
@@ -55,8 +64,8 @@
         .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.2; }
         .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.8); max-width: 500px; }
         .btn-primary-custom {
-            background: #4db8ff;
-            color: #0a2342;
+            background: var(--e-global-color-primary);
+            color: var(--e-global-color-secondary);
             border: none;
             padding: 14px 32px;
             font-weight: 700;
@@ -68,7 +77,7 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-        .btn-primary-custom:hover { background: white; color: #0a2342; }
+        .btn-primary-custom:hover { background: white; color: var(--e-global-color-secondary); }
         .btn-outline-custom {
             background: transparent;
             color: white;
@@ -87,19 +96,19 @@
 
         /* STATS BAR */
         .stats-bar {
-            background: #0a2342;
+            background: var(--e-global-color-secondary);
             color: white;
             padding: 24px 0;
         }
         .stat-item { text-align: center; padding: 0 20px; border-right: 1px solid rgba(255,255,255,0.15); }
         .stat-item:last-child { border-right: none; }
-        .stat-num { font-size: 2rem; font-weight: 700; color: #4db8ff; }
+        .stat-num { font-size: 2rem; font-weight: 700; color: var(--e-global-color-primary); }
         .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
 
         /* SECTION TITLES */
-        .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #0a2342; }
-        .section-subtitle { color: #666; font-size: 15px; }
-        .section-line { width: 50px; height: 3px; background: #4db8ff; margin: 12px 0 20px; }
+        .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--e-global-color-secondary); }
+        .section-subtitle { color: var(--e-global-color-text); font-size: 15px; }
+        .section-line { width: 50px; height: 3px; background: var(--e-global-color-primary); margin: 12px 0 20px; }
 
         /* APPLICATION FIELDS */
         .field-card {
@@ -114,7 +123,7 @@
         .field-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(10,35,66,0.9) 0%, rgba(10,35,66,0.3) 60%, transparent 100%);
+            background: linear-gradient(to top, rgba(3,51,123,0.9) 0%, rgba(3,51,123,0.3) 60%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -122,7 +131,7 @@
             color: white;
             transition: all 0.3s;
         }
-        .field-card:hover .field-overlay { background: linear-gradient(to top, rgba(10,35,66,0.95) 0%, rgba(10,35,66,0.6) 60%, rgba(10,35,66,0.2) 100%); }
+        .field-card:hover .field-overlay { background: linear-gradient(to top, rgba(3,51,123,0.95) 0%, rgba(3,51,123,0.6) 60%, rgba(3,51,123,0.2) 100%); }
         .field-overlay h4 { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
         .field-overlay p { font-size: 13px; color: rgba(255,255,255,0.8); opacity: 0; transform: translateY(10px); transition: all 0.3s; }
         .field-card:hover .field-overlay p { opacity: 1; transform: translateY(0); }
@@ -133,30 +142,30 @@
             border-radius: 8px;
             padding: 32px 24px;
             height: 100%;
-            border-top: 4px solid #4db8ff;
+            border-top: 4px solid var(--e-global-color-primary);
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             transition: transform 0.2s;
         }
         .commit-card:hover { transform: translateY(-4px); }
         .commit-icon { font-size: 2.5rem; margin-bottom: 16px; }
-        .commit-card h5 { font-weight: 700; color: #0a2342; margin-bottom: 12px; }
-        .commit-card p { color: #666; font-size: 14px; line-height: 1.7; }
+        .commit-card h5 { font-weight: 700; color: var(--e-global-color-secondary); margin-bottom: 12px; }
+        .commit-card p { color: var(--e-global-color-text); font-size: 14px; line-height: 1.7; }
 
         /* ABOUT SECTION */
         .about-section { background: #f4f7fb; }
         .about-highlight {
-            background: #0a2342;
+            background: var(--e-global-color-secondary);
             color: white;
             border-radius: 8px;
             padding: 24px;
             margin-bottom: 16px;
         }
-        .about-highlight h6 { color: #4db8ff; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+        .about-highlight h6 { color: var(--e-global-color-primary); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
         .about-highlight p { color: rgba(255,255,255,0.85); font-size: 14px; margin: 0; }
 
         /* TICKER */
         .ticker-wrap {
-            background: #4db8ff;
+            background: var(--e-global-color-primary);
             padding: 14px 0;
             overflow: hidden;
             white-space: nowrap;
@@ -165,7 +174,7 @@
             display: inline-block;
             animation: ticker 20s linear infinite;
             font-weight: 700;
-            color: #0a2342;
+            color: var(--e-global-color-secondary);
             font-size: 14px;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -173,9 +182,12 @@
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* FOOTER */
-        footer { background: #0a2342; color: white; }
+        footer { background: var(--e-global-color-secondary); color: white; }
         footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
-        footer a:hover { color: #4db8ff; }
+        footer a:hover { color: var(--e-global-color-primary); }
+        
+        /* Hero span */
+        .hero h1 span { color: var(--e-global-color-primary); }
     </style>
 </head>
 <body>
@@ -217,7 +229,7 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="hero-badge">Đối tác van & bơm công nghiệp</div>
-                <h1 class="mb-4">Chuyên cung cấp<br><span style="color:#4db8ff;">Van & Bơm Nước</span><br>Chất lượng cao</h1>
+                <h1 class="mb-4">Chuyên cung cấp<br><span>Van & Bơm Nước</span><br>Chất lượng cao</h1>
                 <p class="mb-5">Giải pháp toàn diện về van công nghiệp và bơm nước. Tư vấn kỹ thuật miễn phí — thương lượng giá linh hoạt.</p>
                 <div class="d-flex gap-3 flex-wrap">
                     <a href="/san-pham" class="btn-primary-custom">Xem sản phẩm</a>
@@ -264,7 +276,7 @@
 <section class="py-5">
     <div class="container">
         <div class="mb-5">
-            <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Lĩnh vực ứng dụng</div>
+            <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Lĩnh vực ứng dụng</div>
             <h2 class="section-title mt-2">4 lĩnh vực chính</h2>
             <div class="section-line"></div>
         </div>
@@ -321,7 +333,7 @@
 <section class="py-5" style="background:#f4f7fb;">
     <div class="container">
         <div class="mb-5">
-            <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Cam kết của chúng tôi</div>
+            <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Cam kết của chúng tôi</div>
             <h2 class="section-title mt-2">3 cam kết cốt lõi</h2>
             <div class="section-line"></div>
         </div>
@@ -356,10 +368,10 @@
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Về chúng tôi</div>
+                <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Về chúng tôi</div>
                 <h2 class="section-title mt-2">Hơn 10 năm kinh nghiệm trong ngành van & bơm</h2>
                 <div class="section-line"></div>
-                <p class="text-muted mb-4" style="font-size:15px; line-height:1.8;">
+                <p class="mb-4" style="font-size:15px; line-height:1.8; color:var(--e-global-color-text);">
                     Chúng tôi chuyên cung cấp các sản phẩm van công nghiệp và bơm nước chất lượng cao từ các nhà sản xuất uy tín. Với đội ngũ kỹ thuật am hiểu, chúng tôi tư vấn giải pháp tối ưu cho từng ứng dụng cụ thể.
                 </p>
                 <a href="/lien-he" class="btn-primary-custom">Liên hệ tư vấn miễn phí</a>
