@@ -6,35 +6,189 @@
     <title>Van & Bơm Nước Quy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .hero { background-color: #1a1a2e; color: white; padding: 60px 20px; }
-        
-        /* Hiệu ứng: Mục được chọn sẽ nhạt màu đi */
-        @media (min-width: 992px) {
-            .nav-desktop-link {
-                text-decoration: none !important;
-                transition: opacity 0.2s ease, border-bottom 0.2s ease;
-                border-bottom: 2px solid transparent;
-                padding-bottom: 4px;
-            }
-            .nav-desktop-link:hover {
-                opacity: 0.6; /* Nhạt màu đi khi đưa chuột vào */
-                border-bottom: 2px solid rgba(255,255,255,0.6); /* Gạch chân cũng nhạt theo */
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .nav-link-mobile { font-weight: 500; color: #1a1a2e !important; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid #eee; }
+        /* NAVBAR */
+        .navbar { background: #0a2342; }
+        .nav-desktop-link {
+            color: white !important;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .nav-desktop-link:hover { border-bottom: 2px solid #4db8ff; color: #4db8ff !important; }
+        .nav-link-mobile { font-weight: 500; color: #0a2342 !important; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid #eee; }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 50%, #0d3a6e 100%);
+            color: white;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="40" fill="rgba(255,255,255,0.03)"/><circle cx="80" cy="80" r="60" fill="rgba(255,255,255,0.02)"/></svg>');
+        }
+        .hero-badge {
+            background: rgba(77,184,255,0.2);
+            border: 1px solid rgba(77,184,255,0.4);
+            color: #4db8ff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.2; }
+        .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.8); max-width: 500px; }
+        .btn-primary-custom {
+            background: #4db8ff;
+            color: #0a2342;
+            border: none;
+            padding: 14px 32px;
+            font-weight: 700;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .btn-primary-custom:hover { background: white; color: #0a2342; }
+        .btn-outline-custom {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 14px 32px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .btn-outline-custom:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); }
+
+        /* STATS BAR */
+        .stats-bar {
+            background: #0a2342;
+            color: white;
+            padding: 24px 0;
+        }
+        .stat-item { text-align: center; padding: 0 20px; border-right: 1px solid rgba(255,255,255,0.15); }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-size: 2rem; font-weight: 700; color: #4db8ff; }
+        .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* SECTION TITLES */
+        .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #0a2342; }
+        .section-subtitle { color: #666; font-size: 15px; }
+        .section-line { width: 50px; height: 3px; background: #4db8ff; margin: 12px 0 20px; }
+
+        /* APPLICATION FIELDS */
+        .field-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 280px;
+            cursor: pointer;
+        }
+        .field-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .field-card:hover img { transform: scale(1.05); }
+        .field-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10,35,66,0.9) 0%, rgba(10,35,66,0.3) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+            color: white;
+            transition: all 0.3s;
+        }
+        .field-card:hover .field-overlay { background: linear-gradient(to top, rgba(10,35,66,0.95) 0%, rgba(10,35,66,0.6) 60%, rgba(10,35,66,0.2) 100%); }
+        .field-overlay h4 { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+        .field-overlay p { font-size: 13px; color: rgba(255,255,255,0.8); opacity: 0; transform: translateY(10px); transition: all 0.3s; }
+        .field-card:hover .field-overlay p { opacity: 1; transform: translateY(0); }
+
+        /* COMMITMENTS */
+        .commit-card {
+            background: white;
+            border-radius: 8px;
+            padding: 32px 24px;
+            height: 100%;
+            border-top: 4px solid #4db8ff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .commit-card:hover { transform: translateY(-4px); }
+        .commit-icon { font-size: 2.5rem; margin-bottom: 16px; }
+        .commit-card h5 { font-weight: 700; color: #0a2342; margin-bottom: 12px; }
+        .commit-card p { color: #666; font-size: 14px; line-height: 1.7; }
+
+        /* ABOUT SECTION */
+        .about-section { background: #f4f7fb; }
+        .about-highlight {
+            background: #0a2342;
+            color: white;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .about-highlight h6 { color: #4db8ff; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+        .about-highlight p { color: rgba(255,255,255,0.85); font-size: 14px; margin: 0; }
+
+        /* TICKER */
+        .ticker-wrap {
+            background: #4db8ff;
+            padding: 14px 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-text {
+            display: inline-block;
+            animation: ticker 20s linear infinite;
+            font-weight: 700;
+            color: #0a2342;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* FOOTER */
+        footer { background: #0a2342; color: white; }
+        footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+        footer a:hover { color: #4db8ff; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark px-3 sticky-top shadow">
+<!-- NAVBAR -->
+<nav class="navbar px-3 sticky-top shadow" style="padding-top:14px; padding-bottom:14px;">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="/">Van & Bơm Nước Quy</a>
-        
-        <div class="d-none d-lg-flex">
-            <a href="/" class="text-white me-4 nav-desktop-link">Trang chủ</a>
-            <a href="/san-pham" class="text-white me-4 nav-desktop-link">Sản phẩm</a>
-            <a href="/lien-he" class="text-white nav-desktop-link">Liên hệ</a>
+        <a class="navbar-brand fw-bold text-white fs-5" href="/">VAN & BƠM NƯỚC QUY</a>
+
+        <div class="d-none d-lg-flex gap-4">
+            <a href="/" class="nav-desktop-link">Trang chủ</a>
+            <a href="/san-pham" class="nav-desktop-link">Sản phẩm</a>
+            <a href="/lien-he" class="nav-desktop-link">Liên hệ</a>
         </div>
 
         <button class="navbar-toggler d-lg-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#userMenu">
@@ -50,24 +204,222 @@
                 <ul class="navbar-nav text-center">
                     <li><a class="nav-link nav-link-mobile" href="/">Trang chủ</a></li>
                     <li><a class="nav-link nav-link-mobile" href="/san-pham">Sản phẩm</a></li>
-                    <li><a class="nav-link nav-link-mobile" href="/lien-he" >Liên hệ</a></li>
+                    <li><a class="nav-link nav-link-mobile" href="/lien-he">Liên hệ</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
 
-<div class="hero text-center">
+<!-- HERO -->
+<section class="hero">
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-badge">Đối tác van & bơm công nghiệp</div>
+                <h1 class="mb-4">Chuyên cung cấp<br><span style="color:#4db8ff;">Van & Bơm Nước</span><br>Chất lượng cao</h1>
+                <p class="mb-5">Giải pháp toàn diện về van công nghiệp và bơm nước. Tư vấn kỹ thuật miễn phí — thương lượng giá linh hoạt.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="/san-pham" class="btn-primary-custom">Xem sản phẩm</a>
+                    <a href="/lien-he" class="btn-outline-custom">Liên hệ ngay</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-flex justify-content-center mt-4 mt-lg-0">
+                <div style="width:420px; height:320px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center;">
+                    <div class="text-center">
+                        <div style="font-size:5rem;">🔧</div>
+                        <p style="color:rgba(255,255,255,0.5); font-size:13px; margin-top:12px;">Ảnh sản phẩm</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
     <div class="container">
-        <h1 class="display-5 fw-bold">Van & Bơm Nước Chất Lượng Cao</h1>
-        <p class="lead mt-3">Chuyên cung cấp van công nghiệp, bơm nước các loại.</p>
-        <a href="/san-pham" class="btn btn-light btn-lg mt-3 me-2 shadow-sm">Xem sản phẩm</a>
-        <a href="/lien-he" class="btn btn-outline-light btn-lg mt-3">Liên hệ ngay</a>
+        <div class="row">
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-num">100+</div>
+                <div class="stat-label">Sản phẩm</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <div class="stat-num">500+</div>
+                <div class="stat-label">Khách hàng</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item mt-3 mt-md-0">
+                <div class="stat-num">10+</div>
+                <div class="stat-label">Năm kinh nghiệm</div>
+            </div>
+            <div class="col-6 col-md-3 stat-item mt-3 mt-md-0">
+                <div class="stat-num">24/7</div>
+                <div class="stat-label">Hỗ trợ kỹ thuật</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<footer class="bg-dark text-white text-center py-4 mt-5">
-    <small>© 2026 Van & Bơm Nước Quy. All rights reserved.</small>
+<!-- APPLICATION FIELDS -->
+<section class="py-5">
+    <div class="container">
+        <div class="mb-5">
+            <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Lĩnh vực ứng dụng</div>
+            <h2 class="section-title mt-2">4 lĩnh vực chính</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-3">
+                <div class="field-card">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=280&fit=crop" alt="Công nghiệp">
+                    <div class="field-overlay">
+                        <h4>Công nghiệp</h4>
+                        <p>Van và bơm cho hệ thống công nghiệp nặng, áp suất cao, nhiệt độ cao.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="field-card">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=280&fit=crop" alt="Nước sạch">
+                    <div class="field-overlay">
+                        <h4>Nước sạch</h4>
+                        <p>Giải pháp van cho hệ thống cấp thoát nước, xử lý nước thải.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="field-card">
+                    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=280&fit=crop" alt="Xây dựng">
+                    <div class="field-overlay">
+                        <h4>Xây dựng</h4>
+                        <p>Sản phẩm phù hợp cho hệ thống HVAC, phòng cháy chữa cháy.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="field-card">
+                    <img src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=280&fit=crop" alt="Nông nghiệp">
+                    <div class="field-overlay">
+                        <h4>Nông nghiệp</h4>
+                        <p>Bơm và van cho hệ thống tưới tiêu, thủy lợi nông nghiệp.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+    <span class="ticker-text">
+        VAN CỔNG &nbsp;•&nbsp; VAN BI &nbsp;•&nbsp; VAN BƯỚM &nbsp;•&nbsp; BƠM LY TÂM &nbsp;•&nbsp; BƠM CHÌM &nbsp;•&nbsp; VAN KIỂM &nbsp;•&nbsp; VAN AN TOÀN &nbsp;•&nbsp; BƠM CÔNG NGHIỆP &nbsp;•&nbsp;
+        VAN CỔNG &nbsp;•&nbsp; VAN BI &nbsp;•&nbsp; VAN BƯỚM &nbsp;•&nbsp; BƠM LY TÂM &nbsp;•&nbsp; BƠM CHÌM &nbsp;•&nbsp; VAN KIỂM &nbsp;•&nbsp; VAN AN TOÀN &nbsp;•&nbsp; BƠM CÔNG NGHIỆP &nbsp;•&nbsp;
+    </span>
+</div>
+
+<!-- COMMITMENTS -->
+<section class="py-5" style="background:#f4f7fb;">
+    <div class="container">
+        <div class="mb-5">
+            <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Cam kết của chúng tôi</div>
+            <h2 class="section-title mt-2">3 cam kết cốt lõi</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="commit-card">
+                    <div class="commit-icon">🎯</div>
+                    <h5>Khách hàng là trung tâm</h5>
+                    <p>Chúng tôi lắng nghe và tư vấn giải pháp phù hợp nhất với nhu cầu, ngân sách và thời hạn của từng khách hàng. Mỗi dự án được xử lý riêng biệt và tận tâm.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="commit-card">
+                    <div class="commit-icon">⚙️</div>
+                    <h5>Chuyên gia van & bơm</h5>
+                    <p>Đội ngũ kỹ thuật giàu kinh nghiệm, am hiểu sâu về van công nghiệp và bơm nước. Tư vấn lựa chọn sản phẩm đúng — tiết kiệm chi phí tối đa.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="commit-card">
+                    <div class="commit-icon">💡</div>
+                    <h5>Giá cạnh tranh & linh hoạt</h5>
+                    <p>Cam kết giá tốt nhất thị trường. Thương lượng linh hoạt theo số lượng, dự án dài hạn. Hỗ trợ sau bán hàng tận nơi khi cần thiết.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="hero-badge" style="background:rgba(10,35,66,0.08); border-color:rgba(10,35,66,0.2); color:#0a2342;">Về chúng tôi</div>
+                <h2 class="section-title mt-2">Hơn 10 năm kinh nghiệm trong ngành van & bơm</h2>
+                <div class="section-line"></div>
+                <p class="text-muted mb-4" style="font-size:15px; line-height:1.8;">
+                    Chúng tôi chuyên cung cấp các sản phẩm van công nghiệp và bơm nước chất lượng cao từ các nhà sản xuất uy tín. Với đội ngũ kỹ thuật am hiểu, chúng tôi tư vấn giải pháp tối ưu cho từng ứng dụng cụ thể.
+                </p>
+                <a href="/lien-he" class="btn-primary-custom">Liên hệ tư vấn miễn phí</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="about-highlight">
+                            <h6>Tư vấn kỹ thuật</h6>
+                            <p>Hỗ trợ lựa chọn sản phẩm phù hợp theo điều kiện làm việc, áp suất, nhiệt độ và loại lưu chất.</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="about-highlight">
+                            <h6>Thương lượng giá</h6>
+                            <p>Đội ngũ kinh doanh linh hoạt, sẵn sàng thương lượng theo số lượng và điều kiện dự án cụ thể.</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="about-highlight">
+                            <h6>Hỗ trợ sau bán hàng</h6>
+                            <p>Nhân viên kỹ thuật hỗ trợ lắp đặt, vận hành và bảo trì sản phẩm tận nơi khi cần thiết.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">VAN & BƠM NƯỚC QUY</h6>
+                <p style="color:rgba(255,255,255,0.6); font-size:14px; line-height:1.8;">
+                    Chuyên cung cấp van công nghiệp và bơm nước chất lượng cao. Tư vấn kỹ thuật miễn phí.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">LIÊN KẾT</h6>
+                <ul class="list-unstyled" style="font-size:14px;">
+                    <li class="mb-2"><a href="/">Trang chủ</a></li>
+                    <li class="mb-2"><a href="/san-pham">Sản phẩm</a></li>
+                    <li class="mb-2"><a href="/lien-he">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">LIÊN HỆ</h6>
+                <ul class="list-unstyled" style="font-size:14px; color:rgba(255,255,255,0.6);">
+                    <li class="mb-2">📞 Hotline: 0829 626 899</li>
+                    <li class="mb-2">✉️ quybui0611@gmail.com</li>
+                    <li class="mb-2">🕐 Hỗ trợ 24/7</li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color:rgba(255,255,255,0.1); margin-top:32px;">
+        <p class="text-center mb-0" style="color:rgba(255,255,255,0.4); font-size:13px;">© 2026 Van & Bơm Nước Quy. All rights reserved.</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
