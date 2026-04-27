@@ -8,196 +8,243 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* COLOR VARIABLES - ELEMENTOR KIT-10 */
+        /* COLOR VARIABLES - OMEAX STYLE */
         :root {
-            --e-global-color-primary: #729AFF;
-            --e-global-color-secondary: #03337B;
-            --e-global-color-text: #54595F;
-            --e-global-color-accent: #61CE70;
-            --e-global-color-white: #FFFFFF;
+            --primary: #729AFF;
+            --secondary: #0a1a3a;
+            --text-dark: #1a1a2e;
+            --text-light: #6c6c7a;
+            --bg-light: #f8f9fc;
         }
 
-        /* NAVBAR */
-        .navbar { background: var(--e-global-color-secondary); }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-dark);
+            background: white;
+        }
+
+        /* NAVBAR - OMEAX MINIMALIST */
+        .navbar {
+            background: white;
+            padding: 20px 0;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.3px;
+            color: var(--secondary) !important;
+        }
         .nav-desktop-link {
-            color: white !important;
+            color: var(--text-dark) !important;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 450;
             font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 6px 0;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
+            letter-spacing: 0px;
+            padding: 8px 0;
+            margin: 0 16px;
+            transition: color 0.2s;
         }
-        .nav-desktop-link:hover { border-bottom: 2px solid var(--e-global-color-primary); color: var(--e-global-color-primary) !important; }
-        .nav-link-mobile { font-weight: 500; color: var(--e-global-color-secondary) !important; text-transform: uppercase; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .nav-desktop-link:hover { color: var(--primary) !important; }
+        .nav-link-mobile { font-weight: 500; color: var(--secondary) !important; padding: 15px 0; border-bottom: 1px solid #eee; }
 
-        /* HERO */
+        /* HERO - OMEAX STYLE */
         .hero {
-            background: linear-gradient(135deg, var(--e-global-color-secondary) 0%, #1a4a7a 50%, #0d3a6e 100%);
-            color: white;
-            min-height: 85vh;
+            background: white;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="40" fill="rgba(255,255,255,0.03)"/><circle cx="80" cy="80" r="60" fill="rgba(255,255,255,0.02)"/></svg>');
+            padding: 80px 0;
         }
         .hero-badge {
-            background: rgba(114,154,255,0.2);
-            border: 1px solid rgba(114,154,255,0.4);
-            color: var(--e-global-color-primary);
+            background: rgba(114,154,255,0.1);
+            color: var(--primary);
             padding: 6px 16px;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 13px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0px;
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 28px;
         }
-        .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.2; }
-        .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.8); max-width: 500px; }
-        .btn-primary-custom {
-            background: var(--e-global-color-primary);
-            color: var(--e-global-color-secondary);
-            border: none;
-            padding: 14px 32px;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
-            border-radius: 4px;
+            line-height: 1.2;
+            color: var(--secondary);
+            letter-spacing: -1px;
+        }
+        .hero h1 span {
+            color: var(--primary);
+        }
+        .hero .subheadline {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 24px 0 32px;
+        }
+        .hero-feature {
+            display: flex;
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .hero-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .hero-feature-item span:first-child {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .btn-primary-custom {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 36px;
+            font-weight: 500;
+            border-radius: 40px;
             text-decoration: none;
             display: inline-block;
             transition: all 0.2s;
             font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            letter-spacing: 0px;
         }
-        .btn-primary-custom:hover { background: white; color: var(--e-global-color-secondary); }
+        .btn-primary-custom:hover { background: var(--secondary); color: white; }
         .btn-outline-custom {
             background: transparent;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.5);
-            padding: 14px 32px;
-            font-weight: 600;
-            border-radius: 4px;
+            color: var(--secondary);
+            border: 1px solid #ddd;
+            padding: 14px 36px;
+            font-weight: 500;
+            border-radius: 40px;
             text-decoration: none;
             display: inline-block;
             transition: all 0.2s;
             font-size: 14px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
         }
-        .btn-outline-custom:hover { border-color: white; color: white; background: rgba(255,255,255,0.1); }
+        .btn-outline-custom:hover { border-color: var(--primary); background: rgba(114,154,255,0.05); }
 
-        /* STATS BAR */
+        /* STATS - MINIMAL */
         .stats-bar {
-            background: var(--e-global-color-secondary);
-            color: white;
-            padding: 24px 0;
+            background: var(--bg-light);
+            padding: 60px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
         }
-        .stat-item { text-align: center; padding: 0 20px; border-right: 1px solid rgba(255,255,255,0.15); }
-        .stat-item:last-child { border-right: none; }
-        .stat-num { font-size: 2rem; font-weight: 700; color: var(--e-global-color-primary); }
-        .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item { text-align: center; }
+        .stat-num { font-size: 2.2rem; font-weight: 700; color: var(--secondary); }
+        .stat-label { font-size: 13px; color: var(--text-light); letter-spacing: 0px; margin-top: 6px; }
 
-        /* SECTION TITLES */
-        .section-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: var(--e-global-color-secondary); }
-        .section-subtitle { color: var(--e-global-color-text); font-size: 15px; }
-        .section-line { width: 50px; height: 3px; background: var(--e-global-color-primary); margin: 12px 0 20px; }
+        /* SECTION TITLES - OMEAX STYLE */
+        .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 600; color: var(--secondary); letter-spacing: -0.5px; }
+        .section-line { width: 50px; height: 2px; background: var(--primary); margin: 16px 0 24px; }
 
-        /* APPLICATION FIELDS */
+        /* APPLICATION FIELDS - OMEAX GRID */
         .field-card {
             position: relative;
             overflow: hidden;
-            border-radius: 8px;
-            height: 280px;
+            border-radius: 16px;
+            height: 300px;
             cursor: pointer;
         }
-        .field-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .field-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .field-card:hover img { transform: scale(1.05); }
         .field-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(3,51,123,0.9) 0%, rgba(3,51,123,0.3) 60%, transparent 100%);
+            background: linear-gradient(to top, rgba(10,26,58,0.85) 0%, rgba(10,26,58,0.2) 60%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 24px;
+            padding: 28px;
             color: white;
-            transition: all 0.3s;
         }
-        .field-card:hover .field-overlay { background: linear-gradient(to top, rgba(3,51,123,0.95) 0%, rgba(3,51,123,0.6) 60%, rgba(3,51,123,0.2) 100%); }
-        .field-overlay h4 { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+        .field-overlay h4 { font-weight: 600; font-size: 1.3rem; margin-bottom: 8px; }
         .field-overlay p { font-size: 13px; color: rgba(255,255,255,0.8); opacity: 0; transform: translateY(10px); transition: all 0.3s; }
         .field-card:hover .field-overlay p { opacity: 1; transform: translateY(0); }
 
-        /* COMMITMENTS */
+        /* COMMITMENTS - SIMPLE CARDS */
         .commit-card {
             background: white;
-            border-radius: 8px;
-            padding: 32px 24px;
+            border-radius: 16px;
+            padding: 32px 28px;
             height: 100%;
-            border-top: 4px solid var(--e-global-color-primary);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
+            border: 1px solid #eee;
+            transition: all 0.2s;
         }
-        .commit-card:hover { transform: translateY(-4px); }
-        .commit-icon { font-size: 2.5rem; margin-bottom: 16px; }
-        .commit-card h5 { font-weight: 700; color: var(--e-global-color-secondary); margin-bottom: 12px; }
-        .commit-card p { color: var(--e-global-color-text); font-size: 14px; line-height: 1.7; }
+        .commit-card:hover { border-color: var(--primary); box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
+        .commit-icon { font-size: 2rem; margin-bottom: 20px; }
+        .commit-card h5 { font-weight: 600; color: var(--secondary); margin-bottom: 12px; font-size: 1.1rem; }
+        .commit-card p { color: var(--text-light); font-size: 14px; line-height: 1.6; }
 
         /* ABOUT SECTION */
-        .about-section { background: #f4f7fb; }
+        .about-section { background: var(--bg-light); }
         .about-highlight {
-            background: var(--e-global-color-secondary);
-            color: white;
-            border-radius: 8px;
+            background: white;
+            border-radius: 16px;
             padding: 24px;
             margin-bottom: 16px;
+            border: 1px solid #eee;
         }
-        .about-highlight h6 { color: var(--e-global-color-primary); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
-        .about-highlight p { color: rgba(255,255,255,0.85); font-size: 14px; margin: 0; }
+        .about-highlight h6 { color: var(--primary); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .about-highlight p { color: var(--text-light); font-size: 14px; margin: 0; }
 
         /* TICKER */
         .ticker-wrap {
-            background: var(--e-global-color-primary);
-            padding: 14px 0;
+            background: var(--secondary);
+            padding: 18px 0;
             overflow: hidden;
             white-space: nowrap;
         }
         .ticker-text {
             display: inline-block;
-            animation: ticker 20s linear infinite;
-            font-weight: 700;
-            color: var(--e-global-color-secondary);
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            animation: ticker 25s linear infinite;
+            font-weight: 450;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            letter-spacing: 1px;
         }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* FOOTER */
-        footer { background: var(--e-global-color-secondary); color: white; }
-        footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
-        footer a:hover { color: var(--e-global-color-primary); }
+        /* FOOTER - MINIMAL */
+        footer { background: var(--secondary); color: white; padding: 60px 0 40px; }
+        footer a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+        footer a:hover { color: var(--primary); }
+        footer h6 { font-weight: 600; margin-bottom: 20px; font-size: 14px; letter-spacing: 1px; }
         
-        /* Hero span */
-        .hero h1 span { color: var(--e-global-color-primary); }
+        /* HELP BUTTON (FLOATING) */
+        .help-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(114,154,255,0.3);
+            z-index: 1000;
+            transition: all 0.2s;
+        }
+        .help-button:hover { background: var(--secondary); color: white; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar px-3 sticky-top shadow" style="padding-top:14px; padding-bottom:14px;">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-white fs-5" href="/">VAN & BƠM NƯỚC QUY</a>
+<!-- NAVBAR - OMEAX STYLE -->
+<nav class="navbar px-3 sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">VAN & BƠM NƯỚC QUY</a>
 
-        <div class="d-none d-lg-flex gap-4">
+        <div class="d-none d-lg-flex">
             <a href="/" class="nav-desktop-link">Trang chủ</a>
             <a href="/san-pham" class="nav-desktop-link">Sản phẩm</a>
             <a href="/lien-he" class="nav-desktop-link">Liên hệ</a>
@@ -209,7 +256,7 @@
 
         <div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="userMenu">
             <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title fw-bold text-dark">DANH MỤC</h5>
+                <h5 class="offcanvas-title fw-bold">MENU</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="offcanvas-body">
@@ -223,25 +270,35 @@
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO - OMEAX SIMPLIFIES LIFE STYLE -->
 <section class="hero">
-    <div class="container position-relative">
+    <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="hero-badge">Đối tác van & bơm công nghiệp</div>
-                <h1 class="mb-4">Chuyên cung cấp<br><span>Van & Bơm Nước</span><br>Chất lượng cao</h1>
-                <p class="mb-5">Giải pháp toàn diện về van công nghiệp và bơm nước. Tư vấn kỹ thuật miễn phí — thương lượng giá linh hoạt.</p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="/san-pham" class="btn-primary-custom">Xem sản phẩm</a>
+            <div class="col-lg-7">
+                <div class="hero-badge">✦ SIMPLIFIES LIFE</div>
+                <h1>
+                    YOUR WORLDWIDE<br>
+                    PARTNER FOR<br>
+                    <span>INDUSTRIAL VALVES</span>
+                </h1>
+                <p class="subheadline">
+                    We operate all over the world! Our raw material: water and all fluids.<br>
+                    Our goal: meet all your valve needs.
+                </p>
+                <div>
+                    <a href="/san-pham" class="btn-primary-custom me-3">Xem sản phẩm</a>
                     <a href="/lien-he" class="btn-outline-custom">Liên hệ ngay</a>
                 </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-item"><span>✓</span> Hàng chính hãng</div>
+                    <div class="hero-feature-item"><span>✓</span> Tư vấn kỹ thuật</div>
+                    <div class="hero-feature-item"><span>✓</span> Giao hàng toàn quốc</div>
+                </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-flex justify-content-center mt-4 mt-lg-0">
-                <div style="width:420px; height:320px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center;">
-                    <div class="text-center">
-                        <div style="font-size:5rem;">🔧</div>
-                        <p style="color:rgba(255,255,255,0.5); font-size:13px; margin-top:12px;">Ảnh sản phẩm</p>
-                    </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div style="text-align: center;">
+                    <div style="font-size: 8rem;">🔧⚙️</div>
+                    <p style="color: var(--text-light); font-size: 13px; margin-top: 20px;">Industrial valves & fittings</p>
                 </div>
             </div>
         </div>
@@ -254,66 +311,66 @@
         <div class="row">
             <div class="col-6 col-md-3 stat-item">
                 <div class="stat-num">100+</div>
-                <div class="stat-label">Sản phẩm</div>
+                <div class="stat-label">SẢN PHẨM</div>
             </div>
             <div class="col-6 col-md-3 stat-item">
                 <div class="stat-num">500+</div>
-                <div class="stat-label">Khách hàng</div>
+                <div class="stat-label">KHÁCH HÀNG</div>
             </div>
-            <div class="col-6 col-md-3 stat-item mt-3 mt-md-0">
+            <div class="col-6 col-md-3 stat-item mt-4 mt-md-0">
                 <div class="stat-num">10+</div>
-                <div class="stat-label">Năm kinh nghiệm</div>
+                <div class="stat-label">NĂM KINH NGHIỆM</div>
             </div>
-            <div class="col-6 col-md-3 stat-item mt-3 mt-md-0">
+            <div class="col-6 col-md-3 stat-item mt-4 mt-md-0">
                 <div class="stat-num">24/7</div>
-                <div class="stat-label">Hỗ trợ kỹ thuật</div>
+                <div class="stat-label">HỖ TRỢ KỸ THUẬT</div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- APPLICATION FIELDS -->
-<section class="py-5">
+<section class="py-5" style="padding: 80px 0;">
     <div class="container">
         <div class="mb-5">
-            <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Lĩnh vực ứng dụng</div>
-            <h2 class="section-title mt-2">4 lĩnh vực chính</h2>
+            <div class="hero-badge" style="background: rgba(10,26,58,0.08); color: var(--secondary);">Lĩnh vực ứng dụng</div>
+            <h2 class="section-title">4 lĩnh vực chính</h2>
             <div class="section-line"></div>
         </div>
-        <div class="row g-3">
+        <div class="row g-4">
             <div class="col-md-6 col-lg-3">
                 <div class="field-card">
-                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=280&fit=crop" alt="Công nghiệp">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=300&fit=crop" alt="Công nghiệp">
                     <div class="field-overlay">
                         <h4>Công nghiệp</h4>
-                        <p>Van và bơm cho hệ thống công nghiệp nặng, áp suất cao, nhiệt độ cao.</p>
+                        <p>Van và bơm cho hệ thống công nghiệp nặng</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="field-card">
-                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=280&fit=crop" alt="Nước sạch">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&h=300&fit=crop" alt="Nước sạch">
                     <div class="field-overlay">
                         <h4>Nước sạch</h4>
-                        <p>Giải pháp van cho hệ thống cấp thoát nước, xử lý nước thải.</p>
+                        <p>Giải pháp cho hệ thống cấp thoát nước</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="field-card">
-                    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=280&fit=crop" alt="Xây dựng">
+                    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=300&fit=crop" alt="Xây dựng">
                     <div class="field-overlay">
                         <h4>Xây dựng</h4>
-                        <p>Sản phẩm phù hợp cho hệ thống HVAC, phòng cháy chữa cháy.</p>
+                        <p>Phù hợp cho HVAC, phòng cháy chữa cháy</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="field-card">
-                    <img src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=280&fit=crop" alt="Nông nghiệp">
+                    <img src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=300&fit=crop" alt="Nông nghiệp">
                     <div class="field-overlay">
                         <h4>Nông nghiệp</h4>
-                        <p>Bơm và van cho hệ thống tưới tiêu, thủy lợi nông nghiệp.</p>
+                        <p>Bơm và van cho hệ thống tưới tiêu</p>
                     </div>
                 </div>
             </div>
@@ -324,39 +381,36 @@
 <!-- TICKER -->
 <div class="ticker-wrap">
     <span class="ticker-text">
-        VAN CỔNG &nbsp;•&nbsp; VAN BI &nbsp;•&nbsp; VAN BƯỚM &nbsp;•&nbsp; BƠM LY TÂM &nbsp;•&nbsp; BƠM CHÌM &nbsp;•&nbsp; VAN KIỂM &nbsp;•&nbsp; VAN AN TOÀN &nbsp;•&nbsp; BƠM CÔNG NGHIỆP &nbsp;•&nbsp;
-        VAN CỔNG &nbsp;•&nbsp; VAN BI &nbsp;•&nbsp; VAN BƯỚM &nbsp;•&nbsp; BƠM LY TÂM &nbsp;•&nbsp; BƠM CHÌM &nbsp;•&nbsp; VAN KIỂM &nbsp;•&nbsp; VAN AN TOÀN &nbsp;•&nbsp; BƠM CÔNG NGHIỆP &nbsp;•&nbsp;
+        VAN CỔNG • VAN BI • VAN BƯỚM • BƠM LY TÂM • BƠM CHÌM • VAN KIỂM • VAN AN TOÀN • BƠM CÔNG NGHIỆP •
+        VAN CỔNG • VAN BI • VAN BƯỚM • BƠM LY TÂM • BƠM CHÌM • VAN KIỂM • VAN AN TOÀN • BƠM CÔNG NGHIỆP •
     </span>
 </div>
 
 <!-- COMMITMENTS -->
-<section class="py-5" style="background:#f4f7fb;">
+<section class="py-5" style="padding: 80px 0; background: white;">
     <div class="container">
-        <div class="mb-5">
-            <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Cam kết của chúng tôi</div>
-            <h2 class="section-title mt-2">3 cam kết cốt lõi</h2>
-            <div class="section-line"></div>
+        <div class="mb-5 text-center">
+            <div class="hero-badge" style="background: rgba(114,154,255,0.1); display: inline-block;">Why choose us</div>
+            <h2 class="section-title" style="margin-top: 16px;">3 cam kết cốt lõi</h2>
+            <div class="section-line" style="margin-left: auto; margin-right: auto;"></div>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="commit-card">
-                    <div class="commit-icon">🎯</div>
                     <h5>Khách hàng là trung tâm</h5>
-                    <p>Chúng tôi lắng nghe và tư vấn giải pháp phù hợp nhất với nhu cầu, ngân sách và thời hạn của từng khách hàng. Mỗi dự án được xử lý riêng biệt và tận tâm.</p>
+                    <p>Tư vấn giải pháp phù hợp nhất với nhu cầu và ngân sách của từng khách hàng.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="commit-card">
-                    <div class="commit-icon">⚙️</div>
                     <h5>Chuyên gia van & bơm</h5>
-                    <p>Đội ngũ kỹ thuật giàu kinh nghiệm, am hiểu sâu về van công nghiệp và bơm nước. Tư vấn lựa chọn sản phẩm đúng — tiết kiệm chi phí tối đa.</p>
+                    <p>Đội ngũ kỹ thuật giàu kinh nghiệm, am hiểu sâu về sản phẩm công nghiệp.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="commit-card">
-                    <div class="commit-icon">💡</div>
-                    <h5>Giá cạnh tranh & linh hoạt</h5>
-                    <p>Cam kết giá tốt nhất thị trường. Thương lượng linh hoạt theo số lượng, dự án dài hạn. Hỗ trợ sau bán hàng tận nơi khi cần thiết.</p>
+                    <h5>Giá cạnh tranh</h5>
+                    <p>Cam kết giá tốt nhất, thương lượng linh hoạt theo số lượng và dự án.</p>
                 </div>
             </div>
         </div>
@@ -364,17 +418,17 @@
 </section>
 
 <!-- ABOUT -->
-<section class="about-section py-5">
+<section class="about-section py-5" style="padding: 80px 0;">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <div class="hero-badge" style="background:rgba(3,51,123,0.08); border-color:rgba(3,51,123,0.2); color:var(--e-global-color-secondary);">Về chúng tôi</div>
-                <h2 class="section-title mt-2">Hơn 10 năm kinh nghiệm trong ngành van & bơm</h2>
+                <div class="hero-badge" style="background: rgba(10,26,58,0.08); color: var(--secondary);">Về chúng tôi</div>
+                <h2 class="section-title">Hơn 10 năm kinh nghiệm</h2>
                 <div class="section-line"></div>
-                <p class="mb-4" style="font-size:15px; line-height:1.8; color:var(--e-global-color-text);">
-                    Chúng tôi chuyên cung cấp các sản phẩm van công nghiệp và bơm nước chất lượng cao từ các nhà sản xuất uy tín. Với đội ngũ kỹ thuật am hiểu, chúng tôi tư vấn giải pháp tối ưu cho từng ứng dụng cụ thể.
+                <p style="color: var(--text-light); line-height: 1.7;">
+                    Chúng tôi chuyên cung cấp van công nghiệp và bơm nước chất lượng cao từ các nhà sản xuất uy tín. Với đội ngũ kỹ thuật am hiểu, chúng tôi tư vấn giải pháp tối ưu cho từng ứng dụng cụ thể.
                 </p>
-                <a href="/lien-he" class="btn-primary-custom">Liên hệ tư vấn miễn phí</a>
+                <a href="/lien-he" class="btn-primary-custom mt-3" style="display: inline-block;">Liên hệ tư vấn miễn phí</a>
             </div>
             <div class="col-lg-6">
                 <div class="row g-3">
@@ -403,36 +457,39 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="py-5">
+<footer>
     <div class="container">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">VAN & BƠM NƯỚC QUY</h6>
-                <p style="color:rgba(255,255,255,0.6); font-size:14px; line-height:1.8;">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h6>VAN & BƠM NƯỚC QUY</h6>
+                <p style="color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.6;">
                     Chuyên cung cấp van công nghiệp và bơm nước chất lượng cao. Tư vấn kỹ thuật miễn phí.
                 </p>
             </div>
-            <div class="col-md-4">
-                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">LIÊN KẾT</h6>
-                <ul class="list-unstyled" style="font-size:14px;">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h6>LIÊN KẾT</h6>
+                <ul class="list-unstyled">
                     <li class="mb-2"><a href="/">Trang chủ</a></li>
                     <li class="mb-2"><a href="/san-pham">Sản phẩm</a></li>
                     <li class="mb-2"><a href="/lien-he">Liên hệ</a></li>
                 </ul>
             </div>
             <div class="col-md-4">
-                <h6 class="text-white fw-bold mb-3" style="letter-spacing:1px;">LIÊN HỆ</h6>
-                <ul class="list-unstyled" style="font-size:14px; color:rgba(255,255,255,0.6);">
-                    <li class="mb-2">📞 Hotline: 0829 626 899</li>
+                <h6>LIÊN HỆ</h6>
+                <ul class="list-unstyled" style="color: rgba(255,255,255,0.6); font-size: 14px;">
+                    <li class="mb-2">📞 0829 626 899</li>
                     <li class="mb-2">✉️ quybui0611@gmail.com</li>
                     <li class="mb-2">🕐 Hỗ trợ 24/7</li>
                 </ul>
             </div>
         </div>
-        <hr style="border-color:rgba(255,255,255,0.1); margin-top:32px;">
-        <p class="text-center mb-0" style="color:rgba(255,255,255,0.4); font-size:13px;">© 2026 Van & Bơm Nước Quy. All rights reserved.</p>
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 40px 0 24px;">
+        <p class="text-center mb-0" style="color: rgba(255,255,255,0.3); font-size: 12px;">© 2026 Van & Bơm Nước Quy. All rights reserved.</p>
     </div>
 </footer>
+
+<!-- FLOATING HELP BUTTON (giống omeax) -->
+<a href="/lien-he" class="help-button">💬 Cần giúp đỡ?</a>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
