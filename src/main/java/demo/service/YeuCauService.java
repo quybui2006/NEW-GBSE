@@ -3,9 +3,10 @@ package demo.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import demo.model.YeuCau;
@@ -23,17 +24,26 @@ public class YeuCauService {
         return yeuCauRepository.save(yeuCau);
     }
 
-    // Lấy tất cả yêu cầu
+    // Lấy tất cả yêu cầu (dùng cho export Excel)
     public List<YeuCau> layTatCa() {
         return yeuCauRepository.findAll();
     }
 
-    // Lọc yêu cầu theo khoảng thời gian
+    // ✅ THÊM: Lấy tất cả có phân trang
+    public Page<YeuCau> layTatCaCoPhanTrang(int page, int size) {
+        return yeuCauRepository.findAll(PageRequest.of(page, size));
+    }
+
+    // ✅ SỬA: Lọc trong database thay vì RAM
     public List<YeuCau> locTheoThoiGian(String period, String from, String to) {
         LocalDateTime fromDateTime;
+        LocalDateTime toDateTime = null;
 
         if ("custom".equals(period) && from != null && !from.isEmpty()) {
             fromDateTime = LocalDate.parse(from).atStartOfDay();
+            if (to != null && !to.isEmpty()) {
+                toDateTime = LocalDate.parse(to).plusDays(1).atStartOfDay();
+            }
         } else {
             fromDateTime = switch (period) {
                 case "day" -> LocalDateTime.now().toLocalDate().atStartOfDay();
@@ -44,18 +54,8 @@ public class YeuCauService {
             };
         }
 
-        LocalDateTime toDateTime = null;
-        if ("custom".equals(period) && to != null && !to.isEmpty()) {
-            toDateTime = LocalDate.parse(to).plusDays(1).atStartOfDay();
-        }
-
-        final LocalDateTime finalFrom = fromDateTime;
-        final LocalDateTime finalTo = toDateTime;
-
-        return yeuCauRepository.findAll().stream()
-                .filter(yc -> yc.getThoiGian() != null && !yc.getThoiGian().isBefore(finalFrom))
-                .filter(yc -> finalTo == null || yc.getThoiGian().isBefore(finalTo))
-                .collect(Collectors.toList());
+        // ✅ GỌI DATABASE TRỰC TIẾP - không findAll() rồi lọc trong RAM
+        return yeuCauRepository.findByDateRange(fromDateTime, toDateTime);
     }
 
     // Xóa yêu cầu

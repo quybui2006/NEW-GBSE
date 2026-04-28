@@ -1,6 +1,10 @@
 package demo.config;
 
+import java.security.SecureRandom;
+import java.util.Base64;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,17 +21,40 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // ✅ Ẩn cả username
+    @Value("${ADMIN_USERNAME:admin}")
+    private String adminUsername;
+
+    // ✅ Ẩn cả password
+    @Value("${ADMIN_PASSWORD:#{null}}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) {
-        // Chỉ tạo nếu chưa có admin
-        if (!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername(adminUsername)) {
             User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setUsername(adminUsername);
+
+            String password;
+            if (adminPassword != null && !adminPassword.isEmpty()) {
+                password = adminPassword;
+            } else {
+                byte[] randomBytes = new byte[12];
+                new SecureRandom().nextBytes(randomBytes);
+                password = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+            }
+
+            admin.setPassword(passwordEncoder.encode(password));
             admin.setRole("ADMIN");
             admin.setEnabled(true);
             userRepository.save(admin);
-            System.out.println("✅ Đã tạo tài khoản admin mặc định: admin / admin123");
+
+            System.out.println("============================================");
+            System.out.println("🔐 TÀI KHOẢN QUẢN TRỊ:");
+            System.out.println("   Username: " + adminUsername);
+            System.out.println("   Password: " + password);
+            System.out.println("   ⚠️ LƯU LẠI NGAY - CHỈ HIỂN THỊ 1 LẦN!");
+            System.out.println("============================================");
         }
     }
 }

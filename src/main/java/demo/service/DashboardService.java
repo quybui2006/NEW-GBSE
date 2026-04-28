@@ -43,24 +43,26 @@ public class DashboardService {
             toDate = temp;
         }
 
-        // Load dữ liệu
-        List<YeuCau> allYeuCau = yeuCauRepository.findAll();
+        // ✅ SỬA: Load dữ liệu đã lọc từ database (không findAll() toàn bộ)
+        LocalDateTime startDateTime = fromDate.atStartOfDay();
+        LocalDateTime endDateTime = toDate.plusDays(1).atStartOfDay();
+        List<YeuCau> filteredYeuCau = yeuCauRepository.findByDateRange(startDateTime, endDateTime);
         List<VisitLog> allVisitLogs = visitLogRepository.findAll();
 
         // Tính tổng
-        long tongYeuCau = countRequestsInRange(allYeuCau, fromDate, toDate);
+        long tongYeuCau = filteredYeuCau.size();
         long tongTruyCap = sumVisitsInRange(allVisitLogs, fromDate, toDate);
         boolean hasData = tongYeuCau > 0 || tongTruyCap > 0;
 
-        // Tạo chart data - ✅ SỬA: Integer → Long
+        // Tạo chart data
         List<String> labels = new ArrayList<>();
         List<Long> accessData = new ArrayList<>();
         List<Long> requestData = new ArrayList<>();
 
         for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
             labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
-            requestData.add(countRequestsInRange(allYeuCau, d, d));
-            accessData.add(sumVisitsInRange(allVisitLogs, d, d));
+            requestData.add(countRequestsOnDate(filteredYeuCau, d));
+            accessData.add(sumVisitsOnDate(allVisitLogs, d));
         }
 
         // Đóng gói kết quả
@@ -88,9 +90,10 @@ public class DashboardService {
         }
     }
 
-    private long countRequestsInRange(List<YeuCau> list, LocalDate from, LocalDate to) {
-        LocalDateTime start = from.atStartOfDay();
-        LocalDateTime end = to.plusDays(1).atStartOfDay();
+    // ✅ SỬA: Đếm trên dữ liệu đã lọc (nhẹ hơn)
+    private long countRequestsOnDate(List<YeuCau> list, LocalDate date) {
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.plusDays(1).atStartOfDay();
         return list.stream()
                 .filter(yc -> yc.getThoiGian() != null
                         && !yc.getThoiGian().isBefore(start)
@@ -98,7 +101,13 @@ public class DashboardService {
                 .count();
     }
 
-    // ✅ SỬA: int → long
+    private long sumVisitsOnDate(List<VisitLog> list, LocalDate date) {
+        return list.stream()
+                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(date))
+                .mapToLong(VisitLog::getVisitCount)
+                .sum();
+    }
+
     private long sumVisitsInRange(List<VisitLog> list, LocalDate from, LocalDate to) {
         return list.stream()
                 .filter(vl -> vl.getVisitDate() != null
