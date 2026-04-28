@@ -52,10 +52,10 @@ public class DashboardService {
         long tongTruyCap = sumVisitsInRange(allVisitLogs, fromDate, toDate);
         boolean hasData = tongYeuCau > 0 || tongTruyCap > 0;
 
-        // Tạo chart data
+        // Tạo chart data - ✅ SỬA: Integer → Long
         List<String> labels = new ArrayList<>();
-        List<Integer> accessData = new ArrayList<>();
-        List<Integer> requestData = new ArrayList<>();
+        List<Long> accessData = new ArrayList<>();
+        List<Long> requestData = new ArrayList<>();
 
         for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
             labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
@@ -98,12 +98,13 @@ public class DashboardService {
                 .count();
     }
 
-    private int sumVisitsInRange(List<VisitLog> list, LocalDate from, LocalDate to) {
+    // ✅ SỬA: int → long
+    private long sumVisitsInRange(List<VisitLog> list, LocalDate from, LocalDate to) {
         return list.stream()
                 .filter(vl -> vl.getVisitDate() != null
                         && !vl.getVisitDate().isBefore(from)
                         && !vl.getVisitDate().isAfter(to))
-                .mapToInt(VisitLog::getVisitCount)
+                .mapToLong(VisitLog::getVisitCount)
                 .sum();
     }
 }
