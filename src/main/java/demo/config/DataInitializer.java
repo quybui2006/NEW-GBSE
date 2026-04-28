@@ -21,12 +21,11 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // ✅ Ẩn cả username
     @Value("${ADMIN_USERNAME:admin}")
     private String adminUsername;
 
-    // ✅ Ẩn cả password
-    @Value("${ADMIN_PASSWORD:#{null}}")
+    // ✅ SỬA: Dùng giá trị rỗng thay vì #{null}
+    @Value("${ADMIN_PASSWORD:}")
     private String adminPassword;
 
     @Override
@@ -36,7 +35,8 @@ public class DataInitializer implements CommandLineRunner {
             admin.setUsername(adminUsername);
 
             String password;
-            if (adminPassword != null && !adminPassword.isEmpty()) {
+            // ✅ SỬA: Kiểm tra rỗng đúng cách
+            if (adminPassword != null && !adminPassword.trim().isEmpty()) {
                 password = adminPassword;
             } else {
                 byte[] randomBytes = new byte[12];
