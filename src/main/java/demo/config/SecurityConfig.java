@@ -1,26 +1,22 @@
 package demo.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import demo.service.CustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
 
-    // ✅ SỬA: Dùng biến môi trường, có giá trị mặc định khi dev
-    @Value("${ADMIN_USERNAME:admin}")
-    private String adminUsername;
-
-    @Value("${ADMIN_PASSWORD:admin123}")
-    private String adminPassword;
+    // ✅ SỬA: Inject UserDetailsService từ database thay vì InMemory
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,8 +26,8 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/**")
             )
             .authorizeHttpRequests(authz -> authz
-                // ✅ ĐÃ THÊM: /uploads/** để ảnh hiển thị không cần đăng nhập
-                .requestMatchers("/", "/san-pham", "/lien-he", "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
+                .requestMatchers("/", "/san-pham", "/san-pham/**", "/lien-he",
+                                 "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -47,16 +43,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        // ✅ SỬA: Dùng biến thay vì hardcode "admin"/"admin123"
-        UserDetails admin = User.builder()
-            .username(adminUsername)
-            .password(passwordEncoder().encode(adminPassword))
-            .roles("ADMIN")
-            .build();
-        return new InMemoryUserDetailsManager(admin);
-    }
+    // ✅ XÓA: InMemoryUserDetailsManager - không cần nữa
+    // Spring Security tự động dùng CustomUserDetailsService đã @Autowired
 
     @Bean
     public PasswordEncoder passwordEncoder() {

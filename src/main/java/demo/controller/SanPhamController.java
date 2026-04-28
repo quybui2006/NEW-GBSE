@@ -1,16 +1,13 @@
 package demo.controller;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,28 +16,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import demo.model.SanPham;
-import demo.model.VisitLog;
 import demo.model.YeuCau;
-import demo.repository.SanPhamRepository;
-import demo.repository.VisitLogRepository;
-import demo.repository.YeuCauRepository;
-import demo.service.FileUploadService;
+import demo.service.DashboardService;
+import demo.service.SanPhamService;
+import demo.service.YeuCauService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @Controller
 public class SanPhamController {
 
+    // ========== SERVICES ==========
     @Autowired
-    private SanPhamRepository sanPhamRepository;
+    private SanPhamService sanPhamService;
 
     @Autowired
-    private YeuCauRepository yeuCauRepository;
+    private YeuCauService yeuCauService;
 
     @Autowired
-    private VisitLogRepository visitLogRepository;
+    private DashboardService dashboardService;
 
-    @Autowired
-    private FileUploadService fileUploadService;
+    // ================================================================
+    //  TRANG CÔNG KHAI
+    // ================================================================
 
     @GetMapping("/")
     public String trangChu() {
@@ -49,25 +47,23 @@ public class SanPhamController {
 
     @GetMapping("/san-pham")
     public String danhSachSanPham(@RequestParam(required = false) String keyword, Model model) {
-        List<SanPham> danhSach;
-        if (keyword != null && !keyword.isEmpty()) {
-            danhSach = sanPhamRepository.timKiem(keyword);
-            model.addAttribute("keyword", keyword);
-        } else {
-            danhSach = sanPhamRepository.findAll();
-        }
+        List<SanPham> danhSach = sanPhamService.timKiem(keyword);
         model.addAttribute("danhSach", danhSach);
+        if (keyword != null && !keyword.isEmpty()) {
+            model.addAttribute("keyword", keyword);
+        }
         return "san-pham";
     }
 
     @GetMapping("/lien-he")
-    public String trangLienHe() {
+    public String trangLienHe(Model model) {
+        model.addAttribute("yeuCau", new YeuCau());
         return "lien-he";
     }
 
     @GetMapping("/san-pham/{id}")
     public String chiTietSanPham(@PathVariable Long id, Model model) {
-        SanPham sp = sanPhamRepository.findById(id).orElse(null);
+        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
         model.addAttribute("sp", sp);
         return "chi-tiet-san-pham";
     }
@@ -78,101 +74,42 @@ public class SanPhamController {
     }
 
     @PostMapping("/lien-he")
-    public String guiYeuCau(@ModelAttribute YeuCau yeuCau, Model model) {
-        yeuCauRepository.save(yeuCau);
+    public String guiYeuCau(@Valid @ModelAttribute("yeuCau") YeuCau yeuCau,
+                            BindingResult bindingResult,
+                            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "lien-he";
+        }
+        yeuCauService.luuYeuCau(yeuCau);
         model.addAttribute("thanhCong", true);
+        model.addAttribute("yeuCau", new YeuCau());
         return "lien-he";
     }
+
+    // ================================================================
+    //  TRANG ADMIN
+    // ================================================================
 
     @GetMapping("/admin")
     public String adminDashboard(@RequestParam(required = false) String from,
                                  @RequestParam(required = false) String to,
                                  Model model) {
-        LocalDate fromDate;
-        LocalDate toDate;
-
-        try {
-            fromDate = (from != null && !from.isEmpty()) ? LocalDate.parse(from) : LocalDate.now().minusDays(6);
-            toDate = (to != null && !to.isEmpty()) ? LocalDate.parse(to) : LocalDate.now();
-        } catch (Exception e) {
-            fromDate = LocalDate.now().minusDays(6);
-            toDate = LocalDate.now();
-        }
-
-        if (fromDate.isAfter(toDate)) {
-            LocalDate temp = fromDate;
-            fromDate = toDate;
-            toDate = temp;
-        }
-        final LocalDate start = fromDate;
-        final LocalDate end = toDate;
-
-        List<YeuCau> allYeuCau = yeuCauRepository.findAll();
-        List<VisitLog> allVisitLogs = visitLogRepository.findAll();
-
-        LocalDateTime startDateTime = fromDate.atStartOfDay();
-        LocalDateTime endDateTime = toDate.plusDays(1).atStartOfDay();
-
-        long tongYeuCau = allYeuCau.stream()
-            .filter(yc -> yc.getThoiGian() != null
-                && !yc.getThoiGian().isBefore(startDateTime)
-                && yc.getThoiGian().isBefore(endDateTime))
-            .count();
-
-        long tongTruyCap = allVisitLogs.stream()
-            .filter(vl -> vl.getVisitDate() != null
-                && !vl.getVisitDate().isBefore(start)
-                && !vl.getVisitDate().isAfter(end))
-            .mapToLong(VisitLog::getVisitCount)
-            .sum();
-
-        List<String> chartLabels = new ArrayList<>();
-        List<Integer> chartAccessData = new ArrayList<>();
-        List<Integer> chartRequestData = new ArrayList<>();
-
-        LocalDate current = fromDate;
-        for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-            final LocalDate currentDay = d;
-            chartLabels.add(currentDay.format(DateTimeFormatter.ofPattern("dd/MM")));
-
-            LocalDateTime dayStart = currentDay.atStartOfDay();
-            LocalDateTime dayEnd = currentDay.plusDays(1).atStartOfDay();
-
-            int reqCount = (int) allYeuCau.stream()
-                .filter(yc -> yc.getThoiGian() != null
-                    && !yc.getThoiGian().isBefore(dayStart)
-                    && yc.getThoiGian().isBefore(dayEnd))
-                .count();
-            chartRequestData.add(reqCount);
-
-            int visitCount = allVisitLogs.stream()
-                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(currentDay))
-                .mapToInt(VisitLog::getVisitCount)
-                .sum();
-            chartAccessData.add(visitCount);
-        }
-
-        model.addAttribute("tongSanPham", sanPhamRepository.count());
-        model.addAttribute("tongYeuCau", tongYeuCau);
-        model.addAttribute("tongTruyCap", tongTruyCap);
-        model.addAttribute("hasData", tongYeuCau > 0 || tongTruyCap > 0);
-        model.addAttribute("chartLabels", chartLabels);
-        model.addAttribute("chartAccessData", chartAccessData);
-        model.addAttribute("chartRequestData", chartRequestData);
-        model.addAttribute("fromDate", fromDate.toString());
-        model.addAttribute("toDate", toDate.toString());
+        // ✅ 1 dòng gọi Service - 78 dòng logic đã chuyển vào DashboardService
+        Map<String, Object> data = dashboardService.getDashboardData(from, to);
+        model.addAllAttributes(data);
         return "admin/index";
     }
 
     @GetMapping("/admin/yeu-cau")
     public String danhSachYeuCau(Model model) {
-        model.addAttribute("danhSachYeuCau", yeuCauRepository.findAll());
+        model.addAttribute("danhSachYeuCau", yeuCauService.layTatCa());
         return "admin/yeu-cau";
     }
 
     @GetMapping("/admin/san-pham")
     public String adminDanhSachSanPham(Model model) {
-        model.addAttribute("danhSach", sanPhamRepository.findAll());
+        model.addAttribute("danhSach", sanPhamService.layTatCa());
         return "admin/san-pham";
     }
 
@@ -184,34 +121,24 @@ public class SanPhamController {
 
     @GetMapping("/admin/san-pham/sua/{id}")
     public String adminSuaSanPham(@PathVariable Long id, Model model) {
-        SanPham sp = sanPhamRepository.findById(id).orElse(null);
+        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
         model.addAttribute("sp", sp);
         return "admin/form-san-pham";
     }
 
     @PostMapping("/admin/san-pham/luu")
     public String adminLuuSanPham(@ModelAttribute SanPham sp,
-            @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile) {
-        try {
-            if (!hinhAnhFile.isEmpty()) {
-                String tenFile = fileUploadService.luuFile(hinhAnhFile);
-                sp.setHinhAnh(tenFile);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        sanPhamRepository.save(sp);
+                                  @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile) {
+        sanPhamService.luu(sp, hinhAnhFile);
         return "redirect:/admin/san-pham";
     }
 
-    // ✅ ĐÃ SỬA: GetMapping → PostMapping (khớp với form POST có CSRF)
     @PostMapping("/admin/san-pham/xoa/{id}")
     public String adminXoaSanPham(@PathVariable Long id) {
-        sanPhamRepository.deleteById(id);
+        sanPhamService.xoa(id);
         return "redirect:/admin/san-pham";
     }
 
-    // ✅ ĐÃ SỬA: GetMapping → PostMapping + thêm tham số from, to
     @PostMapping("/admin/bao-cao/excel")
     public void xuatExcel(@RequestParam(defaultValue = "all") String period,
                           @RequestParam(required = false) String from,
@@ -220,7 +147,7 @@ public class SanPhamController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=bao-cao-yeu-cau.xlsx");
 
-        List<YeuCau> data = locTheoThoiGian(period, from, to);
+        List<YeuCau> data = yeuCauService.locTheoThoiGian(period, from, to);
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             var sheet = workbook.createSheet("Yeu Cau");
@@ -242,35 +169,5 @@ public class SanPhamController {
             }
             workbook.write(response.getOutputStream());
         }
-    }
-
-    // ✅ ĐÃ SỬA: Hỗ trợ lọc theo from/to từ form export
-    private List<YeuCau> locTheoThoiGian(String period, String from, String to) {
-        LocalDateTime fromDateTime;
-        
-        if ("custom".equals(period) && from != null && !from.isEmpty()) {
-            fromDateTime = LocalDate.parse(from).atStartOfDay();
-        } else {
-            fromDateTime = switch (period) {
-                case "day" -> LocalDateTime.now().toLocalDate().atStartOfDay();
-                case "week" -> LocalDateTime.now().minusWeeks(1);
-                case "month" -> LocalDateTime.now().minusMonths(1);
-                case "year" -> LocalDateTime.now().minusYears(1);
-                default -> LocalDateTime.of(2000, 1, 1, 0, 0);
-            };
-        }
-        
-        LocalDateTime toDateTime = null;
-        if ("custom".equals(period) && to != null && !to.isEmpty()) {
-            toDateTime = LocalDate.parse(to).plusDays(1).atStartOfDay();
-        }
-        
-        final LocalDateTime finalFrom = fromDateTime;
-        final LocalDateTime finalTo = toDateTime;
-        
-        return yeuCauRepository.findAll().stream()
-            .filter(yc -> yc.getThoiGian() != null && !yc.getThoiGian().isBefore(finalFrom))
-            .filter(yc -> finalTo == null || yc.getThoiGian().isBefore(finalTo))
-            .collect(Collectors.toList());
     }
 }

@@ -9,7 +9,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "yeu_cau")
 public class YeuCau {
@@ -18,20 +21,27 @@ public class YeuCau {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-@Column(columnDefinition = "varchar(255)")
-private String hoTen;
+    @NotBlank(message = "Họ tên không được để trống")
+    @Size(min = 2, max = 100, message = "Họ tên phải từ 2-100 ký tự")
+    @Column(columnDefinition = "varchar(255)")
+    private String hoTen;
 
-@Column(columnDefinition = "varchar(20)")
-private String soDienThoai;
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "^[0-9]{9,11}$", message = "Số điện thoại không hợp lệ")
+    @Column(columnDefinition = "varchar(20)")
+    private String soDienThoai;
 
-@Column(columnDefinition = "varchar(255)")
-private String email;
+    @Email(message = "Email không hợp lệ")
+    @Column(columnDefinition = "varchar(255)")
+    private String email;
 
-@Column(columnDefinition = "varchar(255)")
-private String sanPhamQuanTam;
+    @Column(columnDefinition = "varchar(255)")
+    private String sanPhamQuanTam;
 
-@Column(columnDefinition = "varchar(1000)")
-private String noiDung;
+
+    @Size(max = 1000, message = "Nội dung không quá 1000 ký tự")
+    @Column(columnDefinition = "varchar(1000)")
+    private String noiDung;
 
     private LocalDateTime thoiGian;
 

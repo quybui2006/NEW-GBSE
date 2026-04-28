@@ -56,7 +56,11 @@
             <div th:if="${thanhCong}" class="alert alert-success">
                 Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm nhất có thể.
             </div>
-
+            <div th:if="${errors}" class="alert alert-danger">
+                <ul class="mb-0">
+                    <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+                </ul>
+            </div>
             <form action="/lien-he" method="post" class="needs-validation" novalidate>
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="mb-3">
