@@ -15,14 +15,26 @@ import demo.model.YeuCau;
 @Repository
 public interface YeuCauRepository extends JpaRepository<YeuCau, Long> {
 
-    // ✅ THÊM: Lọc theo ngày TRONG DATABASE (không lọc trong RAM nữa)
-    @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from AND (:to IS NULL OR y.thoiGian < :to) ORDER BY y.thoiGian DESC")
+    // ✅ CÁCH 1: Tách thành 2 trường hợp riêng biệt
+    @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from AND y.thoiGian < :to ORDER BY y.thoiGian DESC")
     List<YeuCau> findByDateRange(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+    
+    @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from ORDER BY y.thoiGian DESC")
+    List<YeuCau> findByDateRangeFrom(@Param("from") LocalDateTime from);
 
-    // ✅ THÊM: Phân trang tất cả
+    // ✅ CÁCH 2: Dùng Native Query (làm việc chắc chắn với PostgreSQL)
+    @Query(value = "SELECT * FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to) ORDER BY thoi_gian DESC", 
+           nativeQuery = true)
+    List<YeuCau> findByDateRangeNative(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    // Phân trang với Native Query
+    @Query(value = "SELECT * FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to) ORDER BY thoi_gian DESC",
+           countQuery = "SELECT COUNT(*) FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to)",
+           nativeQuery = true)
+    Page<YeuCau> findByDateRangeCoPhanTrang(@Param("from") LocalDateTime from, 
+                                            @Param("to") LocalDateTime to, 
+                                            Pageable pageable);
+
+    // Phân trang tất cả
     Page<YeuCau> findAll(Pageable pageable);
-
-    // ✅ THÊM: Lọc + phân trang
-    @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from AND (:to IS NULL OR y.thoiGian < :to) ORDER BY y.thoiGian DESC")
-    Page<YeuCau> findByDateRangeCoPhanTrang(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to, Pageable pageable);
 }
