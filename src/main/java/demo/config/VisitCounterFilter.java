@@ -1,16 +1,21 @@
 package demo.config;
 
-import demo.model.VisitLog;
-import demo.repository.VisitLogRepository;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import demo.model.VisitLog;
+import demo.repository.VisitLogRepository;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class VisitCounterFilter implements Filter {
@@ -34,10 +39,10 @@ public class VisitCounterFilter implements Filter {
                 Optional<VisitLog> existing = visitLogRepository.findByVisitDate(today);
                 if (existing.isPresent()) {
                     VisitLog log = existing.get();
-                    log.setVisitCount(log.getVisitCount() + 1);
+                    log.incrementVisitCount();  // ✅ SỬA: dùng method helper
                     visitLogRepository.save(log);
                 } else {
-                    visitLogRepository.save(new VisitLog(today, 1));
+                    visitLogRepository.save(new VisitLog(today, 1L));  // ✅ SỬA: dùng 1L
                 }
             } catch (Exception e) {
                 // Không làm crash app nếu DB lỗi

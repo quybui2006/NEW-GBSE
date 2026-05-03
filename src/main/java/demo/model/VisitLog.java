@@ -20,11 +20,11 @@ public class VisitLog {
     private LocalDate visitDate;
     
     @Column(nullable = false)
-    private Integer visitCount = 0;
+    private Long visitCount = 0L;
 
     public VisitLog() {}
 
-    public VisitLog(LocalDate visitDate, Integer visitCount) {
+    public VisitLog(LocalDate visitDate, Long visitCount) {
         this.visitDate = visitDate;
         this.visitCount = visitCount;
     }
@@ -35,6 +35,11 @@ public class VisitLog {
     public LocalDate getVisitDate() { return visitDate; }
     public void setVisitDate(LocalDate visitDate) { this.visitDate = visitDate; }
     
-    public Integer getVisitCount() { return visitCount; }
-    public void setVisitCount(Integer visitCount) { this.visitCount = visitCount; }
+    public Long getVisitCount() { return visitCount; }
+    public void setVisitCount(Long visitCount) { this.visitCount = visitCount; }
+    
+    // ✅ Thêm method helper
+    public void incrementVisitCount() {
+        this.visitCount = this.visitCount + 1L;
+    }
 }
