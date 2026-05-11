@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/**")
             )
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/san-pham", "/san-pham/**", "/lien-he",
+                .requestMatchers("/", "/products", "/products/**", "/contact", "/about", "/projects", "/news",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
