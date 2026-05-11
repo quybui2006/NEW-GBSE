@@ -7,96 +7,6 @@
 <meta name="description" content="OMEAX – Đối tác cung cấp thiết bị cơ điện cho các dự án HVAC, cấp thoát nước, PCCC tại Việt Nam."/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
-
-<style>
-/* ── Carousel wrapper ─────────────────────────────── */
-.carousel {
-  position: relative;
-  overflow: hidden;
-}
-
-.carousel-track {
-  display: flex;
-  gap: 1.5rem;              /* same gap as .grid */
-  transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-  will-change: transform;
-}
-
-/* Each card inside a carousel keeps a fixed width of ~1/3 container */
-.carousel .card {
-  flex: 0 0 calc((100% - 3rem) / 3); /* 3 cards visible, 2 gaps */
-  min-width: 0;
-}
-
-/* Navigation buttons */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  border: 2px solid var(--navy-deep, #0a2540);
-  background: #fff;
-  color: var(--navy-deep, #0a2540);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
-  transition: background .2s, color .2s, opacity .2s;
-}
-.carousel-btn:hover {
-  background: var(--navy-deep, #0a2540);
-  color: #fff;
-}
-.carousel-btn.prev { left: -1.25rem; }
-.carousel-btn.next { right: -1.25rem; }
-.carousel-btn:disabled {
-  opacity: .3;
-  cursor: default;
-  pointer-events: none;
-}
-
-/* Pagination dots */
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: .5rem;
-  margin-top: 1.25rem;
-}
-.carousel-dot {
-  width: .55rem;
-  height: .55rem;
-  border-radius: 50%;
-  background: #cbd5e1;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: background .2s, transform .2s;
-}
-.carousel-dot.active {
-  background: var(--navy-deep, #0a2540);
-  transform: scale(1.3);
-}
-
-/* Responsive: 2 cards on tablet, 1 on mobile */
-@media (max-width: 900px) {
-  .carousel .card {
-    flex: 0 0 calc((100% - 1.5rem) / 2);
-  }
-}
-@media (max-width: 560px) {
-  .carousel .card {
-    flex: 0 0 100%;
-  }
-  .carousel-btn.prev { left: -.5rem; }
-  .carousel-btn.next { right: -.5rem; }
-}
-</style>
 </head>
 <body th:with="active='home'">
 <div th:replace="~{fragments/header :: header}"></div>
@@ -180,250 +90,200 @@
       <h2>Dự án tiêu biểu</h2>
       <p>Hàng trăm dự án trên khắp Việt Nam</p>
     </div>
-
-    <!-- ── High-Rise Building (Office – Complex) – 6 cards → CAROUSEL ── -->
-    <div class="project-section">
-      <h2>High-Rise Building (Office – Complex)</h2>
-      <div class="carousel" id="carousel-office">
-        <button class="carousel-btn prev" aria-label="Trước">&#8249;</button>
-        <div class="carousel-track">
-          <article class="card">
-            <div class="card-img"><img src="/images/CapitalPlace.png" alt="CAPITAL PLACE (office tower)"/></div>
-            <div class="card-body">
-              <h3>CAPITAL PLACE (office tower)</h3>
-              <p class="card-meta"><b>Location:</b> Lieu Giai, Ba Dinh, Ha Noi.</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card-img"><img src="/images/TechnoparkTower.png" alt="TECHNOPARK TOWER (office tower)"/></div>
-            <div class="card-body">
-              <h3>TECHNOPARK TOWER (office tower)</h3>
-              <p class="card-meta"><b>Location:</b> Gia Lam, Ha Noi.</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card-img"><img src="/images/DiamondCrownPlaza.png" alt="DIAMOND CROWN PLAZA (complex)"/></div>
-            <div class="card-body">
-              <h3>DIAMOND CROWN PLAZA (complex)</h3>
-              <p class="card-meta"><b>Location:</b> Le Hong Phong, Ngo Quyen, Hai Phong.</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">DOJI GROUP</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li><li>– SS expansion joint</li></ul></div>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card-img"><img src="/images/SunGrandCity.png" alt="SUN GRAND CITY – TAY HO VIEW"/></div>
-            <div class="card-body">
-              <h3>SUN GRAND CITY – TAY HO VIEW</h3>
-              <p class="card-meta"><b>Location:</b> Quang An, Ha Noi.</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HVAC</li><li>– HEX for hot water system</li><li>– Water meter</li></ul></div>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card-img"><img src="/images/GoldMarkCity.png" alt="GOLD MARK CITY"/></div>
-            <div class="card-body">
-              <h3>GOLD MARK CITY</h3>
-              <p class="card-meta"><b>Location:</b> Ha Noi</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TNR</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC system</li><li>– Heat exchanger for HVAC system</li></ul></div>
-            </div>
-          </article>
-          <article class="card">
-            <div class="card-img"><img src="/images/TienBoPlaza.png" alt="TIEN BO PLAZA"/></div>
-            <div class="card-body">
-              <h3>TIEN BO PLAZA</h3>
-              <p class="card-meta"><b>Location:</b> Nguyen Thai Hoc, Ha Noi</p>
-              <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TDI</span></p>
-              <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HAVC</li><li>– PICV, MV valve</li><li>– Flexible joint</li><li>– BTU meter</li></ul></div>
-            </div>
-          </article>
-        </div>
-        <button class="carousel-btn next" aria-label="Sau">&#8250;</button>
+    <div class="project-section"><h2>High-Rise Building (Office – Complex)</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/CapitalPlace.png" alt="CAPITAL PLACE (office tower)"/></div>
+      <div class="card-body">
+        <h3>CAPITAL PLACE (office tower)</h3>
+        <p class="card-meta"><b>Location:</b> Lieu Giai, Ba Dinh, Ha Noi.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
       </div>
-      <div class="carousel-dots" id="dots-office"></div>
-    </div>
-
-    <!-- ── High-Rise Building (Residential) – 2 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>High-Rise Building (Residential)</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/VinhomesGrandPark.png" alt="VINHOMES GRAND PARK"/></div>
-          <div class="card-body">
-            <h3>VINHOMES GRAND PARK</h3>
-            <p class="card-meta"><b>Location:</b> District 9, HCMC.</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Water meter, BTU meter</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/VinhomesOceanPark.png" alt="VINHOMES OCEAN PARK"/></div>
-          <div class="card-body">
-            <h3>VINHOMES OCEAN PARK</h3>
-            <p class="card-meta"><b>Location:</b> Ha Noi – Hung Yen</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps & Heatpump</li><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li></ul></div>
-          </div>
-        </article>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/TechnoparkTower.png" alt="TECHNOPARK TOWER (office tower)"/></div>
+      <div class="card-body">
+        <h3>TECHNOPARK TOWER (office tower)</h3>
+        <p class="card-meta"><b>Location:</b> Gia Lam, Ha Noi.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
       </div>
-    </div>
-
-    <!-- ── Exhibition Center – Data Center – 2 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>Exhibition Center – Data Center</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/TheGrandEXPO.png" alt="THE GRAND EXPO, VIETNAM EXPOSITION CENTER"/></div>
-          <div class="card-body">
-            <h3>THE GRAND EXPO, VIETNAM EXPOSITION CENTER</h3>
-            <p class="card-meta"><b>Location:</b> Dong Anh, Ha Noi.</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MV valves</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/CMCDataCenter.png" alt="CMC DATA CENTER"/></div>
-          <div class="card-body">
-            <h3>CMC DATA CENTER</h3>
-            <p class="card-meta"><b>Location:</b> Tan Thuan, HCMC</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">CMC Group</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li></ul></div>
-          </div>
-        </article>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/DiamondCrownPlaza.png" alt="DIAMOND CROWN PLAZA (complex)"/></div>
+      <div class="card-body">
+        <h3>DIAMOND CROWN PLAZA (complex)</h3>
+        <p class="card-meta"><b>Location:</b> Le Hong Phong, Ngo Quyen, Hai Phong.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">DOJI GROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li><li>– SS expansion joint</li></ul></div>
       </div>
-    </div>
-
-    <!-- ── Resort – Shopping Mall – Factory – 3 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>Resort – Shopping Mall – Factory</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/Vinfast.png" alt="VINFAST – VINES (Car & Battery factories)"/></div>
-          <div class="card-body">
-            <h3>VINFAST – VINES (Car & Battery factories)</h3>
-            <p class="card-meta"><b>Location:</b> Hai Phong, Ha Tinh.</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/OnsenResort.png" alt="ONSEN (resort)"/></div>
-          <div class="card-body">
-            <h3>ONSEN (resort)</h3>
-            <p class="card-meta"><b>Location:</b> Quang Hanh, Quang Ninh.</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– HEX for hot water supply</li><li>– MV, CV valves</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/VincomCenter.png" alt="VINCOM CENTER (Shopping mall)"/></div>
-          <div class="card-body">
-            <h3>VINCOM CENTER (Shopping mall)</h3>
-            <p class="card-meta"><b>Location:</b> Ha Noi, HCMC, Hai Phong, Ninh Binh, ...</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Hydraulic valves</li></ul></div>
-          </div>
-        </article>
+    </article>
+  <article class="card">
+      <div class="card-img"><img src="/images/SunGrandCity.png" alt="SUN GRAND CITY – TAY HO VIEW"/></div>
+      <div class="card-body">
+        <h3>SUN GRAND CITY – TAY HO VIEW</h3>
+        <p class="card-meta"><b>Location:</b> Quang An, Ha Noi.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HVAC</li><li>– HEX for hot water system</li><li>– Water meter</li></ul></div>
       </div>
-    </div>
-
-    <!-- ── Hotel – 3 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>Hotel</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/HyattRegencyHL.png" alt="HYATT REGENCY HA LONG"/></div>
-          <div class="card-body">
-            <h3>HYATT REGENCY HA LONG</h3>
-            <p class="card-meta"><b>Location:</b> Ha Long – Quang Ninh</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">Dong Gia</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/SheratonHG.png" alt="SHERATON HA GIANG"/></div>
-          <div class="card-body">
-            <h3>SHERATON HA GIANG</h3>
-            <p class="card-meta"><b>Location:</b> Ha Giang</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/MarriottBN.png" alt="MARRIOTT BAC NINH"/></div>
-          <div class="card-body">
-            <h3>MARRIOTT BAC NINH</h3>
-            <p class="card-meta"><b>Location:</b> Bac Ninh</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
-          </div>
-        </article>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/GoldMarkCity.png" alt="GOLD MARK CITY"/></div>
+      <div class="card-body">
+        <h3>GOLD MARK CITY</h3>
+        <p class="card-meta"><b>Location:</b> Ha Noi</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TNR</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC system</li><li>– Heat exchanger for HVAC system</li></ul></div>
       </div>
-    </div>
-
-    <!-- ── Hospital Building – 2 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>Hospital Building</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/VinmeC.png" alt="VINMEC (8 x Hospitals)"/></div>
-          <div class="card-body">
-            <h3>VINMEC (8 x Hospitals)</h3>
-            <p class="card-meta"><b>Location:</b> Hanoi, HCMC, Phu Quoc, Nha Trang, ...</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/HongNgoc.png" alt="HONG NGOC HOSPITAL (phase 1 & 2)"/></div>
-          <div class="card-body">
-            <h3>HONG NGOC HOSPITAL (phase 1 & 2)</h3>
-            <p class="card-meta"><b>Location:</b> My Dinh, Ha Noi.</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">HONG NGOC HOSPITAL GROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– PICV, MBV, MV valves</li></ul></div>
-          </div>
-        </article>
+    </article>
+  <article class="card">
+      <div class="card-img"><img src="/images/TienBoPlaza.png" alt="TIEN BO PLAZA"/></div>
+      <div class="card-body">
+        <h3>TIEN BO PLAZA</h3>
+        <p class="card-meta"><b>Location:</b> Nguyen Thai Hoc, Ha Noi</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TDI</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HAVC</li><li>– PICV, MV valve</li><li>– Flexible joint</li><li>– BTU meter</li></ul></div>
       </div>
-    </div>
-
-    <!-- ── Water Park – 3 cards → grid (≤3) ── -->
-    <div class="project-section">
-      <h2>Water Park</h2>
-      <div class="grid grid-3">
-        <article class="card">
-          <div class="card-img"><img src="/images/SSPark.png" alt="SAM SON PARK"/></div>
-          <div class="card-body">
-            <h3>SAM SON PARK</h3>
-            <p class="card-meta"><b>Location:</b> Sam Son, Thanh Hoa</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/HaNamPark.png" alt="HA NAM PARK"/></div>
-          <div class="card-body">
-            <h3>HA NAM PARK</h3>
-            <p class="card-meta"><b>Location:</b> Phu Ly, Ha Nam</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-img"><img src="/images/CuaHoiPark.png" alt="CUA HOI PARK"/></div>
-          <div class="card-body">
-            <h3>CUA HOI PARK</h3>
-            <p class="card-meta"><b>Location:</b> Nghe An</p>
-            <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VinGroup</span></p>
-            <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, game & show system</li></ul></div>
-          </div>
-        </article>
+    </article></div></div>
+<div class="project-section"><h2>High-Rise Building (Residential)</h2><div class="carousel">
+              <button class="carousel-btn prev" aria-label="Trước">‹</button>
+              <div class="carousel-track">
+<article class="card">
+      <div class="card-img"><img src="/images/VinhomesGrandPark.png" alt="VINHOMES GRAND PARK"/></div>
+      <div class="card-body">
+        <h3>VINHOMES GRAND PARK</h3>
+        <p class="card-meta"><b>Location:</b> District 9, HCMC.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Water meter, BTU meter</li></ul></div>
       </div>
-    </div>
-
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/VinhomesOceanPark.png" alt="VINHOMES OCEAN PARK"/></div>
+      <div class="card-body">
+        <h3>VINHOMES OCEAN PARK</h3>
+        <p class="card-meta"><b>Location:</b> Ha Noi – Hung Yen</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps & Heatpump</li><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li></ul></div>
+      </div>
+    </article></div>
+              <button class="carousel-btn next" aria-label="Sau">›</button>
+            </div></div>
+<div class="project-section"><h2>Exhibition Center – Data Center</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/TheGrandEXPO.png" alt="THE GRAND EXPO, VIETNAM EXPOSITION CENTER"/></div>
+      <div class="card-body">
+        <h3>THE GRAND EXPO, VIETNAM EXPOSITION CENTER</h3>
+        <p class="card-meta"><b>Location:</b> Dong Anh, Ha Noi.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MV valves</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/CMCDataCenter.png" alt="CMC DATA CENTER"/></div>
+      <div class="card-body">
+        <h3>CMC DATA CENTER</h3>
+        <p class="card-meta"><b>Location:</b> Tan Thuan, HCMC</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">CMC Group</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li></ul></div>
+      </div>
+    </article></div></div>
+<div class="project-section"><h2>Resort – Shopping Mall – Factory</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/Vinfast.png" alt="VINFAST – VINES (Car & Battery factories)"/></div>
+      <div class="card-body">
+        <h3>VINFAST – VINES (Car & Battery factories)</h3>
+        <p class="card-meta"><b>Location:</b> Hai Phong, Ha Tinh.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/OnsenResort.png" alt="ONSEN (resort)"/></div>
+      <div class="card-body">
+        <h3>ONSEN (resort)</h3>
+        <p class="card-meta"><b>Location:</b> Quang Hanh, Quang Ninh.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– HEX for hot water supply</li><li>– MV, CV valves</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/VincomCenter.png" alt="VINCOM CENTER (Shopping mall)"/></div>
+      <div class="card-body">
+        <h3>VINCOM CENTER (Shopping mall)</h3>
+        <p class="card-meta"><b>Location:</b> Ha Noi, HCMC, Hai Phong, Ninh Binh, ...</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Hydraulic valves</li></ul></div>
+      </div>
+    </article></div></div>
+<div class="project-section"><h2>Hotel</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/HyattRegencyHL.png" alt="HYATT REGENCY HA LONG"/></div>
+      <div class="card-body">
+        <h3>HYATT REGENCY HA LONG</h3>
+        <p class="card-meta"><b>Location:</b> Ha Long – Quang Ninh</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">Dong Gia</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/SheratonHG.png" alt="SHERATON HA GIANG"/></div>
+      <div class="card-body">
+        <h3>SHERATON HA GIANG</h3>
+        <p class="card-meta"><b>Location:</b> Ha Giang</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/MarriottBN.png" alt="MARRIOTT BAC NINH"/></div>
+      <div class="card-body">
+        <h3>MARRIOTT BAC NINH</h3>
+        <p class="card-meta"><b>Location:</b> Bac Ninh</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
+      </div>
+    </article></div></div>
+<div class="project-section"><h2>Hospital Building</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/VinmeC.png" alt="VINMEC (8 x Hospitals)"/></div>
+      <div class="card-body">
+        <h3>VINMEC (8 x Hospitals)</h3>
+        <p class="card-meta"><b>Location:</b> Hanoi, HCMC, Phu Quoc, Nha Trang, ...</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/HongNgoc.png" alt="HONG NGOC HOSPITAL (phase 1 & 2)"/></div>
+      <div class="card-body">
+        <h3>HONG NGOC HOSPITAL (phase 1 & 2)</h3>
+        <p class="card-meta"><b>Location:</b> My Dinh, Ha Noi.</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">HONG NGOC HOSPITAL GROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– PICV, MBV, MV valves</li></ul></div>
+      </div>
+    </article></div></div>
+<div class="project-section"><h2>Water Park</h2><div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/SSPark.png" alt="SAM SON PARK"/></div>
+      <div class="card-body">
+        <h3>SAM SON PARK</h3>
+        <p class="card-meta"><b>Location:</b> Sam Son, Thanh Hoa</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/HaNamPark.png" alt="HA NAM PARK"/></div>
+      <div class="card-body">
+        <h3>HA NAM PARK</h3>
+        <p class="card-meta"><b>Location:</b> Phu Ly, Ha Nam</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/CuaHoiPark.png" alt="CUA HOI PARK"/></div>
+      <div class="card-body">
+        <h3>CUA HOI PARK</h3>
+        <p class="card-meta"><b>Location:</b> Nghe An</p>
+        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VinGroup</span></p>
+        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, game & show system</li></ul></div>
+      </div>
+    </article></div></div>
     <div class="text-center" style="margin-top:2.5rem">
       <a class="btn btn-outline" href="/projects">Xem tất cả dự án →</a>
     </div>
@@ -432,116 +292,6 @@
 
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
-
-<script>
-/**
- * initCarousel(carouselId, dotsId, visibleCount)
- * Generic carousel initialiser – works for any number of cards.
- * visibleCount: how many cards shown at once on desktop (default 3).
- */
-function initCarousel(carouselId, dotsId, visibleCount) {
-  visibleCount = visibleCount || 3;
-
-  const wrapper = document.getElementById(carouselId);
-  if (!wrapper) return;
-
-  const track   = wrapper.querySelector('.carousel-track');
-  const cards   = Array.from(track.children);
-  const btnPrev = wrapper.querySelector('.carousel-btn.prev');
-  const btnNext = wrapper.querySelector('.carousel-btn.next');
-  const dotsEl  = document.getElementById(dotsId);
-
-  const total = cards.length;
-  let current = 0;                       // current PAGE index
-
-  /* ── Responsive visible count ─────────────────── */
-  function getVisible() {
-    if (window.innerWidth <= 560)  return 1;
-    if (window.innerWidth <= 900)  return 2;
-    return visibleCount;
-  }
-
-  function pageCount() {
-    return Math.ceil(total / getVisible());
-  }
-
-  /* ── Build dots ─────────────────────────────────── */
-  function buildDots() {
-    if (!dotsEl) return;
-    dotsEl.innerHTML = '';
-    const pc = pageCount();
-    if (pc <= 1) { dotsEl.style.display = 'none'; return; }
-    dotsEl.style.display = 'flex';
-    for (let i = 0; i < pc; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'carousel-dot' + (i === current ? ' active' : '');
-      btn.setAttribute('aria-label', 'Trang ' + (i + 1));
-      btn.addEventListener('click', () => goTo(i));
-      dotsEl.appendChild(btn);
-    }
-  }
-
-  /* ── Move to page ───────────────────────────────── */
-  function goTo(page) {
-    const pc = pageCount();
-    current = Math.max(0, Math.min(page, pc - 1));
-
-    const vis        = getVisible();
-    const cardWidth  = cards[0].getBoundingClientRect().width;
-    const gap        = parseFloat(getComputedStyle(track).gap) || 24;
-    const offset     = current * vis * (cardWidth + gap);
-
-    track.style.transform = `translateX(-${offset}px)`;
-
-    /* update buttons */
-    btnPrev.disabled = current === 0;
-    btnNext.disabled = current >= pc - 1;
-
-    /* update dots */
-    if (dotsEl) {
-      Array.from(dotsEl.children).forEach((d, i) =>
-        d.classList.toggle('active', i === current)
-      );
-    }
-  }
-
-  /* ── Wire buttons ───────────────────────────────── */
-  btnPrev.addEventListener('click', () => goTo(current - 1));
-  btnNext.addEventListener('click', () => goTo(current + 1));
-
-  /* ── Touch / swipe ──────────────────────────────── */
-  let touchStartX = 0;
-  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend',   e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
-  });
-
-  /* ── Re-init on resize ──────────────────────────── */
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      current = 0;
-      track.style.transition = 'none';
-      buildDots();
-      goTo(0);
-      requestAnimationFrame(() => { track.style.transition = ''; });
-    }, 150);
-  });
-
-  /* ── Initialise ─────────────────────────────────── */
-  buildDots();
-  goTo(0);
-}
-
-/* Boot all carousels */
-document.addEventListener('DOMContentLoaded', function () {
-  initCarousel('carousel-office', 'dots-office', 3);
-  /* Add more here if you add new carousels later:
-     initCarousel('carousel-xyz', 'dots-xyz', 3); */
-});
-</script>
-
+<div th:replace="~{fragments/scripts :: carousel-js}"></div>
 </body>
 </html>
