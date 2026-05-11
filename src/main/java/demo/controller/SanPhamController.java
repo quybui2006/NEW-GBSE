@@ -45,7 +45,7 @@ public class SanPhamController {
         return "home";
     }
 
-    @GetMapping("/san-pham")
+    @GetMapping("/products")
     public String danhSachSanPham(@RequestParam(required = false) String keyword, Model model) {
         List<SanPham> danhSach = sanPhamService.timKiem(keyword);
         model.addAttribute("danhSach", danhSach);
@@ -55,13 +55,13 @@ public class SanPhamController {
         return "products";
     }
 
-    @GetMapping("/lien-he")
+    @GetMapping("/contact")
     public String trangLienHe(Model model) {
         model.addAttribute("yeuCau", new YeuCau());
         return "contact";
     }
 
-    @GetMapping("/san-pham/{id}")
+    @GetMapping("/products/{id}")
     public String chiTietSanPham(@PathVariable Long id, Model model) {
         SanPham sp = sanPhamService.timTheoId(id).orElse(null);
         model.addAttribute("sp", sp);
@@ -73,7 +73,7 @@ public class SanPhamController {
         return "login";
     }
 
-    @PostMapping("/lien-he")
+    @PostMapping("/contact")
     public String guiYeuCau(@Valid @ModelAttribute("yeuCau") YeuCau yeuCau,
                             BindingResult bindingResult,
                             Model model) {
