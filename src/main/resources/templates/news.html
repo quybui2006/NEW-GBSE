@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tin tức | OMEAX</title>
+<meta name="description" content="OMEAX – Đối tác cung cấp thiết bị cơ điện cho các dự án HVAC, cấp thoát nước, PCCC tại Việt Nam."/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
+</head>
+<body th:with="active='news'">
+<div th:replace="~{fragments/header :: header}"></div>
+<main>
+
+<section class="bg-valve page-header">
+  <div class="container">
+    <p class="eyebrow-w">Tin tức</p>
+    <h1>Tin tức & Cập nhật</h1>
+    <p class="sub">Cập nhật về công ty, thị trường và sản phẩm mới.</p>
+  </div>
+</section>
+<section>
+  <div class="container">
+    <div class="grid grid-3"><article class="card">
+      <div class="card-img"><img src="/images/page_4_image_1_v2.jpg" alt="OMEAX mở rộng văn phòng tại TP. Hồ Chí Minh"/></div>
+      <div class="card-body">
+        <div class="news-meta"><span class="news-cat">Công ty</span><span>📅 15/04/2026</span></div>
+        <h3 style="margin-top:.75rem">OMEAX mở rộng văn phòng tại TP. Hồ Chí Minh</h3>
+        <p style="flex:1">Chi nhánh HCMC chính thức đi vào hoạt động, phục vụ khách hàng khu vực phía Nam tốt hơn.</p>
+        <a href="#" class="read-more">Đọc tiếp →</a>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/page_4_image_2_v2.jpg" alt="Ra mắt dòng bơm Grundfos thế hệ mới cho HVAC"/></div>
+      <div class="card-body">
+        <div class="news-meta"><span class="news-cat">Sản phẩm mới</span><span>📅 02/03/2026</span></div>
+        <h3 style="margin-top:.75rem">Ra mắt dòng bơm Grundfos thế hệ mới cho HVAC</h3>
+        <p style="flex:1">Hiệu suất cao hơn, tiết kiệm năng lượng và tích hợp điều khiển thông minh cho các tòa nhà cao tầng.</p>
+        <a href="#" class="read-more">Đọc tiếp →</a>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/page_2_image_1_v2.jpg" alt="Xu hướng tiết kiệm năng lượng trong hệ thống cơ điện 2026"/></div>
+      <div class="card-body">
+        <div class="news-meta"><span class="news-cat">Thị trường</span><span>📅 20/01/2026</span></div>
+        <h3 style="margin-top:.75rem">Xu hướng tiết kiệm năng lượng trong hệ thống cơ điện 2026</h3>
+        <p style="flex:1">Tổng quan về các giải pháp PICV, biến tần và heat pump đang được ứng dụng rộng rãi tại Việt Nam.</p>
+        <a href="#" class="read-more">Đọc tiếp →</a>
+      </div>
+    </article>
+<article class="card">
+      <div class="card-img"><img src="/images/page_4_image_1_v2.jpg" alt="OMEAX cung cấp thiết bị cho dự án khách sạn 5 sao tại Đà Nẵng"/></div>
+      <div class="card-body">
+        <div class="news-meta"><span class="news-cat">Dự án</span><span>📅 08/12/2025</span></div>
+        <h3 style="margin-top:.75rem">OMEAX cung cấp thiết bị cho dự án khách sạn 5 sao tại Đà Nẵng</h3>
+        <p style="flex:1">Hệ thống bơm, van cân bằng và bộ trao đổi nhiệt do OMEAX cung cấp đã được lắp đặt thành công.</p>
+        <a href="#" class="read-more">Đọc tiếp →</a>
+      </div>
+    </article></div>
+    <p class="text-center" style="margin-top:3rem;color:var(--muted);font-style:italic">Nội dung sẽ được cập nhật liên tục.</p>
+  </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

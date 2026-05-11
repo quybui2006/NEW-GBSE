@@ -1,0 +1,9 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><body>
+<script th:fragment="carousel-js">
+document.querySelectorAll('.carousel').forEach(c=>{
+  const t=c.querySelector('.carousel-track');
+  c.querySelector('.prev')?.addEventListener('click',()=>t.scrollBy({left:-t.clientWidth,behavior:'smooth'}));
+  c.querySelector('.next')?.addEventListener('click',()=>t.scrollBy({left:t.clientWidth,behavior:'smooth'}));
+});
+</script>
+</body></html>

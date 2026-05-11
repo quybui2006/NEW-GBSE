@@ -1,0 +1,26 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"><body>
+<header th:fragment="header" class="site-header">
+  <div class="container row">
+    <a href="/" class="logo">
+      <span class="brand">OMEAX</span>
+      <span class="slogan">Simplifies life</span>
+    </a>
+    <nav class="nav">
+      <a href="/"          th:classappend="${active=='home'} ? 'active'">Trang chủ</a>
+      <a href="/products"  th:classappend="${active=='products'} ? 'active'">Sản phẩm</a>
+      <a href="/about"     th:classappend="${active=='about'} ? 'active'">Công ty</a>
+      <a href="/projects"  th:classappend="${active=='projects'} ? 'active'">Dự án</a>
+      <a href="/news"      th:classappend="${active=='news'} ? 'active'">Tin tức</a>
+      <a href="/contact"   th:classappend="${active=='contact'} ? 'active'">Liên hệ</a>
+    </nav>
+  </div>
+  <nav class="nav-mobile">
+    <a href="/"          th:classappend="${active=='home'} ? 'active'">Trang chủ</a>
+    <a href="/products"  th:classappend="${active=='products'} ? 'active'">Sản phẩm</a>
+    <a href="/about"     th:classappend="${active=='about'} ? 'active'">Công ty</a>
+    <a href="/projects"  th:classappend="${active=='projects'} ? 'active'">Dự án</a>
+    <a href="/news"      th:classappend="${active=='news'} ? 'active'">Tin tức</a>
+    <a href="/contact"   th:classappend="${active=='contact'} ? 'active'">Liên hệ</a>
+  </nav>
+</header>
+</body></html>

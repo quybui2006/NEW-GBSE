@@ -42,7 +42,7 @@ public class SanPhamController {
 
     @GetMapping("/")
     public String trangChu() {
-        return "index";
+        return "home";
     }
 
     @GetMapping("/san-pham")
@@ -52,13 +52,13 @@ public class SanPhamController {
         if (keyword != null && !keyword.isEmpty()) {
             model.addAttribute("keyword", keyword);
         }
-        return "san-pham";
+        return "products";
     }
 
     @GetMapping("/lien-he")
     public String trangLienHe(Model model) {
         model.addAttribute("yeuCau", new YeuCau());
-        return "lien-he";
+        return "contact";
     }
 
     @GetMapping("/san-pham/{id}")
@@ -79,12 +79,12 @@ public class SanPhamController {
                             Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
-            return "lien-he";
+            return "contact";
         }
         yeuCauService.luuYeuCau(yeuCau);
         model.addAttribute("thanhCong", true);
         model.addAttribute("yeuCau", new YeuCau());
-        return "lien-he";
+        return "contact";
     }
 
     // ================================================================

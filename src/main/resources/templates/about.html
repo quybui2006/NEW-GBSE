@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Công ty | OMEAX</title>
+<meta name="description" content="OMEAX – Đối tác cung cấp thiết bị cơ điện cho các dự án HVAC, cấp thoát nước, PCCC tại Việt Nam."/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
+</head>
+<body th:with="active='about'">
+<div th:replace="~{fragments/header :: header}"></div>
+<main>
+
+<section class="bg-valve page-header">
+  <div class="container">
+    <p class="eyebrow-w">Introduction</p>
+    <h1>About OMEAX</h1>
+    <p class="sub">Simplifies life</p>
+  </div>
+</section>
+
+<section>
+  <div class="container split">
+    <div>
+      <p class="eyebrow">Introduction</p>
+      <h2 style="font-size:2.25rem">Our Group</h2>
+      <ul class="bullet-list">
+        <li>• <b>Omeax SARL</b> – Headquarter, France: Assembling & warehouse</li>
+        <li>• <b>OMEAX Shanghai Flow Control Co., LTD</b>, China: Design and manufacture</li>
+        <li>• <b>Omeax Company Limited</b>, Hongkong</li>
+        <li>• <b>Omeax Hainan Trading Co., Ltd</b>, China</li>
+        <li>• <b>Omeax Entreprises</b>, Philippines</li>
+        <li>• <b>Omeax Joint Stock Company</b>, Vietnam</li>
+      </ul>
+    </div>
+    <img src="/images/page_4_image_1_v2.jpg" alt="Skyscrapers"/>
+  </div>
+</section>
+
+<section class="section-secondary">
+  <div class="container">
+    <h2 class="text-center" style="font-size:2rem">OMEAX Vietnam</h2>
+    <div class="grid grid-2" style="margin-top:2.5rem;max-width:960px;margin-left:auto;margin-right:auto">
+      <div class="info-card"><div class="ico">🏢</div><div><div class="label">Party name</div><div class="value">OMEAX JOINT STOCK COMPANY</div></div></div><div class="info-card"><div class="ico">📍</div><div><div class="label">Registered address</div><div class="value">134A Giang Vo, Ba Dinh, Ha Noi.</div></div></div><div class="info-card"><div class="ico">📍</div><div><div class="label">HANOI – Operating address</div><div class="value">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div></div></div><div class="info-card"><div class="ico">📍</div><div><div class="label">HCMC branch</div><div class="value">11B Hong Ha, Tan Binh, HCMC.</div></div></div><div class="info-card"><div class="ico">📄</div><div><div class="label">Registration number</div><div class="value">0110535209</div></div></div><div class="info-card"><div class="ico">📅</div><div><div class="label">Established</div><div class="value">Nov 8th, 2023</div></div></div><div class="info-card"><div class="ico">👥</div><div><div class="label">Employees</div><div class="value">15 employees</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container split">
+    <img src="/images/page_4_image_2_v2.jpg" alt="Server room" style="order:2"/>
+    <div>
+      <p class="eyebrow">Value Propositions</p>
+      <h2 style="font-size:2.25rem">More than 15 years of experience</h2>
+      <ul class="bullet-list">
+        <li>• Knowledge and experience in HVAC, WS application for Pumps, Heat pump, Drives, Valves, HEX, etc.</li>
+        <li>• Experience supplying hundreds of projects in North, South and Middle of Vietnam.</li>
+        <li>• Distribute many equipments in one system.</li>
+        <li>• After-sale service: technical support, warranty, upgrade and repair.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section-secondary">
+  <div class="container grid grid-2">
+    <div class="skill-card"><h3>Sales Skills</h3>
+      <p>Ability to find new customers/opportunities and build up strong relationships with the Owner, Consultant, Designer and Contractors.</p></div>
+    <div class="skill-card"><h3>Technical Skills</h3>
+      <p>Provide solutions and supply equipment based on customer requirements: heating & cooling, smart motor controlling, smart and remote reading measurement instruments. Pump, heat pump and Heat exchanger maintenance and service.</p></div>
+  </div>
+</section>
+
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
