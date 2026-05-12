@@ -1,102 +1,108 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sản phẩm | OMEAX</title>
-<meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+  <title>Sản phẩm | OMEAX</title>
+
+  <meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css" />
 </head>
-<body th:with="active='projects'">
-<div th:replace="~{fragments/header :: header}"></div>
-<main>
 
-<section class="page-header">
-  <div class="container">
-    <p class="eyebrow">Sản phẩm</p>
-    <h1>Danh mục sản phẩm</h1>
-    <p class="subtitle">OMEAX · GBSE · Partners</p>
-  </div>
-</section>
+<body th:with="active='products'">
 
-<section style="padding:2.5rem 0;background:#fff">
-  <div class="container">
-    <div class="search-wrap">
-      <span class="search-icon"></span>
-      <input id="search" type="text" autocomplete="off" placeholder="Tìm kiếm sản phẩm..."/>
-      <div id="suggestions" class="suggestions"></div>
-    </div>
-  </div>
-</section>
+  <div th:replace="~{fragments/header :: header}"></div>
 
-<section style="background:#fff;padding:0 0 4rem">
-  <div class="container">
-    <div class="range-list">
-      <div class="range" th:each="r,it : ${ranges}" th:classappend="${it.first} ? 'open' : ''" th:id="|range-${r.id}|">
-        <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
-          <span><h3 th:text="${r.brand}">Brand</h3><span class="tagline" th:text="${r.tagline}"></span></span>
-          <span class="chevron"></span>
-        </button>
-        <div class="range-body">
-          <div class="product-grid">
-            <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
-              <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}"/></div>
-              <div class="pbody">
-                <h4 th:text="${p.name}">Name</h4>
-                <p class="pshort" th:text="${p.shortText}">short</p>
-              </div>
-            </a>
-          </div>
-        </div>
+  <main>
+
+    <section class="page-header">
+      <div class="container">
+        <p class="eyebrow">Sản phẩm</p>
+        <h1>Danh mục sản phẩm</h1>
+        <p class="subtitle">OMEAX · GBSE · Partners</p>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<script th:inline="javascript">
-  const ALL = /*[[${allProducts}]]*/ [];
-  const input = document.getElementById('search');
-  const sug = document.getElementById('suggestions');
+    <section style="padding:2.5rem 0;background:#fff">
+      <div class="container">
 
-  function searchAll(q){
-    q = (q||'').trim().toLowerCase();
-    if(!q) return [];
-    return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
-  }
+        <div class="search-wrap">
+          <span class="search-icon"></span>
 
-  function renderSug(items){
-    if(!items.length){ sug.classList.remove('open'); sug.innerHTML=''; return; }
-    sug.innerHTML = items.map(p => `
-      <a href="/products/${p.id}">
-        <img src="${p.image}" alt=""/>
-        <div style="min-width:0;flex:1">
-          <div class="name">${p.name}</div>
-          <div class="short">${p.shortText}</div>
+          <input id="search" type="text" autocomplete="off" placeholder="Tìm kiếm sản phẩm..." />
+
+          <div id="suggestions" class="suggestions"></div>
         </div>
-        <span class="brand">${p.brand}</span>
-      </a>`).join('');
-    sug.classList.add('open');
-  }
 
-  function filterCards(q){
-    q = (q||'').trim().toLowerCase();
-    document.querySelectorAll('.prod-card').forEach(c => {
-      const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
-      c.style.display = !q || t.includes(q) ? '' : 'none';
-    });
-  }
+      </div>
+    </section>
 
-  input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
-  input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
-  input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
-</script>
+    <section style="background:#fff;padding:0 0 4rem">
+      <div class="container">
 
-</main>
-<div th:replace="~{fragments/footer :: footer}"></div>
-<div th:replace="~{fragments/scripts :: carousel-js}"></div>
+        <div class="range-list">
+
+          <div class="range" th:each="r,it : ${ranges}" th:classappend="${it.first} ? 'open' : ''"
+            th:id="|range-${r.id}|">
+
+            <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
+
+              <span>
+                <h3 th:text="${r.brand}">Brand</h3>
+                <span class="tagline" th:text="${r.tagline}"></span>
+              </span>
+
+              <span class="chevron"></span>
+            </button>
+
+            <div class="range-body">
+
+              <div class="product-grid">
+
+                <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}"
+                  th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
+
+                  <div class="pimg">
+                    <img th:src="${p.image}" th:alt="${p.name}" />
+                  </div>
+
+                  <div class="pbody">
+                    <h4 th:text="${p.name}">Name</h4>
+
+                    <p class="pshort" th:text="${p.shortText}">
+                      short
+                    </p>
+                  </div>
+
+                </a>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+
+  <!-- Scripts -->
+  <div th:replace="~{fragments/scripts :: carousel-js}"></div>
+
 </body>
+
 </html>

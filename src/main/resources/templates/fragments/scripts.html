@@ -5,5 +5,40 @@ document.querySelectorAll('.carousel').forEach(c=>{
   c.querySelector('.prev')?.addEventListener('click',()=>t.scrollBy({left:-t.clientWidth,behavior:'smooth'}));
   c.querySelector('.next')?.addEventListener('click',()=>t.scrollBy({left:t.clientWidth,behavior:'smooth'}));
 });
+  const ALL = /*[[${allProducts}]]*/ [];
+  const input = document.getElementById('search');
+  const sug = document.getElementById('suggestions');
+
+  function searchAll(q){
+    q = (q||'').trim().toLowerCase();
+    if(!q) return [];
+    return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
+  }
+
+  function renderSug(items){
+    if(!items.length){ sug.classList.remove('open'); sug.innerHTML=''; return; }
+    sug.innerHTML = items.map(p => `
+      <a href="/products/${p.id}">
+        <img src="${p.image}" alt=""/>
+        <div style="min-width:0;flex:1">
+          <div class="name">${p.name}</div>
+          <div class="short">${p.shortText}</div>
+        </div>
+        <span class="brand">${p.brand}</span>
+      </a>`).join('');
+    sug.classList.add('open');
+  }
+
+  function filterCards(q){
+    q = (q||'').trim().toLowerCase();
+    document.querySelectorAll('.prod-card').forEach(c => {
+      const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
+      c.style.display = !q || t.includes(q) ? '' : 'none';
+    });
+  }
+
+  input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
+  input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
+  input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
 </script>
 </body></html>
