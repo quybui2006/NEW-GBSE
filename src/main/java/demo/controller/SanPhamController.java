@@ -61,12 +61,14 @@ public class SanPhamController {
         return "contact";
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/product/{id}")
     public String chiTietSanPham(@PathVariable Long id, Model model) {
-        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
-        model.addAttribute("sp", sp);
-        return "chi-tiet-san-pham";
-    }
+    SanPham sp = sanPhamService.timTheoId(id).orElse(null);
+    if (sp == null) return "redirect:/products";
+    model.addAttribute("product", sp);          // template dùng ${product}
+    model.addAttribute("range", sp);            // template dùng ${range.brand}
+    return "product-detail";
+}
 
     @GetMapping("/login")
     public String trangLogin() {
