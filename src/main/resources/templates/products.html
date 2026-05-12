@@ -4,162 +4,99 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Sản phẩm | OMEAX</title>
-<meta name="description" content="OMEAX – Đối tác cung cấp thiết bị cơ điện cho các dự án HVAC, cấp thoát nước, PCCC tại Việt Nam."/>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
+
 </head>
-<body th:with="active='products'">
+<body th:with="active='projects'">
 <div th:replace="~{fragments/header :: header}"></div>
 <main>
 
-<section class="bg-valve page-header">
+<section class="page-header">
   <div class="container">
-    <p class="eyebrow-w">Sản phẩm</p>
+    <p class="eyebrow">Sản phẩm</p>
     <h1>Danh mục sản phẩm</h1>
-    <p class="sub">Bơm Grundfos · Van OMEAX · Cooling Tower — phân phối chính hãng tại Việt Nam.</p>
+    <p class="subtitle">OMEAX · GBSE · Partners</p>
   </div>
 </section>
-<div class="quick-nav">
-  <div class="container row">
-<a href="#grundfos">Bơm Grundfos</a>
-<a href="#omeax-valves">Van OMEAX</a>
-<a href="#cooling-tower">Cooling Tower</a>
-</div></div>
-<section id="grundfos" class="">
-      <div class="container">
-        <div class="product-group-head">
-          <div class="max-w">
-            <p class="eyebrow">Grundfos</p>
-            <h2>Bơm Grundfos</h2>
-            <p>Hãng bơm hàng đầu thế giới đến từ Đan Mạch, ứng dụng rộng rãi cho HVAC, cấp thoát nước và phòng cháy chữa cháy.</p>
+
+<section style="padding:2.5rem 0;background:#fff">
+  <div class="container">
+    <div class="search-wrap">
+      <span class="search-icon"></span>
+      <input id="search" type="text" autocomplete="off" placeholder="Tìm kiếm sản phẩm..."/>
+      <div id="suggestions" class="suggestions"></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;padding:0 0 4rem">
+  <div class="container">
+    <div class="range-list">
+      <div class="range" th:each="r,it : ${ranges}" th:classappend="${it.first} ? 'open' : ''" th:id="|range-${r.id}|">
+        <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
+          <span><h3 th:text="${r.brand}">Brand</h3><span class="tagline" th:text="${r.tagline}"></span></span>
+          <span class="chevron"></span>
+        </button>
+        <div class="range-body">
+          <div class="product-grid">
+            <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
+              <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}"/></div>
+              <div class="pbody">
+                <h4 th:text="${p.name}">Name</h4>
+                <p class="pshort" th:text="${p.shortText}">short</p>
+              </div>
+            </a>
           </div>
-          <a class="btn btn-outline" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Website hãng ↗</a>
         </div>
-        <div class="grid grid-3"><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_5_v2.jpg" alt="Bơm tăng áp biến tần"/></div>
-          <div class="card-body">
-            <h3>Bơm tăng áp biến tần</h3><p>Hệ tăng áp thông minh cho tòa nhà cao tầng.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_6_v2.jpg" alt="Bơm tuần hoàn HVAC"/></div>
-          <div class="card-body">
-            <h3>Bơm tuần hoàn HVAC</h3><p>Bơm trục đứng/ngang cho hệ thống chiller.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_7_v2.jpg" alt="Bơm chuyển nước"/></div>
-          <div class="card-body">
-            <h3>Bơm chuyển nước</h3><p>Cấp nước sinh hoạt và công nghiệp.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_8_v2.jpg" alt="Bơm chìm thoát nước"/></div>
-          <div class="card-body">
-            <h3>Bơm chìm thoát nước</h3><p>Bơm hố ga, nước thải.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_9_v2.jpg" alt="Bơm chữa cháy"/></div>
-          <div class="card-body">
-            <h3>Bơm chữa cháy</h3><p>Theo tiêu chuẩn UL/FM.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_11_v2.jpg" alt="Bơm định lượng"/></div>
-          <div class="card-body">
-            <h3>Bơm định lượng</h3><p>Hóa chất xử lý nước.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_12_v2.jpg" alt="Bơm trục rời"/></div>
-          <div class="card-body">
-            <h3>Bơm trục rời</h3><p>Lưu lượng lớn cho công trình lớn.</p>
-            <a class="read-more" href="https://www.grundfos.com/vn" target="_blank" rel="noopener">Xem chi tiết tại Grundfos →</a>
-          </div>
-        </article></div>
       </div>
-    </section><section id="omeax-valves" class="alt-bg">
-      <div class="container">
-        <div class="product-group-head">
-          <div class="max-w">
-            <p class="eyebrow">OMEAX</p>
-            <h2>Van OMEAX</h2>
-            <p>Dải van công nghiệp đầy đủ: van chặn, van điều khiển và van cân bằng cho hệ HVAC & cấp thoát nước.</p>
-          </div>
-          <a class="btn btn-outline" href="https://omeax.com/" target="_blank" rel="noopener">Website hãng ↗</a>
+    </div>
+  </div>
+</section>
+
+<script th:inline="javascript">
+  const ALL = /*[[${allProducts}]]*/ [];
+  const input = document.getElementById('search');
+  const sug = document.getElementById('suggestions');
+
+  function searchAll(q){
+    q = (q||'').trim().toLowerCase();
+    if(!q) return [];
+    return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
+  }
+
+  function renderSug(items){
+    if(!items.length){ sug.classList.remove('open'); sug.innerHTML=''; return; }
+    sug.innerHTML = items.map(p => `
+      <a href="/products/${p.id}">
+        <img src="${p.image}" alt=""/>
+        <div style="min-width:0;flex:1">
+          <div class="name">${p.name}</div>
+          <div class="short">${p.shortText}</div>
         </div>
-        <div class="grid grid-3"><article class="card product-card">
-          <div class="card-img"><img src="/images/page_5_image_10_v2.jpg" alt="Van bướm tay gạt / hộp số"/></div>
-          <div class="card-body">
-            <h3>Van bướm tay gạt / hộp số</h3><p>Wafer / Lug, DN50–DN1200.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_9_v2.jpg" alt="Van cân bằng PICV"/></div>
-          <div class="card-body">
-            <h3>Van cân bằng PICV</h3><p>Cân bằng áp suất độc lập cho FCU/AHU.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_11_v2.jpg" alt="Van điều khiển động cơ"/></div>
-          <div class="card-body">
-            <h3>Van điều khiển động cơ</h3><p>Modulating motorized valve cho BMS.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_13_v2.jpg" alt="Van một chiều"/></div>
-          <div class="card-body">
-            <h3>Van một chiều</h3><p>Swing / wafer check valve.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_7_v2.jpg" alt="Van cổng (gate valve)"/></div>
-          <div class="card-body">
-            <h3>Van cổng (gate valve)</h3><p>Gang / thép cho hệ nước & PCCC.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_8_v2.jpg" alt="Van bi (ball valve)"/></div>
-          <div class="card-body">
-            <h3>Van bi (ball valve)</h3><p>Đồng / inox cho hệ nước nóng lạnh.</p>
-            <a class="read-more" href="https://omeax.com/" target="_blank" rel="noopener">Xem chi tiết tại OMEAX →</a>
-          </div>
-        </article></div>
-      </div>
-    </section><section id="cooling-tower" class="">
-      <div class="container">
-        <div class="product-group-head">
-          <div class="max-w">
-            <p class="eyebrow">Ocean</p>
-            <h2>Cooling Tower</h2>
-            <p>Tháp giải nhiệt tròn, vuông và cross-flow cho hệ thống chiller và làm mát công nghiệp.</p>
-          </div>
-          <a class="btn btn-outline" href="https://oceancoolingtower.com/" target="_blank" rel="noopener">Website hãng ↗</a>
-        </div>
-        <div class="grid grid-3"><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_5_v2.jpg" alt="Tháp giải nhiệt tròn"/></div>
-          <div class="card-body">
-            <h3>Tháp giải nhiệt tròn</h3><p>Counter-flow, công suất 10–500 RT.</p>
-            <a class="read-more" href="https://oceancoolingtower.com/" target="_blank" rel="noopener">Xem chi tiết tại Ocean →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_2_v2.jpg" alt="Tháp giải nhiệt vuông"/></div>
-          <div class="card-body">
-            <h3>Tháp giải nhiệt vuông</h3><p>Module ghép cho tải lớn.</p>
-            <a class="read-more" href="https://oceancoolingtower.com/" target="_blank" rel="noopener">Xem chi tiết tại Ocean →</a>
-          </div>
-        </article><article class="card product-card">
-          <div class="card-img"><img src="/images/page_6_image_1_v2.jpg" alt="Tháp cross-flow"/></div>
-          <div class="card-body">
-            <h3>Tháp cross-flow</h3><p>Hiệu suất cao, tiếng ồn thấp.</p>
-            <a class="read-more" href="https://oceancoolingtower.com/" target="_blank" rel="noopener">Xem chi tiết tại Ocean →</a>
-          </div>
-        </article></div>
-      </div>
-    </section>
+        <span class="brand">${p.brand}</span>
+      </a>`).join('');
+    sug.classList.add('open');
+  }
+
+  function filterCards(q){
+    q = (q||'').trim().toLowerCase();
+    document.querySelectorAll('.prod-card').forEach(c => {
+      const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
+      c.style.display = !q || t.includes(q) ? '' : 'none';
+    });
+  }
+
+  input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
+  input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
+  input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
+</script>
+
 </main>
 <div th:replace="~{fragments/footer :: footer}"></div>
-
+<div th:replace="~{fragments/scripts :: carousel-js}"></div>
 </body>
 </html>
