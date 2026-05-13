@@ -271,7 +271,13 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
     </div>
     <div style="margin-top:3rem">
       <div th:each="sec,it : ${projects}" class="proj-section">
-        <h2 th:text="${sec.title}">Section</h2>
+        <h2 th:text="${sec.title}">Section</h2>         
+        <!-- wrapper: position:relative để neo 2 nút, overflow:hidden để clip scroll -->
+        <div style="position:relative; overflow:hidden">
+          <!-- nút trái: nằm bên trong, overlay lên góc trái giữa -->
+          <button class="proj-arrow proj-arrow-left"
+                  th:if="${sec.projects.size() > 3}"
+                  th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:-400,behavior:'smooth'})|">‹</button>
         <div class="proj-row" th:id="|row-h-${it.index}|">
           <article class="card" th:each="p : ${sec.projects}">
             <div class="img"><img th:src="${p.image}" th:alt="${p.name}"/></div>
@@ -288,9 +294,9 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
             </div>
           </article>
         </div>
-        <div class="proj-nav" th:if="${sec.projects.size() > 3}">
-          <button th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:-400,behavior:'smooth'})|">‹</button>
-          <button th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:400,behavior:'smooth'})|">›</button>
+        <button class="proj-arrow proj-arrow-right"
+                  th:if="${sec.projects.size() > 3}"
+                  th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:400,behavior:'smooth'})|">›</button>
         </div>
       </div>
     </div>

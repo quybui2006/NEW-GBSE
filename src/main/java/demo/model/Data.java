@@ -1,5 +1,10 @@
 package demo.model;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Data {
   public static class Spec { public String label, value; public Spec(String l,String v){label=l;value=v;} }
@@ -126,12 +131,13 @@ public class Data {
     // Projects
     PROJECTS.add(sec("High-Rise Building (Office – Complex)", new Project[]{
       proj("CAPITAL PLACE (office tower)","/images/proj_capital.png","Lieu Giai, Ba Dinh, Ha Noi.","VINGROUP","PICV, MBV, MV valves|HEX for HVAC|Water meter, BTU meter"),
-      proj("TECHNOPARK TOWER (office tower)","/images/proj_technopark.png","Gia Lam, Ha Noi.","VINGROUP","PICV, MBV, MV valves|HEX for HVAC|Water meter, BTU meter"),
+      proj("TECHNOPARK TOWER (office tower)","/images/proj_techno.png","Gia Lam, Ha Noi.","VINGROUP","PICV, MBV, MV valves|HEX for HVAC|Water meter, BTU meter"),
       proj("DIAMOND CROWN PLAZA (complex)","/images/proj_diamond.png","Le Hong Phong, Ngo Quyen, Hai Phong.","DOJI GROUP","PICV, MBV, MV valves|Water meter, BTU meter|SS expansion joint"),
+      proj("SUN GRAND CITY – TAY HO VIEW","/images/proj_sungrand.png","Quang An, Ha Noi.","SUNGROUP","Pumps for WS, HVAC, SW|HEX for HVAC|HEX for hot water system|Water meter"),
+      proj("TIEN BO PLAZA","/images/proj_tienbo.png","Nguyen Thai Hoc, Hanoi","TDI","Pumps for WS, HVAC, SW|HEX for HVAC|HEX for hot water system|Water meter"),
+      proj("GOLD MARK CITY","/images/proj_goldmark.png","Ha Noi","TNR","Pumps for WS, HVAC system|Heat exchanger for HVAC system"),
     }));
     PROJECTS.add(sec("High-Rise Building (Residential)", new Project[]{
-      proj("SUN GRAND CITY – TAY HO VIEW","/images/proj_sungrand.png","Quang An, Ha Noi.","SUNGROUP","Pumps for WS, HVAC, SW|HEX for HVAC|HEX for hot water system|Water meter"),
-      proj("GOLD MARK CITY","/images/proj_goldmark.png","Ha Noi","TNR","Pumps for WS, HVAC system|Heat exchanger for HVAC system"),
       proj("VINHOMES GRAND PARK","/images/proj_vinhomesgrand.png","District 9, HCMC.","VINGROUP","Hydraulic control valves|PICV, MBV, MV valves|Heatpump|Water meter, BTU meter"),
       proj("VINHOMES OCEAN PARK","/images/proj_vinhomesocean.png","Ha Noi – Hung Yen","VINGROUP","Pumps & Heatpump|Hydraulic control valves|PICV, MBV, MV valves|Water meter, BTU meter"),
     }));
@@ -147,7 +153,7 @@ public class Data {
     PROJECTS.add(sec("Hotel", new Project[]{
       proj("HYATT REGENCY HA LONG","/images/proj_hyatt.png","Ha Long – Quang Ninh","Dong Gia","Pumps for WS, HVAC"),
       proj("SHERATON HA GIANG","/images/proj_sheraton.png","Ha Giang","VINGROUP","PICV, MBV, MV valves|Heatpump|Hydraulic control valves"),
-      proj("MARRIOTT BAC NINH","/images/proj_mariott.png","Bac Ninh","VINGROUP","PICV, MBV, MV valves|Heatpump|Hydraulic control valves"),
+      proj("MARRIOTT BAC NINH","/images/proj_marriott.png","Bac Ninh","VINGROUP","PICV, MBV, MV valves|Heatpump|Hydraulic control valves"),
     }));
     PROJECTS.add(sec("Hospital Building", new Project[]{
       proj("VINMEC (8 x Hospitals)","/images/proj_vinmec.png","Hanoi, HCMC, Phu Quoc, Nha Trang, ...","VINGROUP","PICV, MBV, MV valves|Heatpump"),
