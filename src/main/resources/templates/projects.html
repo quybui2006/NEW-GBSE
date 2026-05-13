@@ -4,241 +4,311 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Dự án | OMEAX</title>
-<meta name="description" content="OMEAX – Đối tác cung cấp thiết bị cơ điện cho các dự án HVAC, cấp thoát nước, PCCC tại Việt Nam."/>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" th:href="@{/css/styles.css}" href="/css/styles.css"/>
+<meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Open Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;background:#fff;-webkit-font-smoothing:antialiased;line-height:1.55}
+h1,h2,h3,h4,h5{font-family:'Montserrat',sans-serif;margin:0;color:#152352}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:0 1.25rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:.5rem;font-weight:600;font-size:.9rem;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.btn-primary{background:#152352;color:#fff}
+.btn-primary:hover{background:#1e3a8a}
+.btn-outline{background:transparent;color:#152352;border-color:#152352}
+.btn-outline:hover{background:#152352;color:#fff}
+.btn-light{background:#fff;color:#152352}
+.btn-light:hover{background:#f1f5f9}
+.btn-ghost-light{background:transparent;color:#fff;border-color:#fff}
+.btn-ghost-light:hover{background:#fff;color:#152352}
+.eyebrow{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:#1e3a8a;margin-bottom:.75rem}
+.section-title{font-weight:800;font-size:clamp(1.75rem,4vw,2.5rem);color:#152352}
+.muted{color:#64748b}
+
+/* Header */
+.header{position:sticky;top:0;z-index:50;background:rgba(11,20,52,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.6rem;color:#fff;letter-spacing:.05em}
+.logo .slogan{display:block;font-size:.55rem;letter-spacing:.4em;font-weight:500;color:rgba(255,255,255,.7)}
+.nav{display:flex;gap:.25rem}
+.nav a{padding:.5rem 1rem;font-size:.875rem;font-weight:500;color:rgba(255,255,255,.85);border-radius:.375rem;transition:.2s}
+.nav a:hover{background:rgba(255,255,255,.1)}
+.nav a.active{background:#fff;color:#152352}
+@media(max-width:768px){.nav{display:none}.mobile-nav{display:flex !important;overflow-x:auto;gap:.25rem;padding:.5rem 1rem;background:rgba(11,20,52,.95);border-top:1px solid rgba(255,255,255,.1)}.mobile-nav a{padding:.4rem .75rem;font-size:.75rem;color:rgba(255,255,255,.85);border-radius:.375rem;white-space:nowrap}.mobile-nav a.active{background:#fff;color:#152352}}
+.mobile-nav{display:none}
+
+/* Page header */
+.page-header{background:#152352;background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px),radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px,18px 18px;background-position:0 0,16px 16px;color:#fff;padding:4rem 0;text-align:center}
+.page-header h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;color:#fff}
+.page-header .eyebrow{color:rgba(255,255,255,.7)}
+.page-header .subtitle{color:rgba(255,255,255,.8);max-width:42rem;margin:1rem auto 0;font-style:italic}
+
+/* Hero (home) */
+.hero{position:relative;background:#152352;background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px),radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px,18px 18px;background-position:0 0,16px 16px;color:#fff;padding:6rem 0;text-align:center}
+.hero .logo-big{font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,6rem);color:#fff}
+.hero .logo-big .slogan{display:block;font-size:.7rem;letter-spacing:.5em;font-weight:500;color:rgba(255,255,255,.7);margin-top:.5rem}
+
+/* Cards & grids */
+.grid{display:grid;gap:1.5rem}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+@media(max-width:560px){.grid-3,.grid-4{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;overflow:hidden;box-shadow:0 4px 20px -8px rgba(21,35,82,.15);display:flex;flex-direction:column}
+.card .img{aspect-ratio:16/10;background:#f1f5f9;overflow:hidden}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.card:hover .img img{transform:scale(1.05)}
+.card .body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
+
+/* Customers */
+.cust-group{margin-bottom:3rem}
+.cust-group h3{text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:1.5rem}
+.cust-box{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:1.5rem;box-shadow:0 4px 20px -8px rgba(21,35,82,.15)}
+.cust-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1.5rem;align-items:center}
+@media(max-width:900px){.cust-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:560px){.cust-grid{grid-template-columns:repeat(3,1fr)}}
+.cust-grid .cell{aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;padding:.5rem}
+.cust-grid img{max-height:64px;max-width:100%;object-fit:contain}
+
+/* Projects */
+.proj-section{margin-bottom:4rem}
+.proj-section h2{font-size:1.75rem;font-weight:800;margin-bottom:1.5rem}
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.5rem;scroll-behavior:smooth}
+.proj-row::-webkit-scrollbar{height:8px}
+.proj-row::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+.proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:280px}
+@media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
+@media(max-width:560px){.proj-row .card{flex:0 0 100%}}
+.proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem}
+.proj-nav button{width:36px;height:36px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#152352;font-size:1.1rem}
+.proj-nav button:hover{background:#152352;color:#fff}
+
+/* Ticker */
+.ticker{background:#152352;color:#fff;overflow:hidden;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:3rem}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker 30s linear infinite;padding:.75rem 0}
+.ticker-item{margin:0 2rem;font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:2rem}
+.ticker-item .diamond{color:#f59e0b}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Footer */
+.footer{background:#fff;color:#0f172a;border-top:1px solid #e2e8f0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;padding:3rem 0}
+@media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr}}
+.footer-grid h4{color:#152352;font-size:1rem;margin-bottom:.75rem}
+.footer-grid p{font-size:.875rem;color:#64748b;display:flex;gap:.5rem;align-items:flex-start;margin:.25rem 0}
+.icon-pin,.icon-mail,.icon-phone{display:inline-block;width:14px;height:14px;flex-shrink:0;margin-top:3px;position:relative}
+.icon-pin::before{content:"";position:absolute;top:0;left:1px;width:10px;height:10px;border:2px solid #1e3a8a;border-radius:50%}
+.icon-pin::after{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #1e3a8a}
+.icon-mail{border:2px solid #1e3a8a;border-radius:2px}
+.icon-mail::after{content:"";position:absolute;left:1px;top:0;width:8px;height:6px;border-bottom:2px solid #1e3a8a;border-right:2px solid #1e3a8a;transform:rotate(-45deg)}
+.icon-phone{border:2px solid #1e3a8a;border-radius:3px;transform:rotate(35deg)}
+.footer-bottom{border-top:1px solid #e2e8f0;font-size:.75rem;color:#64748b;padding:1rem 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+
+/* Sections */
+section{padding:4rem 0}
+.bg-secondary{background:#f1f5f9}
+
+/* Products page (white bg, expandable) */
+.search-wrap{position:relative;max-width:640px;margin:0 auto}
+.search-wrap input{width:100%;padding:.95rem 1.25rem .95rem 3rem;border-radius:9999px;border:1px solid #e2e8f0;background:#fff;font-size:.9rem;box-shadow:0 4px 20px -8px rgba(21,35,82,.15);outline:none}
+.search-wrap input:focus{border-color:#1e3a8a}
+.search-icon{position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);width:14px;height:14px}
+.search-icon::before{content:"";position:absolute;width:12px;height:12px;border:2px solid #152352;border-radius:50%}
+.search-icon::after{content:"";position:absolute;left:9px;top:12px;width:7px;height:2px;background:#152352;transform:rotate(45deg);transform-origin:left center}
+.suggestions{position:absolute;left:0;right:0;top:100%;margin-top:.5rem;background:#fff;border:1px solid #e2e8f0;border-radius:1rem;box-shadow:0 10px 30px -10px rgba(21,35,82,.25);overflow:hidden;z-index:30;display:none}
+.suggestions.open{display:block}
+.suggestions a{display:flex;align-items:center;gap:.75rem;padding:.65rem 1rem}
+.suggestions a:hover{background:#f1f5f9}
+.suggestions img{width:40px;height:40px;object-fit:contain}
+.suggestions .name{font-size:.875rem;font-weight:600;color:#152352}
+.suggestions .short{font-size:.75rem;color:#64748b}
+.suggestions .brand{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#64748b;margin-left:auto}
+
+.range-list{display:flex;flex-direction:column;gap:1rem;max-width:1100px;margin:0 auto}
+.range{border:1px solid #e2e8f0;border-radius:1rem;background:#fff;overflow:hidden}
+.range-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;cursor:pointer;background:#fff;border:0;width:100%;text-align:left}
+.range-header:hover{background:#f8fafc}
+.range-header h3{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.5rem;color:#152352;letter-spacing:.05em;text-transform:uppercase;display:inline-block}
+.range-header .tagline{font-size:.75rem;color:#64748b;margin-left:.75rem}
+.chevron{display:inline-block;width:10px;height:10px;border-right:2px solid #152352;border-bottom:2px solid #152352;transform:rotate(45deg);transition:transform .2s}
+.range.open .chevron{transform:rotate(-135deg)}
+.range-body{display:none;padding:0 1.5rem 1.5rem;border-top:1px solid #e2e8f0}
+.range.open .range-body{display:block}
+.product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:900px){.product-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.product-grid{grid-template-columns:repeat(2,1fr)}}
+.prod-card{display:flex;flex-direction:column;background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.prod-card:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(21,35,82,.25)}
+.prod-card .pimg{aspect-ratio:1/1;background:#fff;display:flex;align-items:center;justify-content:center;padding:1rem;border-bottom:1px solid #e2e8f0}
+.prod-card .pimg img{max-width:100%;max-height:100%;object-fit:contain}
+.prod-card .pbody{padding:.75rem}
+.prod-card h4{font-family:'Montserrat',sans-serif;font-weight:700;font-size:.85rem;color:#152352;text-transform:uppercase;letter-spacing:.04em;line-height:1.2;margin:0;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.prod-card .pshort{font-size:.75rem;color:#64748b;margin-top:.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{padding:3rem;text-align:center;color:#64748b;font-size:.875rem}
+
+/* Product detail */
+.crumb{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:1rem 0;font-size:.875rem;color:#64748b}
+.crumb a:hover{color:#1e3a8a}
+.crumb .sep{margin:0 .5rem}
+.detail-hero{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+@media(max-width:900px){.detail-hero{grid-template-columns:1fr}}
+.detail-hero .img-box{background:#f1f5f9;border-radius:1rem;padding:2rem;display:flex;align-items:center;justify-content:center;min-height:360px}
+.detail-hero .img-box img{max-height:320px;object-fit:contain}
+.detail-hero h1{font-size:clamp(1.75rem,4vw,3rem);font-weight:800;line-height:1.1}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.25rem}
+.tag{padding:.25rem .75rem;border-radius:9999px;background:#f1f5f9;color:#152352;font-size:.7rem;font-weight:600}
+.spec-card{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:2rem;box-shadow:0 4px 20px -8px rgba(21,35,82,.15)}
+.spec-card h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:#1e3a8a;margin-bottom:1rem}
+.spec-card ul{list-style:none;padding:0;margin:0}
+.spec-card li{display:flex;gap:.75rem;padding:.4rem 0;color:#334155}
+.spec-card li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#f59e0b;margin-top:.6rem;flex-shrink:0}
+.spec-table{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1rem}
+.spec-table div{padding:.5rem 0;border-bottom:1px solid #e2e8f0;font-size:.875rem}
+.spec-table .lbl{color:#64748b}
+.spec-table .val{color:#152352;font-weight:600}
+
+/* Tags / market */
+.market{background:#152352;background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px);background-size:32px 32px;color:#fff;padding:4rem 0}
+.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+@media(max-width:900px){.market-grid{grid-template-columns:1fr}}
+.market h1{color:#fff;font-weight:800;font-size:clamp(1.75rem,4vw,2.5rem)}
+.market .chip{display:inline-block;padding:.35rem .85rem;border-radius:9999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.85rem;font-weight:500;margin:.25rem .25rem 0 0}
+
+/* Forms */
+form{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;padding:1.5rem;box-shadow:0 4px 20px -8px rgba(21,35,82,.15)}
+form label{display:block;font-size:.85rem;font-weight:600;color:#152352;margin-bottom:.35rem;margin-top:.75rem}
+form input,form textarea{width:100%;padding:.6rem .8rem;border:1px solid #e2e8f0;border-radius:.5rem;font-size:.9rem;font-family:inherit;outline:none}
+form input:focus,form textarea:focus{border-color:#1e3a8a}
+
+/* About info cards */
+.info-card{background:#fff;border-radius:.75rem;padding:1.25rem;box-shadow:0 4px 20px -8px rgba(21,35,82,.15);display:flex;gap:1rem}
+.info-card .ic{width:40px;height:40px;border-radius:50%;background:rgba(30,58,138,.1);color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.info-card .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b}
+.info-card .val{font-weight:600;color:#152352;font-size:.9rem}
+</style>
+
 </head>
-<body th:with="active='projects'">
-<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
+    <nav class="nav">
+<a class="" href="/">Trang chủ</a>
+<a class="" href="/products">Sản phẩm</a>
+<a class="" href="/about">Công ty</a>
+<a class=" active" href="/projects">Dự án</a>
+<a class="" href="/news">Tin tức</a>
+<a class="" href="/contact">Liên hệ</a>
+    </nav>
+  </div>
+  <nav class="mobile-nav">
+<a class="" href="/">Trang chủ</a>
+<a class="" href="/products">Sản phẩm</a>
+<a class="" href="/about">Công ty</a>
+<a class=" active" href="/projects">Dự án</a>
+<a class="" href="/news">Tin tức</a>
+<a class="" href="/contact">Liên hệ</a>
+  </nav>
+</header>
 <main>
 
-<section class="bg-valve">
-  <div class="container" style="padding:4rem 0">
-    <div class="split">
-      <img src="/images/Global.png" alt="OMEAX global presence" style="height:auto;border-radius:12px"/>
-      <div>
-        <p class="eyebrow-w">Global presence</p>
-        <h1 style="color:#fff;font-size:2.25rem">Our Market</h1>
-        <p style="color:rgba(255,255,255,.85);margin-top:.75rem">A global footprint, local expertise.</p>
-        <div class="market-tags"><span class="market-tag">DACH</span><span class="market-tag">BENELUX</span><span class="market-tag">MENA</span><span class="market-tag">LATAM</span><span class="market-tag">South Africa</span><span class="market-tag">India</span><span class="market-tag">Pakistan</span><span class="market-tag">Indonesia</span><span class="market-tag">Malaysia</span><span class="market-tag">Singapore</span><span class="market-tag">Thailand</span><span class="market-tag">Vietnam</span><span class="market-tag">Hongkong</span></div>
+<section class="market">
+  <div class="container market-grid">
+    <img src="/images/world_map.jpg" alt="OMEAX global presence" style="border-radius:.75rem"/>
+    <div>
+      <p class="eyebrow" style="color:rgba(255,255,255,.7)">Global presence</p>
+      <h1>Our Market</h1>
+      <p style="color:rgba(255,255,255,.8);margin-top:.75rem">A global footprint, local expertise.</p>
+      <div style="margin-top:1.5rem">
+        <span class="chip">DACH</span><span class="chip">BENELUX</span><span class="chip">MENA</span><span class="chip">LATAM</span>
+        <span class="chip">South Africa</span><span class="chip">India</span><span class="chip">Pakistan</span>
+        <span class="chip">Indonesia</span><span class="chip">Malaysia</span><span class="chip">Singapore</span>
+        <span class="chip">Thailand</span><span class="chip">Vietnam</span><span class="chip">Hongkong</span>
       </div>
     </div>
   </div>
 </section>
 
-<section class="outstanding">
+<section style="text-align:center;padding:4rem 0 1rem">
   <div class="container">
     <p class="eyebrow">Our Portfolio</p>
-    <h2>Outstanding Projects</h2>
-    <p>Tổng hợp các dự án tiêu biểu OMEAX đã cung cấp thiết bị trên khắp Việt Nam.</p>
+    <h2 style="font-weight:800;font-size:clamp(2rem,5vw,3.75rem);color:#152352">Outstanding Projects</h2>
+    <p class="muted" style="margin-top:1rem;max-width:42rem;margin-left:auto;margin-right:auto">Tổng hợp các dự án tiêu biểu OMEAX đã cung cấp thiết bị trên khắp Việt Nam.</p>
   </div>
 </section>
 
-<section class="section-tight">
+<section style="padding:3rem 0">
   <div class="container">
-    <div class="project-section"><h2>High-Rise Building (Office – Complex)</h2><div class="carousel">
-              <button class="carousel-btn prev" aria-label="Trước">‹</button>
-              <div class="carousel-track">
-    <article class="card">
-      <div class="card-img"><img src="/images/CapitalPlace.png" alt="CAPITAL PLACE (office tower)"/></div>
-      <div class="card-body">
-        <h3>CAPITAL PLACE (office tower)</h3>
-        <p class="card-meta"><b>Location:</b> Lieu Giai, Ba Dinh, Ha Noi.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
+    <div th:each="sec,it : ${projects}" class="proj-section">
+      <h2 th:text="${sec.title}">Section</h2>
+      <div class="proj-row" th:id="|row-${it.index}|">
+        <article class="card" th:each="p : ${sec.projects}">
+          <div class="img"><img th:src="${p.image}" th:alt="${p.name}"/></div>
+          <div class="body">
+            <h3 th:text="${p.name}" style="font-size:1.05rem;font-weight:700">Name</h3>
+            <p class="muted" style="font-size:.85rem;margin-top:.5rem"><b>Location:</b> <span th:text="${p.location}"></span></p>
+            <p class="muted" style="font-size:.85rem"><b>Investor:</b> <span style="color:#152352;font-weight:600" th:text="${p.investor}"></span></p>
+            <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid #e2e8f0">
+              <p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:.25rem">Products</p>
+              <ul style="font-size:.85rem;color:#334155;margin:0;padding-left:1rem">
+                <li th:each="pr : ${p.products}" th:text="'– ' + ${pr}"></li>
+              </ul>
+            </div>
+          </div>
+        </article>
       </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/TechnoparkTower.png" alt="TECHNOPARK TOWER (office tower)"/></div>
-      <div class="card-body">
-        <h3>TECHNOPARK TOWER (office tower)</h3>
-        <p class="card-meta"><b>Location:</b> Gia Lam, Ha Noi.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– HEX for HVAC</li><li>– Water meter, BTU meter</li></ul></div>
+      <div class="proj-nav" th:if="${sec.projects.size() > 3}">
+        <button th:onclick="|document.getElementById('row-${it.index}').scrollBy({left:-400,behavior:'smooth'})|">‹</button>
+        <button th:onclick="|document.getElementById('row-${it.index}').scrollBy({left:400,behavior:'smooth'})|">›</button>
       </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/DiamondCrownPlaza.png" alt="DIAMOND CROWN PLAZA (complex)"/></div>
-      <div class="card-body">
-        <h3>DIAMOND CROWN PLAZA (complex)</h3>
-        <p class="card-meta"><b>Location:</b> Le Hong Phong, Ngo Quyen, Hai Phong.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">DOJI GROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li><li>– SS expansion joint</li></ul></div>
-      </div>
-    </article>
-  <article class="card">
-      <div class="card-img"><img src="/images/SunGrandCity.png" alt="SUN GRAND CITY – TAY HO VIEW"/></div>
-      <div class="card-body">
-        <h3>SUN GRAND CITY – TAY HO VIEW</h3>
-        <p class="card-meta"><b>Location:</b> Quang An, Ha Noi.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HVAC</li><li>– HEX for hot water system</li><li>– Water meter</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/GoldMarkCity.png" alt="GOLD MARK CITY"/></div>
-      <div class="card-body">
-        <h3>GOLD MARK CITY</h3>
-        <p class="card-meta"><b>Location:</b> Ha Noi</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TNR</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC system</li><li>– Heat exchanger for HVAC system</li></ul></div>
-      </div>
-    </article>
-  <article class="card">
-      <div class="card-img"><img src="/images/TienBoPlaza.png" alt="TIEN BO PLAZA"/></div>
-      <div class="card-body">
-        <h3>TIEN BO PLAZA</h3>
-        <p class="card-meta"><b>Location:</b> Nguyen Thai Hoc, Ha Noi</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">TDI</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– HEX for HAVC</li><li>– PICV, MV valve</li><li>– Flexible joint</li><li>– BTU meter</li></ul></div>
-      </div>
-    </article></div>
-                <button class="carousel-btn next" aria-label="Sau">›</button></div>
     </div>
-<div class="project-section"><h2>High-Rise Building (Residential)</h2><div class="grid grid-3">
-  <article class="card">
-      <div class="card-img"><img src="/images/VinhomesGrandPark.png" alt="VINHOMES GRAND PARK"/></div>
-      <div class="card-body">
-        <h3>VINHOMES GRAND PARK</h3>
-        <p class="card-meta"><b>Location:</b> District 9, HCMC.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Water meter, BTU meter</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/VinhomesOceanPark.png" alt="VINHOMES OCEAN PARK"/></div>
-      <div class="card-body">
-        <h3>VINHOMES OCEAN PARK</h3>
-        <p class="card-meta"><b>Location:</b> Ha Noi – Hung Yen</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps & Heatpump</li><li>– Hydraulic control valves</li><li>– PICV, MBV, MV valves</li><li>– Water meter, BTU meter</li></ul></div>
-      </div>
-    </article></div></div>
-<div class="project-section"><h2>Exhibition Center – Data Center</h2><div class="grid grid-3">
-  <article class="card">
-      <div class="card-img"><img src="/images/TheGrandEXPO.png" alt="THE GRAND EXPO, VIETNAM EXPOSITION CENTER"/></div>
-      <div class="card-body">
-        <h3>THE GRAND EXPO, VIETNAM EXPOSITION CENTER</h3>
-        <p class="card-meta"><b>Location:</b> Dong Anh, Ha Noi.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MV valves</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/CMCDataCenter.png" alt="CMC DATA CENTER"/></div>
-      <div class="card-body">
-        <h3>CMC DATA CENTER</h3>
-        <p class="card-meta"><b>Location:</b> Tan Thuan, HCMC</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">CMC Group</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li></ul></div>
-      </div>
-    </article></div></div>
-<div class="project-section"><h2>Resort – Shopping Mall – Factory</h2><div class="grid grid-3">
-  <article class="card">
-      <div class="card-img"><img src="/images/Vinfast.png" alt="VINFAST – VINES (Car & Battery factories)"/></div>
-      <div class="card-body">
-        <h3>VINFAST – VINES (Car & Battery factories)</h3>
-        <p class="card-meta"><b>Location:</b> Hai Phong, Ha Tinh.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/OnsenResort.png" alt="ONSEN (resort)"/></div>
-      <div class="card-body">
-        <h3>ONSEN (resort)</h3>
-        <p class="card-meta"><b>Location:</b> Quang Hanh, Quang Ninh.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– HEX for hot water supply</li><li>– MV, CV valves</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/VincomCenter.png" alt="VINCOM CENTER (Shopping mall)"/></div>
-      <div class="card-body">
-        <h3>VINCOM CENTER (Shopping mall)</h3>
-        <p class="card-meta"><b>Location:</b> Ha Noi, HCMC, Hai Phong, Ninh Binh, ...</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Hydraulic valves</li></ul></div>
-      </div>
-    </article></div></div>
-<div class="project-section"><h2>Hotel</h2><div class="grid grid-3"><article class="card">
-      <div class="card-img"><img src="/images/HyattRegencyHL.png" alt="HYATT REGENCY HA LONG"/></div>
-      <div class="card-body">
-        <h3>HYATT REGENCY HA LONG</h3>
-        <p class="card-meta"><b>Location:</b> Ha Long – Quang Ninh</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">Dong Gia</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/SheratonHG.png" alt="SHERATON HA GIANG"/></div>
-      <div class="card-body">
-        <h3>SHERATON HA GIANG</h3>
-        <p class="card-meta"><b>Location:</b> Ha Giang</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/MarriottBN.png" alt="MARRIOTT BAC NINH"/></div>
-      <div class="card-body">
-        <h3>MARRIOTT BAC NINH</h3>
-        <p class="card-meta"><b>Location:</b> Bac Ninh</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li><li>– Hydraulic control valves</li></ul></div>
-      </div>
-    </article></div></div>
-<div class="project-section"><h2>Hospital Building</h2><div class="grid grid-3"><article class="card">
-      <div class="card-img"><img src="/images/Vinmec.png" alt="VINMEC (8 x Hospitals)"/></div>
-      <div class="card-body">
-        <h3>VINMEC (8 x Hospitals)</h3>
-        <p class="card-meta"><b>Location:</b> Hanoi, HCMC, Phu Quoc, Nha Trang, ...</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VINGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– PICV, MBV, MV valves</li><li>– Heatpump</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/HongNgoc.png" alt="HONG NGOC HOSPITAL (phase 1 & 2)"/></div>
-      <div class="card-body">
-        <h3>HONG NGOC HOSPITAL (phase 1 & 2)</h3>
-        <p class="card-meta"><b>Location:</b> My Dinh, Ha Noi.</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">HONG NGOC HOSPITAL GROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, HVAC, SW</li><li>– PICV, MBV, MV valves</li></ul></div>
-      </div>
-    </article></div></div>
-<div class="project-section"><h2>Water Park</h2><div class="grid grid-3"><article class="card">
-      <div class="card-img"><img src="/images/SSPark.png" alt="SAM SON PARK"/></div>
-      <div class="card-body">
-        <h3>SAM SON PARK</h3>
-        <p class="card-meta"><b>Location:</b> Sam Son, Thanh Hoa</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/HaNamPark.png" alt="HA NAM PARK"/></div>
-      <div class="card-body">
-        <h3>HA NAM PARK</h3>
-        <p class="card-meta"><b>Location:</b> Phu Ly, Ha Nam</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">SUNGROUP</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for game & show</li><li>– CV valves</li></ul></div>
-      </div>
-    </article>
-<article class="card">
-      <div class="card-img"><img src="/images/CuaHoiPark.png" alt="CUA HOI PARK"/></div>
-      <div class="card-body">
-        <h3>CUA HOI PARK</h3>
-        <p class="card-meta"><b>Location:</b> Nghe An</p>
-        <p class="card-meta"><b>Investor:</b> <span style="color:var(--navy-deep);font-weight:600">VinGroup</span></p>
-        <div class="products-list"><div class="label">Products</div><ul><li>– Pumps for WS, game & show system</li></ul></div>
-      </div>
-    </article></div>
-  </div>
   </div>
 </section>
 
 </main>
-<div th:replace="~{fragments/footer :: footer}"></div>
-<div th:replace="~{fragments/scripts :: carousel-js}"></div>
-</body>
-</html>
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Pumps <span class="diamond">◆</span></span>
+    <span class="ticker-item">Valves <span class="diamond">◆</span></span>
+    <span class="ticker-item">Heatpump <span class="diamond">◆</span></span>
+    <span class="ticker-item">Plate Heat Exchanger <span class="diamond">◆</span></span>
+    <span class="ticker-item">Measurement Equipment <span class="diamond">◆</span></span>
+    <span class="ticker-item">Pumps <span class="diamond">◆</span></span>
+    <span class="ticker-item">Valves <span class="diamond">◆</span></span>
+    <span class="ticker-item">Heatpump <span class="diamond">◆</span></span>
+    <span class="ticker-item">Plate Heat Exchanger <span class="diamond">◆</span></span>
+    <span class="ticker-item">Measurement Equipment <span class="diamond">◆</span></span>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:#152352">OMEAX<span class="slogan" style="color:#64748b">SIMPLIFIES LIFE</span></div>
+      <p style="color:#64748b;font-size:.875rem;margin-top:1rem">Your partner for mechanical and electrical equipment.</p>
+    </div>
+    <div>
+      <h4>HANOI Office</h4>
+      <p><span class="icon-pin"></span> Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</p>
+    </div>
+    <div>
+      <h4>HCMC Branch</h4>
+      <p><span class="icon-pin"></span> 11B Hong Ha, Tan Binh, HCMC.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><span class="icon-mail"></span> info@omeax.com</p>
+      <p><span class="icon-phone"></span> +84 (0) 24 0000 0000</p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 OMEAX Joint Stock Company. All rights reserved.</span>
+    <span>Registration number: 0110535209 — Established Nov 8th, 2023</span>
+  </div>
+</footer>
+</body></html>
