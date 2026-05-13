@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import demo.model.Data;
 import demo.model.SanPham;
 import demo.model.YeuCau;
 import demo.service.DashboardService;
@@ -41,7 +42,9 @@ public class SanPhamController {
     // ================================================================
 
     @GetMapping("/")
-    public String trangChu() {
+    public String trangChu(Model model) {
+        model.addAttribute("customers", Data.CUSTOMERS);
+        model.addAttribute("projects", Data.PROJECTS);
         return "home";
     }
 
@@ -63,12 +66,12 @@ public class SanPhamController {
 
     @GetMapping("/product/{id}")
     public String chiTietSanPham(@PathVariable Long id, Model model) {
-    SanPham sp = sanPhamService.timTheoId(id).orElse(null);
-    if (sp == null) return "redirect:/products";
-    model.addAttribute("product", sp);          // template dùng ${product}
-    model.addAttribute("range", sp);            // template dùng ${range.brand}
-    return "product-detail";
-}
+        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
+        if (sp == null) return "redirect:/products";
+        model.addAttribute("product", sp);
+        model.addAttribute("range", sp);
+        return "product-detail";
+    }
 
     @GetMapping("/login")
     public String trangLogin() {
@@ -97,7 +100,6 @@ public class SanPhamController {
     public String adminDashboard(@RequestParam(required = false) String from,
                                  @RequestParam(required = false) String to,
                                  Model model) {
-        // ✅ 1 dòng gọi Service - 78 dòng logic đã chuyển vào DashboardService
         Map<String, Object> data = dashboardService.getDashboardData(from, to);
         model.addAllAttributes(data);
         return "admin/index";
