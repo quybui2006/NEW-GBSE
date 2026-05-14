@@ -48,6 +48,16 @@ public class SanPhamController {
         return "home";
     }
 
+    @GetMapping("/about")     public String about()    { return "about"; }
+
+    @GetMapping("/projects")
+    public String projects(org.springframework.ui.Model model) {
+    model.addAttribute("projects", demo.model.Data.PROJECTS);
+    return "projects";
+    }
+    
+    @GetMapping("/news")      public String news()     { return "news"; }
+
     @GetMapping("/products")
     public String danhSachSanPham(@RequestParam(required = false) String keyword, Model model) {
         List<SanPham> danhSach = sanPhamService.timKiem(keyword);
