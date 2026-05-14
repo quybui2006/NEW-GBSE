@@ -78,18 +78,17 @@ a{color:inherit;text-decoration:none}
 /* Projects */
 .proj-section{margin-bottom:4rem}
 .proj-section h2{font-size:1.75rem;font-weight:800;margin-bottom:1.5rem}
-.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.5rem;scroll-behavior:smooth}
+.proj-slider{display:flex;align-items:center;gap:.5rem}
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.5rem;scroll-behavior:smooth;flex:1;min-width:0}
 .proj-row::-webkit-scrollbar{height:8px}
 .proj-row::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
 .proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:280px}
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
 @media(max-width:560px){.proj-row .card{flex:0 0 100%}}
-.proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem}
-.proj-nav button{width:36px;height:36px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#152352;font-size:1.1rem}
-.proj-nav button:hover{background:#152352;color:#fff}
+.proj-arrow{flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#152352;font-size:1.25rem;box-shadow:0 2px 8px rgba(21,35,82,.15);transition:background .2s,color .2s}
+.proj-arrow:hover{background:#152352;color:#fff}
 
 /* Ticker */
-
     .ticker-wrap {background: var(--navy);padding: .85rem 0;overflow: hidden;white-space: nowrap;display: flex;}
     .ticker-track {display: inline-flex;flex-shrink: 0;animation: ticker 28s linear infinite;}
     .ticker-track span {font-family: 'Nunito', sans-serif;font-size: .82rem;font-weight: 800;color: #fff;letter-spacing: .2em;text-transform: uppercase;padding: 0 1.5rem;}
@@ -271,32 +270,42 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
     </div>
     <div style="margin-top:3rem">
       <div th:each="sec,it : ${projects}" class="proj-section">
-        <h2 th:text="${sec.title}">Section</h2>         
-        <!-- wrapper: position:relative để neo 2 nút, overflow:hidden để clip scroll -->
-        <div style="position:relative; overflow:hidden">
-          <!-- nút trái: nằm bên trong, overlay lên góc trái giữa -->
-          <button class="proj-arrow proj-arrow-left"
+        <h2 th:text="${sec.title}">Section</h2>
+ 
+        <!-- ✅ wrapper dùng flex để nút trái/phải tự canh giữa theo chiều dọc của row -->
+        <div style="display:flex; align-items:center; gap:.5rem">
+ 
+          <!-- nút trái -->
+          <button class="proj-arrow"
                   th:if="${sec.projects.size() > 3}"
                   th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:-400,behavior:'smooth'})|">‹</button>
-        <div class="proj-row" th:id="|row-h-${it.index}|">
-          <article class="card" th:each="p : ${sec.projects}">
-            <div class="img"><img th:src="${p.image}" th:alt="${p.name}"/></div>
-            <div class="body">
-              <h3 th:text="${p.name}" style="font-size:1.05rem;font-weight:700">Name</h3>
-              <p class="muted" style="font-size:.85rem;margin-top:.5rem"><b>Location:</b> <span th:text="${p.location}"></span></p>
-              <p class="muted" style="font-size:.85rem"><b>Investor:</b> <span style="color:#152352;font-weight:600" th:text="${p.investor}"></span></p>
-              <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid #e2e8f0">
-                <p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:.25rem">Products</p>
-                <ul style="font-size:.85rem;color:#334155;margin:0;padding-left:1rem">
-                  <li th:each="pr : ${p.products}" th:text="'– ' + ${pr}"></li>
-                </ul>
+          <!-- placeholder giữ chỗ khi không có nút (≤3 project) để row không bị lệch -->
+          <div th:unless="${sec.projects.size() > 3}" style="width:40px;flex-shrink:0"></div>
+ 
+          <!-- scroll row -->
+          <div class="proj-row" style="flex:1;min-width:0" th:id="|row-h-${it.index}|">
+            <article class="card" th:each="p : ${sec.projects}">
+              <div class="img"><img th:src="${p.image}" th:alt="${p.name}"/></div>
+              <div class="body">
+                <h3 th:text="${p.name}" style="font-size:1.05rem;font-weight:700">Name</h3>
+                <p class="muted" style="font-size:.85rem;margin-top:.5rem"><b>Location:</b> <span th:text="${p.location}"></span></p>
+                <p class="muted" style="font-size:.85rem"><b>Investor:</b> <span style="color:#152352;font-weight:600" th:text="${p.investor}"></span></p>
+                <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid #e2e8f0">
+                  <p style="font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin-bottom:.25rem">Products</p>
+                  <ul style="font-size:.85rem;color:#334155;margin:0;padding-left:1rem">
+                    <li th:each="pr : ${p.products}" th:text="'– ' + ${pr}"></li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          </article>
-        </div>
-        <button class="proj-arrow proj-arrow-right"
+            </article>
+          </div>
+ 
+          <!-- nút phải -->
+          <button class="proj-arrow"
                   th:if="${sec.projects.size() > 3}"
                   th:onclick="|document.getElementById('row-h-${it.index}').scrollBy({left:400,behavior:'smooth'})|">›</button>
+          <div th:unless="${sec.projects.size() > 3}" style="width:40px;flex-shrink:0"></div>
+ 
         </div>
       </div>
     </div>
