@@ -59,12 +59,9 @@ public class SanPhamController {
     @GetMapping("/news")      public String news()     { return "news"; }
 
     @GetMapping("/products")
-    public String danhSachSanPham(@RequestParam(required = false) String keyword, Model model) {
-        List<SanPham> danhSach = sanPhamService.timKiem(keyword);
-        model.addAttribute("danhSach", danhSach);
-        if (keyword != null && !keyword.isEmpty()) {
-            model.addAttribute("keyword", keyword);
-        }
+    public String danhSachSanPham(Model model) {
+        model.addAttribute("ranges", Data.RANGES);
+        model.addAttribute("allProducts", Data.allProducts());
         return "products";
     }
 
@@ -74,12 +71,11 @@ public class SanPhamController {
         return "contact";
     }
 
-    @GetMapping("/product/{id}")
-    public String chiTietSanPham(@PathVariable Long id, Model model) {
-        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
-        if (sp == null) return "redirect:/products";
-        model.addAttribute("product", sp);
-        model.addAttribute("range", sp);
+    @GetMapping("/products/{id}")
+    public String chiTietSanPham(@PathVariable String id, Model model) {
+        Map<String, Object> result = Data.findProduct(id);
+        if (result == null) return "redirect:/products";
+        model.addAllAttributes(result);
         return "product-detail";
     }
 

@@ -26,11 +26,19 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         User user = userOpt.get();
+            // THÊM DÒNG NÀY
+    System.out.println("=== DEBUG LOGIN ===");
+    System.out.println("Username: " + user.getUsername());
+    System.out.println("Password hash: " + user.getPassword());
+    System.out.println("Role: " + user.getRole());
+    System.out.println("Enabled: " + user.isEnabled());
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole())
+                .authorities("ROLE_ADMIN") 
+
+                // .roles(user.getRole())
                 .disabled(!user.isEnabled())
                 .build();
     }

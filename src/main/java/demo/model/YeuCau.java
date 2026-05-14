@@ -21,25 +21,24 @@ public class YeuCau {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Họ tên không được để trống")
-    @Size(min = 2, max = 100, message = "Họ tên phải từ 2-100 ký tự")
+    @NotBlank(message = "Full name is required")
+    @Size(min = 2, max = 100, message = "Name must be 2–100 characters")
     @Column(columnDefinition = "varchar(255)")
     private String hoTen;
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^[0-9]{9,11}$", message = "Số điện thoại không hợp lệ")
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^[0-9]{9,11}$", message = "Invalid phone number (9–11 digits)")
     @Column(columnDefinition = "varchar(20)")
     private String soDienThoai;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Invalid email address")
     @Column(columnDefinition = "varchar(255)")
     private String email;
 
     @Column(columnDefinition = "varchar(255)")
     private String sanPhamQuanTam;
 
-
-    @Size(max = 1000, message = "Nội dung không quá 1000 ký tự")
+    @Size(max = 1000, message = "Message must not exceed 1000 characters")
     @Column(columnDefinition = "varchar(1000)")
     private String noiDung;
 

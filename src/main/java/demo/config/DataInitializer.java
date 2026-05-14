@@ -30,12 +30,13 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userRepository.existsByUsername(adminUsername)) {
+        boolean userExists = userRepository.existsByUsername(adminUsername);
+
+        if (!userExists) {
             User admin = new User();
             admin.setUsername(adminUsername);
 
             String password;
-            // ✅ SỬA: Kiểm tra rỗng đúng cách
             if (adminPassword != null && !adminPassword.trim().isEmpty()) {
                 password = adminPassword;
             } else {
@@ -50,11 +51,23 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(admin);
 
             System.out.println("============================================");
-            System.out.println("🔐 TÀI KHOẢN QUẢN TRỊ:");
+            System.out.println("TAI KHOAN QUAN TRI:");
             System.out.println("   Username: " + adminUsername);
             System.out.println("   Password: " + password);
-            System.out.println("   ⚠️ LƯU LẠI NGAY - CHỈ HIỂN THỊ 1 LẦN!");
+            System.out.println("   LUU LAI NGAY - CHI HIEN THI 1 LAN!");
             System.out.println("============================================");
+
+        } else if (adminPassword != null && !adminPassword.trim().isEmpty()) {
+            // User exists and explicit password provided via env/config — update it
+            userRepository.findByUsername(adminUsername).ifPresent(admin -> {
+                admin.setPassword(passwordEncoder.encode(adminPassword));
+                userRepository.save(admin);
+            });
+            System.out.println("[DataInitializer] Admin password updated from config (username: " + adminUsername + ")");
+
+        } else {
+            System.out.println("[DataInitializer] Admin user '" + adminUsername + "' already exists.");
+            System.out.println("[DataInitializer] To reset password: set ADMIN_PASSWORD env var and restart.");
         }
     }
 }

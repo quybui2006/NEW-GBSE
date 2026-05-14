@@ -18,10 +18,14 @@ public class YeuCauService {
     @Autowired
     private YeuCauRepository yeuCauRepository;
 
-    // Lưu yêu cầu mới
+    @Autowired
+    private EmailService emailService;
+
     public YeuCau luuYeuCau(YeuCau yeuCau) {
         yeuCau.setThoiGian(LocalDateTime.now());
-        return yeuCauRepository.save(yeuCau);
+        YeuCau saved = yeuCauRepository.save(yeuCau);
+        emailService.guiThongBao(saved);
+        return saved;
     }
 
     // Lấy tất cả yêu cầu (dùng cho export Excel)

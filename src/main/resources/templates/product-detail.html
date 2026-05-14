@@ -199,21 +199,21 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
   <div class="container header-inner">
     <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
-<a class="" href="/">Trang chủ</a>
-<a class=" active" href="/products">Sản phẩm</a>
-<a class="" href="/about">Công ty</a>
-<a class="" href="/projects">Dự án</a>
-<a class="" href="/news">Tin tức</a>
-<a class="" href="/contact">Liên hệ</a>
+<a class="" href="/">Home</a>
+<a class="active" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="" href="/contact">Contact</a>
     </nav>
   </div>
   <nav class="mobile-nav">
-<a class="" href="/">Trang chủ</a>
-<a class=" active" href="/products">Sản phẩm</a>
-<a class="" href="/about">Công ty</a>
-<a class="" href="/projects">Dự án</a>
-<a class="" href="/news">Tin tức</a>
-<a class="" href="/contact">Liên hệ</a>
+<a class="" href="/">Home</a>
+<a class="active" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="" href="/contact">Contact</a>
   </nav>
 </header>
 <main>
@@ -221,7 +221,7 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
-    <a href="/products">Sản phẩm</a><span class="sep">/</span>
+    <a href="/products">Products</a><span class="sep">/</span>
     <span style="color:#152352;font-weight:600" th:text="${product.name}">Product</span>
   </div>
 </section>
@@ -248,25 +248,25 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
   <div class="container">
     <div class="grid grid-2">
       <div class="spec-card">
-        <h2>Tính năng nổi bật</h2>
+        <h2>Key Features</h2>
         <ul>
           <li th:each="f : ${product.features}" th:text="${f}">feat</li>
         </ul>
       </div>
       <div class="spec-card">
-        <h2>Thông số kỹ thuật</h2>
+        <h2>Technical Specs</h2>
         <div th:if="${not #lists.isEmpty(product.specs)}" class="spec-table">
           <th:block th:each="s : ${product.specs}">
             <div class="lbl" th:text="${s.label}">label</div>
             <div class="val" th:text="${s.value}">value</div>
           </th:block>
         </div>
-        <p th:if="${#lists.isEmpty(product.specs)}" style="color:#64748b;font-size:.875rem">Liên hệ để được tư vấn thông số chi tiết phù hợp dự án.</p>
-        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem">Yêu cầu báo giá →</a>
+        <p th:if="${#lists.isEmpty(product.specs)}" style="color:#64748b;font-size:.875rem">Contact us for detailed specifications tailored to your project.</p>
+        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem">Request a quote →</a>
       </div>
     </div>
     <div style="margin-top:2rem">
-      <a href="/products" style="color:#1e3a8a;font-weight:600">← Quay lại danh mục sản phẩm</a>
+      <a href="/products" style="color:#1e3a8a;font-weight:600">← Back to products</a>
     </div>
   </div>
 </section>

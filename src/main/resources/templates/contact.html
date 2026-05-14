@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Liên hệ | OMEAX</title>
+<title>Contact | OMEAX</title>
 <meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -199,21 +199,21 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
   <div class="container header-inner">
     <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
-<a class="" href="/">Trang chủ</a>
-<a class="" href="/products">Sản phẩm</a>
-<a class="" href="/about">Công ty</a>
-<a class="" href="/projects">Dự án</a>
-<a class="" href="/news">Tin tức</a>
-<a class=" active" href="/contact">Liên hệ</a>
+<a class="" href="/">Home</a>
+<a class="" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="active" href="/contact">Contact</a>
     </nav>
   </div>
   <nav class="mobile-nav">
-<a class="" href="/">Trang chủ</a>
-<a class="" href="/products">Sản phẩm</a>
-<a class="" href="/about">Công ty</a>
-<a class="" href="/projects">Dự án</a>
-<a class="" href="/news">Tin tức</a>
-<a class=" active" href="/contact">Liên hệ</a>
+<a class="" href="/">Home</a>
+<a class="" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="active" href="/contact">Contact</a>
   </nav>
 </header>
 <main>
@@ -238,14 +238,32 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
         <div style="display:flex;gap:.75rem;align-items:center"><span class="icon-phone"></span><span>+84 (0) 24 0000 0000</span></div>
       </div>
     </div>
-    <form onsubmit="event.preventDefault(); alert('Message sent. We will get back to you shortly.'); this.reset();">
-      <div class="grid grid-2" style="gap:1rem">
-        <div><label>Name</label><input required/></div>
-        <div><label>Company</label><input/></div>
+    <form th:action="@{/contact}" method="post" th:object="${yeuCau}">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+      <div th:if="${thanhCong}" style="background:#dcfce7;color:#166534;border:1px solid #bbf7d0;border-radius:.5rem;padding:.75rem 1rem;margin-bottom:1rem;font-size:.9rem">
+        Your message has been sent. We will get back to you shortly.
       </div>
-      <label>Email</label><input type="email" required/>
-      <label>Message</label><textarea rows="5" required></textarea>
-      <button class="btn btn-primary" style="width:100%;margin-top:1rem;justify-content:center">Send message</button>
+      <div class="grid grid-2" style="gap:1rem">
+        <div>
+          <label>Full Name *</label>
+          <input type="text" th:field="*{hoTen}" placeholder="Your full name"/>
+          <span th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
+        </div>
+        <div>
+          <label>Phone *</label>
+          <input type="text" th:field="*{soDienThoai}" placeholder="e.g. 0912345678"/>
+          <span th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
+        </div>
+      </div>
+      <label>Email</label>
+      <input type="email" th:field="*{email}" placeholder="your@email.com"/>
+      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
+      <label>Product of interest</label>
+      <input type="text" th:field="*{sanPhamQuanTam}" placeholder="e.g. HVAC Pump, PICV valve..."/>
+      <label>Message</label>
+      <textarea th:field="*{noiDung}" rows="5" placeholder="Tell us about your project or requirement..."></textarea>
+      <span th:if="${#fields.hasErrors('noiDung')}" th:errors="*{noiDung}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;justify-content:center">Send message →</button>
     </form>
   </div>
 </section>

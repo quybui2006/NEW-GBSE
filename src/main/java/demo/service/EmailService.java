@@ -18,21 +18,28 @@ public class EmailService {
     @Value("${email.nhan}")
     private String emailNhan;
 
+    @Value("${spring.mail.username:}")
+    private String emailTu;
+
     @Async
     public void guiThongBao(YeuCau yeuCau) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
+            if (emailTu != null && !emailTu.isBlank()) {
+                message.setFrom(emailTu);
+            }
             message.setTo(emailNhan);
-            message.setSubject("Yêu cầu báo giá mới từ: " + yeuCau.getHoTen());
+            message.setSubject("New quote request from: " + yeuCau.getHoTen());
             message.setText(
-                "Khách hàng: " + yeuCau.getHoTen() + "\n" +
-                "SĐT: " + yeuCau.getSoDienThoai() + "\n" +
-                "Email: " + yeuCau.getEmail() + "\n" +
-                "Sản phẩm quan tâm: " + yeuCau.getSanPhamQuanTam() + "\n" +
-                "Nội dung: " + yeuCau.getNoiDung()
+                "Name:    " + yeuCau.getHoTen() + "\n" +
+                "Phone:   " + yeuCau.getSoDienThoai() + "\n" +
+                "Email:   " + yeuCau.getEmail() + "\n" +
+                "Product: " + yeuCau.getSanPhamQuanTam() + "\n" +
+                "Message: " + yeuCau.getNoiDung()
             );
             mailSender.send(message);
         } catch (Exception e) {
+            System.err.println("[EmailService] Failed to send notification email: " + e.getMessage());
             e.printStackTrace();
         }
     }

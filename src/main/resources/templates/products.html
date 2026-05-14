@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sản phẩm | OMEAX</title>
+<title>Products | OMEAX</title>
 <meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +29,37 @@ a{color:inherit;text-decoration:none}
 .section-title{font-weight:800;font-size:clamp(1.75rem,4vw,2.5rem);color:#152352}
 .muted{color:#64748b}
 
+/* Header */
+.header{position:sticky;top:0;z-index:50;background:rgba(11,20,52,.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.6rem;color:#fff;letter-spacing:.05em}
+.logo .slogan{display:block;font-size:.55rem;letter-spacing:.4em;font-weight:500;color:rgba(255,255,255,.7)}
+.nav{display:flex;gap:.25rem}
+.nav a{padding:.5rem 1rem;font-size:.875rem;font-weight:500;color:rgba(255,255,255,.85);border-radius:.375rem;transition:.2s}
+.nav a:hover{background:rgba(255,255,255,.1)}
+.nav a.active{background:#fff;color:#152352}
+@media(max-width:768px){.nav{display:none}.mobile-nav{display:flex !important;overflow-x:auto;gap:.25rem;padding:.5rem 1rem;background:rgba(11,20,52,.95);border-top:1px solid rgba(255,255,255,.1)}.mobile-nav a{padding:.4rem .75rem;font-size:.75rem;color:rgba(255,255,255,.85);border-radius:.375rem;white-space:nowrap}.mobile-nav a.active{background:#fff;color:#152352}}
+.mobile-nav{display:none}
+/* Ticker */
+.ticker{background:#152352;color:#fff;overflow:hidden;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);margin-top:3rem}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker 30s linear infinite;padding:.75rem 0}
+.ticker-item{margin:0 2rem;font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:2rem}
+.ticker-item .diamond{color:#f59e0b}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* Footer */
+.footer{background:#fff;color:#0f172a;border-top:1px solid #e2e8f0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;padding:3rem 0}
+@media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr}}
+.footer-grid h4{color:#152352;font-size:1rem;margin-bottom:.75rem}
+.footer-grid p{font-size:.875rem;color:#64748b;display:flex;gap:.5rem;align-items:flex-start;margin:.25rem 0}
+.icon-pin,.icon-mail,.icon-phone{display:inline-block;width:14px;height:14px;flex-shrink:0;margin-top:3px;position:relative}
+.icon-pin::before{content:"";position:absolute;top:0;left:1px;width:10px;height:10px;border:2px solid #1e3a8a;border-radius:50%}
+.icon-pin::after{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #1e3a8a}
+.icon-mail{border:2px solid #1e3a8a;border-radius:2px}
+.icon-mail::after{content:"";position:absolute;left:1px;top:0;width:8px;height:6px;border-bottom:2px solid #1e3a8a;border-right:2px solid #1e3a8a;transform:rotate(-45deg)}
+.icon-phone{border:2px solid #1e3a8a;border-radius:3px;transform:rotate(35deg)}
+.footer-bottom{border-top:1px solid #e2e8f0;font-size:.75rem;color:#64748b;padding:1rem 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
 
 /* Page header */
 .page-header{background:#152352;background-image:radial-gradient(rgba(255,255,255,.06) 1.5px,transparent 1.5px),radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px,18px 18px;background-position:0 0,16px 16px;color:#fff;padding:4rem 0;text-align:center}
@@ -163,15 +194,35 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
 </style>
 
 </head>
-<body th:with="active='projects'">
-<div th:replace="~{fragments/header :: header}"></div>
+<body>
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
+    <nav class="nav">
+<a class="" href="/">Home</a>
+<a class="active" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="" href="/contact">Contact</a>
+    </nav>
+  </div>
+  <nav class="mobile-nav">
+<a class="" href="/">Home</a>
+<a class="active" href="/products">Products</a>
+<a class="" href="/about">About</a>
+<a class="" href="/projects">Projects</a>
+<a class="" href="/news">News</a>
+<a class="" href="/contact">Contact</a>
+  </nav>
+</header>
 <main>
 
 
 <section class="page-header">
   <div class="container">
-    <p class="eyebrow">Sản phẩm</p>
-    <h1>Danh mục sản phẩm</h1>
+    <p class="eyebrow">Products</p>
+    <h1>Product Catalogue</h1>
     <p class="subtitle">OMEAX · GBSE · Partners</p>
   </div>
 </section>
@@ -180,7 +231,7 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
   <div class="container">
     <div class="search-wrap">
       <span class="search-icon"></span>
-      <input id="search" type="text" autocomplete="off" placeholder="Tìm kiếm sản phẩm..."/>
+      <input id="search" type="text" autocomplete="off" placeholder="Search products..."/>
       <div id="suggestions" class="suggestions"></div>
     </div>
   </div>

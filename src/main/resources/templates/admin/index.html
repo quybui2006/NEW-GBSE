@@ -99,19 +99,18 @@
 
 <nav class="navbar px-3 py-2 admin-nav sticky-top shadow">
     <div class="container-fluid">
-        <span class="navbar-brand fw-bold text-white">Van & Bơm Nước Quy — Admin</span>
-        
+        <span class="navbar-brand fw-bold text-white">OMEAX Admin</span>
+
         <!-- Desktop Menu -->
         <div class="d-none d-lg-flex flex-wrap gap-1 align-items-center">
             <a href="/admin" class="active">Dashboard</a>
-            <a href="/admin/san-pham">Sản phẩm</a>
-            <a href="/admin/yeu-cau">Yêu cầu</a>
-            <a href="/" target="_blank">Xem web</a>
-            
-            <!-- ✅ SỬA: Logout Desktop - Form POST có CSRF -->
+            <a href="/admin/san-pham">Products</a>
+            <a href="/admin/yeu-cau">Requests</a>
+            <a href="/" target="_blank">View site</a>
+
             <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" class="logout-link">Đăng xuất</button>
+                <button type="submit" class="logout-link">Log out</button>
             </form>
         </div>
 
@@ -123,22 +122,21 @@
         <!-- Mobile Offcanvas Menu -->
         <div class="offcanvas offcanvas-end admin-offcanvas d-lg-none" tabindex="-1" id="adminMenu">
             <div class="offcanvas-header text-white">
-                <h5 class="offcanvas-title fw-bold">QUẢN TRỊ</h5>
+                <h5 class="offcanvas-title fw-bold">ADMIN</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="offcanvas-body p-0">
                 <div class="navbar-nav">
                     <a href="/admin" class="nav-link active">Dashboard</a>
-                    <a href="/admin/san-pham" class="nav-link">Sản phẩm</a>
-                    <a href="/admin/yeu-cau" class="nav-link">Yêu cầu</a>
-                    <a href="/" class="nav-link text-info">Xem web</a>
-                    
-                    <!-- ✅ SỬA: Logout Mobile - Form POST có CSRF -->
+                    <a href="/admin/san-pham" class="nav-link">Products</a>
+                    <a href="/admin/yeu-cau" class="nav-link">Requests</a>
+                    <a href="/" class="nav-link text-info">View site</a>
+
                     <form th:action="@{/logout}" method="post" style="margin: 0;">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <button type="submit" class="nav-link text-danger w-100 text-start" 
+                        <button type="submit" class="nav-link text-danger w-100 text-start"
                                 style="background: none; border: none; cursor: pointer; font-size: inherit;">
-                            Đăng xuất
+                            Log out
                         </button>
                     </form>
                 </div>
@@ -148,23 +146,23 @@
 </nav>
 
 <div class="container-fluid p-4">
-    <h5 class="mb-4 fw-bold">Tổng quan hệ thống</h5>
+    <h5 class="mb-4 fw-bold">System Overview</h5>
 
     <!-- Filter Bar -->
     <div class="filter-bar shadow-sm">
         <div class="row g-3 align-items-end">
             <div class="col-12 col-md-auto">
-                <label class="form-label small text-muted mb-1">Từ ngày</label>
+                <label class="form-label small text-muted mb-1">From</label>
                 <input type="date" id="fromDate" class="form-control">
             </div>
             <div class="col-12 col-md-auto">
-                <label class="form-label small text-muted mb-1">Đến ngày</label>
+                <label class="form-label small text-muted mb-1">To</label>
                 <input type="date" id="toDate" class="form-control">
             </div>
             <div class="col-12 col-md-auto d-flex gap-2">
-                <button class="btn-filter" onclick="applyFilter()">Lọc</button>               
-                <button class="btn-reset" onclick="resetFilter()">Xóa lọc</button>
-                <button class="btn-today" onclick="setToday()">Hôm nay</button>
+                <button class="btn-filter" onclick="applyFilter()">Filter</button>
+                <button class="btn-reset" onclick="resetFilter()">Clear</button>
+                <button class="btn-today" onclick="setToday()">Today</button>
             </div>
         </div>
     </div>
@@ -173,22 +171,22 @@
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="stat-card shadow-sm text-center">
-                <div class="small mb-1" style="color:#aaa;">Tổng sản phẩm</div>
+                <div class="small mb-1" style="color:#aaa;">Total Products</div>
                 <div class="fs-1 fw-bold" th:text="${tongSanPham}">0</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="stat-card shadow-sm text-center">
-                <div class="small mb-1" style="color:#aaa;">Yêu cầu báo giá</div>
+                <div class="small mb-1" style="color:#aaa;">Quote Requests</div>
                 <div th:if="${hasData}" class="fs-1 fw-bold" th:text="${tongYeuCau}">0</div>
-                <div th:unless="${hasData}" class="no-data-message">Không có dữ liệu</div>
+                <div th:unless="${hasData}" class="no-data-message">No data</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="stat-card shadow-sm text-center">
-                <div class="small mb-1" style="color:#aaa;">Tổng lượt truy cập</div>
+                <div class="small mb-1" style="color:#aaa;">Total Visits</div>
                 <div th:if="${hasData}" class="fs-1 fw-bold" th:text="${tongTruyCap}">0</div>
-                <div th:unless="${hasData}" class="no-data-message">Không có dữ liệu</div>
+                <div th:unless="${hasData}" class="no-data-message">No data</div>
             </div>
         </div>
     </div>
@@ -197,23 +195,23 @@
     <div class="row g-4">
         <div class="col-md-6">
             <div class="chart-box shadow-sm">
-                <h6 class="fw-bold mb-3">Lượt truy cập</h6>
+                <h6 class="fw-bold mb-3">Visits</h6>
                 <div th:if="${hasData}">
                     <canvas id="accessChart" style="max-height: 300px;"></canvas>
                 </div>
                 <div th:unless="${hasData}" class="no-data-message text-center">
-                    Không có dữ liệu trong khoảng thời gian này
+                    No data for this period
                 </div>
             </div>
         </div>
         <div class="col-md-6">
             <div class="chart-box shadow-sm">
-                <h6 class="fw-bold mb-3">Số lượt yêu cầu báo giá</h6>
+                <h6 class="fw-bold mb-3">Quote Requests</h6>
                 <div th:if="${hasData}">
                     <canvas id="requestChart" style="max-height: 300px;"></canvas>
                 </div>
                 <div th:unless="${hasData}" class="no-data-message text-center">
-                    Không có dữ liệu trong khoảng thời gian này
+                    No data for this period
                 </div>
             </div>
         </div>
