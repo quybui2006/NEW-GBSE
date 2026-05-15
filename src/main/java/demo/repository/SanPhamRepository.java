@@ -17,4 +17,6 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
          + "OR LOWER(s.moTa) LIKE LOWER(CONCAT('%', :keyword, '%')) "
          + "OR LOWER(s.danhMuc) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<SanPham> timKiem(@Param("keyword") String keyword);
+
+    List<SanPham> findByRangeIdIsNull();
 }

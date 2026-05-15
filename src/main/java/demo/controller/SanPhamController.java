@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import demo.model.SanPham;
 import demo.model.YeuCau;
@@ -60,8 +61,9 @@ public class SanPhamController {
 
     @GetMapping("/products")
     public String danhSachSanPham(Model model) {
-        model.addAttribute("ranges", sanPhamService.getRangeGroups());
-        model.addAttribute("allProducts", sanPhamService.layTatCa());
+        List<SanPham> all = sanPhamService.layTatCa();
+        model.addAttribute("ranges", sanPhamService.getRangeGroups(all));
+        model.addAttribute("allProducts", all);
         return "products";
     }
 
@@ -154,9 +156,19 @@ public class SanPhamController {
 
     @PostMapping("/admin/san-pham/luu")
     public String adminLuuSanPham(@ModelAttribute SanPham sp,
-                                  @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile) {
-        sanPhamService.luu(sp, hinhAnhFile);
-        return "redirect:/admin/san-pham";
+                                  @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            sanPhamService.luu(sp, hinhAnhFile);
+            return "redirect:/admin/san-pham";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("saveError", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("saveError", "Lưu thất bại: " + e.getMessage());
+        }
+        return sp.getId() == null
+            ? "redirect:/admin/san-pham/them"
+            : "redirect:/admin/san-pham/sua/" + sp.getId();
     }
 
     @PostMapping("/admin/san-pham/xoa/{id}")

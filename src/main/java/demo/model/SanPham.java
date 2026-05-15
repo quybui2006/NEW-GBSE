@@ -84,8 +84,7 @@ public class SanPham {
         }
     }
 
-    // Template/JS aliases so both old (Data.Product) and new (SanPham) property
-    // names work in the same Thymeleaf expressions where needed.
+    // Convenience aliases used by Thymeleaf templates and JS serialization.
 
     @Transient
     public String getName() { return ten; }

@@ -2,10 +2,7 @@ package demo.model;
 
 import java.util.List;
 
-/**
- * View-layer DTO that groups SanPham records under a named brand range.
- * Mirrors the structure Data.Range provided, but backed by the database.
- */
+/** View-layer DTO that groups SanPham records under a named brand range. */
 public class RangeGroup {
 
     private final String id;

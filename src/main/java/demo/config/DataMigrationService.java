@@ -1,6 +1,7 @@
 package demo.config;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -13,18 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import demo.model.Data;
 import demo.model.SanPham;
 import demo.repository.SanPhamRepository;
 
-/**
- * One-time seed that copies all products from Data.java into the san_pham
- * table. Only runs when the table is empty, so it is safe to leave in place —
- * it will never overwrite data the admin has added or edited via the UI.
- *
- * BEFORE deploying to production (Supabase), run:
- *   ALTER TABLE san_pham ADD COLUMN IF NOT EXISTS range_id VARCHAR(50);
- */
 @Component
 @Order(2)
 public class DataMigrationService implements CommandLineRunner {
@@ -32,55 +24,254 @@ public class DataMigrationService implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(DataMigrationService.class);
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private static final Map<String, String> BRAND_TO_RANGE = Map.of(
+        "OMEAX",    "omeax",
+        "GBSE",     "gbse",
+        "PARTNERS", "partners"
+    );
+
     @Autowired
     private SanPhamRepository sanPhamRepository;
 
     @Override
     public void run(String... args) {
-        if (sanPhamRepository.count() > 0) {
+        if (sanPhamRepository.count() == 0) {
+            seed();
+        } else {
             log.info("[DataMigration] san_pham table already has data — skipping seed.");
-            return;
         }
+        backfillRangeIds();
+    }
 
-        log.info("[DataMigration] Table is empty. Seeding {} products from Data.java...",
-                Data.RANGES.stream().mapToInt(r -> r.products.size()).sum());
+    // ── Seed ────────────────────────────────────────────────────────────────
 
+    private void seed() {
+        List<SanPham> products = buildSeedData();
+        log.info("[DataMigration] Table is empty. Seeding {} products...", products.size());
         int count = 0;
-        for (Data.Range range : Data.RANGES) {
-            for (Data.Product p : range.products) {
-                try {
-                    sanPhamRepository.save(toEntity(p, range.id));
-                    count++;
-                } catch (Exception e) {
-                    log.error("[DataMigration] Failed to seed product '{}': {}", p.id, e.getMessage());
-                }
+        for (SanPham sp : products) {
+            try {
+                sanPhamRepository.save(sp);
+                count++;
+            } catch (Exception e) {
+                log.error("[DataMigration] Failed to seed '{}': {}", sp.getTen(), e.getMessage());
             }
         }
-
         log.info("[DataMigration] Seed complete — {} products inserted.", count);
     }
 
-    private SanPham toEntity(Data.Product p, String rangeId) throws Exception {
-        SanPham sp = new SanPham();
-        sp.setTen(p.name);
-        sp.setMoTa(p.description);
-        sp.setShortText(p.shortText);
-        sp.setHinhAnh(p.image);          // stored as-is: "/images/pump1.jpg"
-        sp.setDanhMuc(p.category);
-        sp.setBrand(p.brand);
-        sp.setLink(p.link);
-        sp.setRangeId(rangeId);
+    // ── Backfill ─────────────────────────────────────────────────────────────
 
-        sp.setFeatures(mapper.writeValueAsString(p.features));
-        sp.setApplications(mapper.writeValueAsString(p.applications));
-
-        // Specs: List<Data.Spec> → [{"label":"...","value":"..."}]
-        List<Map<String, String>> specsJson = new ArrayList<>();
-        for (Data.Spec s : p.specs) {
-            specsJson.add(Map.of("label", s.label, "value", s.value));
+    private void backfillRangeIds() {
+        List<SanPham> nullRows = sanPhamRepository.findByRangeIdIsNull();
+        if (nullRows.isEmpty()) {
+            log.info("[DataMigration] Backfill: all rows already have rangeId — nothing to update.");
+            return;
         }
-        sp.setSpecs(mapper.writeValueAsString(specsJson));
+        log.info("[DataMigration] Backfill: found {} row(s) with null rangeId.", nullRows.size());
+        int updated = 0;
+        for (SanPham sp : nullRows) {
+            String brand = sp.getBrand() != null ? sp.getBrand().toUpperCase() : "";
+            String rangeId = BRAND_TO_RANGE.get(brand);
+            if (rangeId != null) {
+                sp.setRangeId(rangeId);
+                sanPhamRepository.save(sp);
+                updated++;
+            } else {
+                log.warn("[DataMigration] Backfill: no rangeId mapping for brand '{}' (id={}) — skipped.",
+                         sp.getBrand(), sp.getId());
+            }
+        }
+        log.info("[DataMigration] Backfill complete — {} row(s) updated.", updated);
+    }
 
-        return sp;
+    // ── Seed data ─────────────────────────────────────────────────────────────
+    // Single source of truth for initial product catalogue.
+    // Add rows here and they will be inserted on first startup (empty table only).
+
+    private List<SanPham> buildSeedData() {
+        return List.of(
+            // ── OMEAX — Pumps ────────────────────────────────────────────────
+            sp("Booster Pump",           "pumps",  "/images/pump1.jpg", "OMEAX", "omeax",
+               "Bơm tăng áp biến tần",
+               "Hệ tăng áp biến tần OMEAX dành cho tòa nhà cao tầng, cấp nước sinh hoạt ổn định, tiết kiệm điện năng tới 40%.",
+               arr("Inverter điều khiển PID", "Vỏ inox 304", "Áp suất tối đa 16 bar", "Lưu lượng tới 80 m³/h"),
+               arr("Tòa nhà văn phòng", "Khu chung cư", "Khách sạn"),
+               specs("Lưu lượng","5 – 80 m³/h", "Cột áp","20 – 160 m", "Công suất","1.5 – 30 kW", "Nguồn","3P / 380V / 50Hz"),
+               null),
+
+            sp("Transfer Pump",          "pumps",  "/images/pump2.jpg", "OMEAX", "omeax",
+               "Bơm chuyển nước",
+               "Bơm trục ngang công suất lớn, chuyên cấp & chuyển nước giữa các bể chứa.",
+               arr("Cánh đồng thau", "Hiệu suất cao IE3", "Vận hành êm < 60 dB"),
+               arr("Cấp nước sinh hoạt", "Hệ thống tưới"),
+               specs("Lưu lượng","10 – 300 m³/h", "Cột áp","10 – 100 m", "Công suất","2.2 – 75 kW"),
+               null),
+
+            sp("HVAC Pump",              "pumps",  "/images/pump3.jpg", "OMEAX", "omeax",
+               "Bơm tuần hoàn HVAC",
+               "Bơm tuần hoàn nước lạnh / nóng cho hệ thống chiller và AHU.",
+               arr("Mặt bích DN50–DN300", "Thân gang đúc", "Phớt cơ khí"),
+               arr("Hệ chiller", "Hệ sưởi sàn"),
+               specs("Cỡ kết nối","DN50 – DN300", "Nhiệt độ","-10°C – 120°C"),
+               null),
+
+            sp("Drainage Pump",          "pumps",  "/images/pump4.jpg", "OMEAX", "omeax",
+               "Bơm chìm thoát nước",
+               "Bơm chìm chuyên thoát nước hố ga, nước thải sinh hoạt.",
+               arr("IP68", "Cánh xé rác", "Phao tự động"),
+               arr("Tầng hầm", "Trạm bơm thoát"),
+               specs("Cấp bảo vệ","IP68", "Lưu lượng","5 – 50 m³/h"),
+               null),
+
+            sp("Fire Fighting Pump",     "pumps",  "/images/pump5.jpg", "OMEAX", "omeax",
+               "Bơm chữa cháy UL/FM",
+               "Cụm bơm chữa cháy đạt tiêu chuẩn UL/FM cho công trình thương mại.",
+               arr("Bơm chính + bù áp", "Tủ điều khiển tự động", "Theo NFPA 20"),
+               arr("PCCC nhà xưởng", "PCCC chung cư"),
+               specs("Tiêu chuẩn","UL / FM / NFPA 20"),
+               null),
+
+            // ── OMEAX — Valves ───────────────────────────────────────────────
+            sp("General Valves",         "valves", "/images/valve5.jpg", "OMEAX", "omeax",
+               "Van chặn đa năng",
+               "Van cổng, van bi, van một chiều dùng cho hệ nước & PCCC.",
+               arr("DN15–DN600", "Gang / inox / đồng", "PN16 – PN25"),
+               arr("Cấp nước", "PCCC", "HVAC"),
+               specs("Kích cỡ","DN15 – DN600", "Áp suất","PN16 – PN25"),
+               null),
+
+            sp("Hydraulic Control Valve","valves", "/images/valve3.jpg", "OMEAX", "omeax",
+               "Van điều khiển thủy lực",
+               "Van điều khiển thủy lực giảm áp, duy trì áp suất, ngắt khi quá tải.",
+               arr("Pilot tự động", "Không cần điện", "Bền 20+ năm"),
+               arr("Mạng cấp nước đô thị", "Trạm bơm"),
+               null, null),
+
+            sp("Special Application Valve","valves","/images/valve1.jpg","OMEAX","omeax",
+               "Van ứng dụng đặc biệt",
+               "Van bướm, van dao chuyên dùng cho môi trường ăn mòn, nước biển.",
+               arr("Body inox 316", "Chống ăn mòn", "Wafer / Lug"),
+               arr("Hóa chất", "Xử lý nước thải"),
+               null, null),
+
+            // ── GBSE — Valves ────────────────────────────────────────────────
+            sp("PICV / Manual Balancing Valve","valves","/images/valve2.jpg","GBSE","gbse",
+               "Van cân bằng PICV",
+               "Van cân bằng áp suất độc lập (PICV) đảm bảo lưu lượng ổn định cho FCU/AHU.",
+               arr("Pre-setting lưu lượng", "Range 0.05–4.0 m³/h", "Đồng thau"),
+               arr("Hệ chiller", "FCU văn phòng"),
+               null, null),
+
+            sp("Motorized Valve",        "valves", "/images/valve4.jpg", "GBSE", "gbse",
+               "Van điều khiển động cơ",
+               "Van điều khiển modulating 0–10V tích hợp BMS.",
+               arr("Tín hiệu 0–10V / Modbus", "Lực đóng 600N", "Fail-safe"),
+               arr("BMS tòa nhà", "Hệ chiller"),
+               null, null),
+
+            // ── GBSE — Heatpump ──────────────────────────────────────────────
+            sp("Air to Water Heatpump",  "heatpump","/images/ct1.jpg","GBSE","gbse",
+               "Heatpump không khí – nước",
+               "Bơm nhiệt không khí – nước tạo nước nóng tới 65°C, COP > 4.5.",
+               arr("Inverter DC", "R32 thân thiện môi trường", "Công suất 7–80 kW"),
+               arr("Khách sạn", "Bể bơi", "Spa"),
+               null, null),
+
+            sp("All-in-one Heatpump",    "heatpump","/images/ct2.jpg","GBSE","gbse",
+               "Heatpump tích hợp bồn",
+               "Bơm nhiệt all-in-one tích hợp bồn 200L, gọn nhẹ cho hộ gia đình.",
+               arr("Bồn inox 200L", "WiFi điều khiển", "Plug & play"),
+               arr("Biệt thự", "Căn hộ"),
+               null, null),
+
+            // ── GBSE — Measurement ───────────────────────────────────────────
+            sp("Water Meter (Cold/Hot)", "measure", "/images/valve6.jpg","GBSE","gbse",
+               "Đồng hồ nước nóng / lạnh",
+               "Đồng hồ đo lưu lượng nước nóng và lạnh, cấp chính xác R160.",
+               arr("DN15–DN50", "Chịu nhiệt 90°C", "MID Class 2"),
+               arr("Chung cư", "Tòa nhà"),
+               null, null),
+
+            sp("Ultrasonic BTU Meter",   "measure", "/images/valve3.jpg","GBSE","gbse",
+               "Đồng hồ nhiệt lượng siêu âm",
+               "Đồng hồ nhiệt lượng siêu âm, không có chi tiết chuyển động, độ bền cao.",
+               arr("Truyền M-Bus / Modbus", "Pin 10 năm", "Cấp 2 EN1434"),
+               arr("Tính tiền BTU chung cư", "District cooling"),
+               null, null),
+
+            // ── GBSE — Plate Heat Exchanger ──────────────────────────────────
+            sp("Plate Heat Exchanger",   "phe",    "/images/ct3.jpg",  "GBSE","gbse",
+               "Trao đổi nhiệt dạng tấm",
+               "PHE inox 316L, gasket NBR/EPDM, hiệu suất truyền nhiệt cao.",
+               arr("Công suất 10 kW – 5 MW", "Inox 316L", "Tháo lắp dễ dàng"),
+               arr("Hot water", "Chiller plant", "Industrial"),
+               null, null),
+
+            // ── Partners — Systems ───────────────────────────────────────────
+            sp("HVAC System",            "hvac",   "/images/pump3.jpg","Partners","partners",
+               "Hệ thống điều hòa trung tâm",
+               "Giải pháp HVAC hoàn chỉnh từ chiller, AHU, FCU đến hệ điều khiển BMS.",
+               arr("Chiller water-cooled / air-cooled", "AHU & FCU", "Tích hợp BMS"),
+               arr("Văn phòng", "TTTM", "Bệnh viện"),
+               null, "https://www.grundfos.com/vn"),
+
+            sp("Hot Water Supply System","hot",    "/images/ct1.jpg", "Partners","partners",
+               "Hệ cấp nước nóng tập trung",
+               "Hệ thống cấp nước nóng dùng heatpump + bồn tích, tối ưu năng lượng cho khách sạn.",
+               arr("Bồn inox 1000–10000 L", "Cụm bơm tuần hoàn", "Điều khiển tự động"),
+               arr("Khách sạn", "Khu nghỉ dưỡng"),
+               null, "https://oceancoolingtower.com/"),
+
+            sp("Industrial Water System","indus",  "/images/ct2.jpg", "Partners","partners",
+               "Hệ nước công nghiệp",
+               "Hệ thống nước làm mát, nước cấp, nước xử lý cho nhà máy sản xuất.",
+               arr("Cooling tower", "Hệ lọc đa tầng", "Hóa chất xử lý"),
+               arr("Nhà máy thép", "Nhà máy hoá chất"),
+               null, "https://omeax.com/")
+        );
+    }
+
+    // ── Builder helpers ───────────────────────────────────────────────────────
+
+    private SanPham sp(String ten, String danhMuc, String hinhAnh, String brand, String rangeId,
+                       String shortText, String moTa,
+                       String[] features, String[] applications,
+                       String[][] specs, String link) {
+        SanPham s = new SanPham();
+        s.setTen(ten);
+        s.setDanhMuc(danhMuc);
+        s.setHinhAnh(hinhAnh);
+        s.setBrand(brand);
+        s.setRangeId(rangeId);
+        s.setShortText(shortText);
+        s.setMoTa(moTa);
+        s.setLink(link);
+        try {
+            s.setFeatures(mapper.writeValueAsString(Arrays.asList(features)));
+            s.setApplications(mapper.writeValueAsString(Arrays.asList(applications)));
+            if (specs != null) {
+                List<Map<String, String>> specList = new ArrayList<>();
+                for (String[] kv : specs) {
+                    specList.add(Map.of("label", kv[0], "value", kv[1]));
+                }
+                s.setSpecs(mapper.writeValueAsString(specList));
+            }
+        } catch (Exception e) {
+            log.error("[DataMigration] JSON serialization error for '{}': {}", ten, e.getMessage());
+        }
+        return s;
+    }
+
+    private static String[] arr(String... values) {
+        return values;
+    }
+
+    private static String[][] specs(String... labelValuePairs) {
+        String[][] result = new String[labelValuePairs.length / 2][2];
+        for (int i = 0; i < labelValuePairs.length; i += 2) {
+            result[i / 2] = new String[]{labelValuePairs[i], labelValuePairs[i + 1]};
+        }
+        return result;
     }
 }
