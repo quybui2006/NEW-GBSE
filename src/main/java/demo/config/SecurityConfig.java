@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 public class SecurityConfig {
@@ -14,10 +15,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // ── CSRF ────────────────────────────────────────────────────────
+            // HttpOnly=true (default) prevents JavaScript from reading the cookie.
+            // All form submissions use the Thymeleaf-rendered token, so JS access
+            // to the cookie is not required.
             .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/api/**")
+                .csrfTokenRepository(new CookieCsrfTokenRepository())
             )
+
+            // ── Authorization ────────────────────────────────────────────────
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/products", "/products/**", "/product/**",
                                  "/contact", "/about", "/projects", "/news",
@@ -25,16 +31,32 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
+
+            // ── Form login ───────────────────────────────────────────────────
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/admin", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+
+            // ── Logout ───────────────────────────────────────────────────────
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
                 .permitAll()
+            )
+
+            // ── Security headers ─────────────────────────────────────────────
+            // Spring Security already sets X-Content-Type-Options: nosniff and
+            // Strict-Transport-Security by default. We override only what differs.
+            .headers(headers -> headers
+                // Allow same-origin framing (admin may embed pages); DENY blocks all.
+                .frameOptions(frame -> frame.sameOrigin())
+                // Limit referrer info sent to third parties.
+                .referrerPolicy(referrer -> referrer
+                    .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
             );
+
         return http.build();
     }
 

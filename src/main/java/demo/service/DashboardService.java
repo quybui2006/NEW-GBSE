@@ -30,7 +30,7 @@ public class DashboardService {
 
     public Map<String, Object> getDashboardData(String from, String to) {
         LocalDate fromDate = parseDate(from, LocalDate.now().minusDays(6));
-        LocalDate toDate = parseDate(to, LocalDate.now());
+        LocalDate toDate   = parseDate(to,   LocalDate.now());
 
         if (fromDate.isAfter(toDate)) {
             LocalDate temp = fromDate;
@@ -39,42 +39,42 @@ public class DashboardService {
         }
 
         LocalDateTime startDateTime = fromDate.atStartOfDay();
-        LocalDateTime endDateTime = toDate.plusDays(1).atStartOfDay();
-        
-        List<YeuCau> filteredYeuCau = yeuCauRepository.findByDateRangeNative(startDateTime, endDateTime);
-        List<VisitLog> allVisitLogs = visitLogRepository.findAll();
+        LocalDateTime endDateTime   = toDate.plusDays(1).atStartOfDay();
 
-        Long tongYeuCau = Long.valueOf(filteredYeuCau.size());
-        Long tongTruyCap = Long.valueOf(sumVisitsInRange(allVisitLogs, fromDate, toDate));
-        boolean hasData = filteredYeuCau.size() > 0 || sumVisitsInRange(allVisitLogs, fromDate, toDate) > 0;
+        List<YeuCau>   filteredYeuCau = yeuCauRepository.findByDateRangeNative(startDateTime, endDateTime);
+        // Fetch only the rows in the requested window — not the entire table.
+        List<VisitLog> visitLogs      = visitLogRepository.findByVisitDateBetween(fromDate, toDate);
 
-        List<String> labels = new ArrayList<>();
-        List<Long> accessData = new ArrayList<>();
-        List<Long> requestData = new ArrayList<>();
+        Long tongYeuCau  = (long) filteredYeuCau.size();
+        long totalVisits = sumVisits(visitLogs);
+        boolean hasData  = !filteredYeuCau.isEmpty() || totalVisits > 0;
+
+        List<String> labels      = new ArrayList<>();
+        List<Long>   accessData  = new ArrayList<>();
+        List<Long>   requestData = new ArrayList<>();
 
         for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
             labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
             requestData.add(countRequestsOnDate(filteredYeuCau, d));
-            accessData.add(sumVisitsOnDate(allVisitLogs, d));
+            accessData.add(visitsOnDate(visitLogs, d));
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("tongSanPham", Long.valueOf(sanPhamService.demTong()));
-        result.put("tongYeuCau", tongYeuCau);
-        result.put("tongTruyCap", tongTruyCap);
-        result.put("hasData", hasData);
-        result.put("chartLabels", labels);
-        result.put("chartAccessData", accessData);
+        result.put("tongSanPham",    (long) sanPhamService.demTong());
+        result.put("tongYeuCau",     tongYeuCau);
+        result.put("tongTruyCap",    totalVisits);
+        result.put("hasData",        hasData);
+        result.put("chartLabels",    labels);
+        result.put("chartAccessData",  accessData);
         result.put("chartRequestData", requestData);
         result.put("fromDate", fromDate.toString());
-        result.put("toDate", toDate.toString());
-
+        result.put("toDate",   toDate.toString());
         return result;
     }
-    
+
     public Map<String, Object> getDashboardDataWithPagination(String from, String to, int page, int size) {
         LocalDate fromDate = parseDate(from, LocalDate.now().minusDays(6));
-        LocalDate toDate = parseDate(to, LocalDate.now());
+        LocalDate toDate   = parseDate(to,   LocalDate.now());
 
         if (fromDate.isAfter(toDate)) {
             LocalDate temp = fromDate;
@@ -83,43 +83,62 @@ public class DashboardService {
         }
 
         LocalDateTime startDateTime = fromDate.atStartOfDay();
-        LocalDateTime endDateTime = toDate.plusDays(1).atStartOfDay();
-        
-        var pageable = org.springframework.data.domain.PageRequest.of(page, size);
-        var yeuCauPage = yeuCauRepository.findByDateRangeCoPhanTrang(startDateTime, endDateTime, pageable);
-        List<VisitLog> allVisitLogs = visitLogRepository.findAll();
+        LocalDateTime endDateTime   = toDate.plusDays(1).atStartOfDay();
 
-        Long tongYeuCau = Long.valueOf(yeuCauPage.getTotalElements());
-        Long tongTruyCap = Long.valueOf(sumVisitsInRange(allVisitLogs, fromDate, toDate));
-        boolean hasData = yeuCauPage.getTotalElements() > 0 || sumVisitsInRange(allVisitLogs, fromDate, toDate) > 0;
+        var pageable    = org.springframework.data.domain.PageRequest.of(page, size);
+        var yeuCauPage  = yeuCauRepository.findByDateRangeCoPhanTrang(startDateTime, endDateTime, pageable);
+        List<VisitLog> visitLogs = visitLogRepository.findByVisitDateBetween(fromDate, toDate);
 
-        List<String> labels = new ArrayList<>();
-        List<Long> accessData = new ArrayList<>();
-        List<Long> requestData = new ArrayList<>();
+        long totalVisits = sumVisits(visitLogs);
+        boolean hasData  = yeuCauPage.getTotalElements() > 0 || totalVisits > 0;
+
+        List<String> labels      = new ArrayList<>();
+        List<Long>   accessData  = new ArrayList<>();
+        List<Long>   requestData = new ArrayList<>();
 
         for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
             labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
             requestData.add(countRequestsOnDate(yeuCauPage.getContent(), d));
-            accessData.add(sumVisitsOnDate(allVisitLogs, d));
+            accessData.add(visitsOnDate(visitLogs, d));
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("tongSanPham", Long.valueOf(sanPhamService.demTong()));
-        result.put("tongYeuCau", tongYeuCau);
-        result.put("tongTruyCap", tongTruyCap);
-        result.put("hasData", hasData);
-        result.put("chartLabels", labels);
-        result.put("chartAccessData", accessData);
+        result.put("tongSanPham",    (long) sanPhamService.demTong());
+        result.put("tongYeuCau",     yeuCauPage.getTotalElements());
+        result.put("tongTruyCap",    totalVisits);
+        result.put("hasData",        hasData);
+        result.put("chartLabels",    labels);
+        result.put("chartAccessData",  accessData);
         result.put("chartRequestData", requestData);
-        result.put("fromDate", fromDate.toString());
-        result.put("toDate", toDate.toString());
+        result.put("fromDate",   fromDate.toString());
+        result.put("toDate",     toDate.toString());
         result.put("yeuCauList", yeuCauPage.getContent());
-        result.put("currentPage", Integer.valueOf(yeuCauPage.getNumber()));
-        result.put("totalPages", Integer.valueOf(yeuCauPage.getTotalPages()));
-        result.put("totalItems", Long.valueOf(yeuCauPage.getTotalElements()));
-
+        result.put("currentPage",  yeuCauPage.getNumber());
+        result.put("totalPages",   yeuCauPage.getTotalPages());
+        result.put("totalItems",   yeuCauPage.getTotalElements());
         return result;
     }
+
+    public Map<String, Object> getQuickStats() {
+        LocalDate today     = LocalDate.now();
+        LocalDate weekStart = today.minusDays(6);
+
+        LocalDateTime now        = LocalDateTime.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+
+        List<VisitLog> todayLogs = visitLogRepository.findByVisitDateBetween(today, today);
+        List<VisitLog> weekLogs  = visitLogRepository.findByVisitDateBetween(weekStart, today);
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("yeuCauHomNay",    (long) yeuCauRepository.findByDateRangeNative(startOfDay, now).size());
+        stats.put("truyCapHomNay",   sumVisits(todayLogs));
+        stats.put("yeuCauTuanNay",   (long) yeuCauRepository.findByDateRangeNative(weekStart.atStartOfDay(), now).size());
+        stats.put("truyCapTuanNay",  sumVisits(weekLogs));
+        stats.put("tongSanPham",     (long) sanPhamService.demTong());
+        return stats;
+    }
+
+    // ── private helpers ──────────────────────────────────────────────────────
 
     private LocalDate parseDate(String dateStr, LocalDate defaultDate) {
         try {
@@ -131,51 +150,22 @@ public class DashboardService {
 
     private long countRequestsOnDate(List<YeuCau> list, LocalDate date) {
         LocalDateTime start = date.atStartOfDay();
-        LocalDateTime end = date.plusDays(1).atStartOfDay();
+        LocalDateTime end   = date.plusDays(1).atStartOfDay();
         return list.stream()
                 .filter(yc -> yc.getThoiGian() != null
                         && !yc.getThoiGian().isBefore(start)
-                        && yc.getThoiGian().isBefore(end))
+                        &&  yc.getThoiGian().isBefore(end))
                 .count();
     }
 
-    private long sumVisitsOnDate(List<VisitLog> list, LocalDate date) {
+    private long visitsOnDate(List<VisitLog> list, LocalDate date) {
         return list.stream()
-                .filter(vl -> vl.getVisitDate() != null && vl.getVisitDate().equals(date))
-                .mapToLong(vl -> vl.getVisitCount().longValue())
+                .filter(vl -> date.equals(vl.getVisitDate()))
+                .mapToLong(VisitLog::getVisitCount)
                 .sum();
     }
 
-    private long sumVisitsInRange(List<VisitLog> list, LocalDate from, LocalDate to) {
-        return list.stream()
-                .filter(vl -> vl.getVisitDate() != null
-                        && !vl.getVisitDate().isBefore(from)
-                        && !vl.getVisitDate().isAfter(to))
-                .mapToLong(vl -> vl.getVisitCount().longValue())
-                .sum();
-    }
-    
-    public Map<String, Object> getQuickStats() {
-        Map<String, Object> stats = new HashMap<>();
-        
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfDay = now.withHour(0).withMinute(0).withSecond(0);
-        
-        Long yeuCauHomNay = Long.valueOf(yeuCauRepository.findByDateRangeNative(startOfDay, now).size());
-        Long truyCapHomNay = Long.valueOf(visitLogRepository.findByVisitDate(LocalDate.now())
-                .map(VisitLog::getVisitCount)
-                .orElse(0L));
-        
-        LocalDate startOfWeek = LocalDate.now().minusDays(6);
-        Long yeuCauTuanNay = Long.valueOf(yeuCauRepository.findByDateRangeNative(startOfWeek.atStartOfDay(), now).size());
-        Long truyCapTuanNay = Long.valueOf(sumVisitsInRange(visitLogRepository.findAll(), startOfWeek, LocalDate.now()));
-        
-        stats.put("yeuCauHomNay", yeuCauHomNay);
-        stats.put("truyCapHomNay", truyCapHomNay);
-        stats.put("yeuCauTuanNay", yeuCauTuanNay);
-        stats.put("truyCapTuanNay", truyCapTuanNay);
-        stats.put("tongSanPham", Long.valueOf(sanPhamService.demTong()));
-        
-        return stats;
+    private long sumVisits(List<VisitLog> list) {
+        return list.stream().mapToLong(VisitLog::getVisitCount).sum();
     }
 }

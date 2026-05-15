@@ -307,20 +307,15 @@
         applyFilter();
     }
 
-    // ✅ SỬA: Thêm CSRF token vào URL khi lọc
     function applyFilter() {
         const from = document.getElementById('fromDate').value;
-        const to = document.getElementById('toDate').value;
+        const to   = document.getElementById('toDate').value;
         if (!from && !to) return;
-        
-        const csrf = getCsrfParam();
-        window.location.href = `/admin?from=${from}&to=${to}&${csrf.name}=${encodeURIComponent(csrf.value)}`;
+        window.location.href = `/admin?from=${from}&to=${to}`;
     }
 
-    // ✅ SỬA: Thêm CSRF token vào URL khi reset
     function resetFilter() {
-        const csrf = getCsrfParam();
-        window.location.href = `/admin?${csrf.name}=${encodeURIComponent(csrf.value)}`;
+        window.location.href = `/admin`;
     }
 
     window.onload = function() {

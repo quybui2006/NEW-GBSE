@@ -2,14 +2,13 @@ package demo.config;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import demo.model.VisitLog;
-import demo.repository.VisitLogRepository;
+import demo.service.VisitService;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,32 +21,35 @@ public class VisitCounterFilter implements Filter {
 
     public static final AtomicLong totalVisits = new AtomicLong(0);
 
+    // Matches any path ending with a file extension (static assets).
+    private static final Pattern STATIC_EXT = Pattern.compile(
+        ".*\\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot|map|json)$",
+        Pattern.CASE_INSENSITIVE
+    );
+
     @Autowired
-    private VisitLogRepository visitLogRepository;
+    private VisitService visitService;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) req;
         String path = request.getRequestURI();
-        if (!path.startsWith("/admin") && !path.startsWith("/uploads")
-                && !path.contains(".css") && !path.contains(".js")
-                && !path.contains(".png") && !path.contains(".ico")) {
+
+        boolean isPageRequest = !path.startsWith("/admin")
+                && !path.startsWith("/uploads")
+                && !STATIC_EXT.matcher(path).matches();
+
+        if (isPageRequest) {
             totalVisits.incrementAndGet();
             try {
-                LocalDate today = LocalDate.now();
-                Optional<VisitLog> existing = visitLogRepository.findByVisitDate(today);
-                if (existing.isPresent()) {
-                    VisitLog log = existing.get();
-                    log.incrementVisitCount();  // ✅ SỬA: dùng method helper
-                    visitLogRepository.save(log);
-                } else {
-                    visitLogRepository.save(new VisitLog(today, 1L));  // ✅ SỬA: dùng 1L
-                }
+                visitService.recordVisit(LocalDate.now());
             } catch (Exception e) {
-                // Không làm crash app nếu DB lỗi
+                // Never let visit tracking crash the actual request.
             }
         }
+
         chain.doFilter(req, res);
     }
 }

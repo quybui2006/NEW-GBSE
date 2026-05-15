@@ -3,6 +3,8 @@ package demo.config;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +16,8 @@ import demo.repository.UserRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -50,24 +54,20 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEnabled(true);
             userRepository.save(admin);
 
-            System.out.println("============================================");
-            System.out.println("TAI KHOAN QUAN TRI:");
-            System.out.println("   Username: " + adminUsername);
-            System.out.println("   Password: " + password);
-            System.out.println("   LUU LAI NGAY - CHI HIEN THI 1 LAN!");
-            System.out.println("============================================");
+            log.warn("=== ADMIN CREATED — SAVE IMMEDIATELY ===");
+            log.warn("  Username : {}", adminUsername);
+            log.warn("  Password : {}", password);
+            log.warn("=========================================");
 
         } else if (adminPassword != null && !adminPassword.trim().isEmpty()) {
-            // User exists and explicit password provided via env/config — update it
             userRepository.findByUsername(adminUsername).ifPresent(admin -> {
                 admin.setPassword(passwordEncoder.encode(adminPassword));
                 userRepository.save(admin);
             });
-            System.out.println("[DataInitializer] Admin password updated from config (username: " + adminUsername + ")");
+            log.info("[DataInitializer] Admin password updated from config (username: {})", adminUsername);
 
         } else {
-            System.out.println("[DataInitializer] Admin user '" + adminUsername + "' already exists.");
-            System.out.println("[DataInitializer] To reset password: set ADMIN_PASSWORD env var and restart.");
+            log.info("[DataInitializer] Admin '{}' already exists. Set ADMIN_PASSWORD env var to reset.", adminUsername);
         }
     }
 }

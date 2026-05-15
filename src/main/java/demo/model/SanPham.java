@@ -1,6 +1,5 @@
 package demo.model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,19 +47,22 @@ public class SanPham {
 
     private Double gia;
 
-    // Lưu JSON string, ví dụ: ["HVAC","Cấp thoát nước"]
+    // Groups this product under a named range (e.g. "omeax", "gbse", "partners").
+    @Column(columnDefinition = "varchar(50)")
+    private String rangeId;
+
+    // JSON arrays stored as text, e.g. ["HVAC","Cấp thoát nước"]
     @Column(columnDefinition = "text")
     private String applications;
 
-    // Lưu JSON string, ví dụ: ["Áp suất tối đa 16 bar","Thân gang"]
     @Column(columnDefinition = "text")
     private String features;
 
-    // Lưu JSON string, ví dụ: [{"label":"DN","value":"50–200"}]
+    // JSON array of {label, value} objects.
     @Column(columnDefinition = "text")
     private String specs;
 
-    // ── Helpers parse JSON ──────────────────────────────────────────
+    // ── Transient helpers ────────────────────────────────────────────────────
 
     @Transient
     public List<String> getApplicationsList() {
@@ -81,18 +83,30 @@ public class SanPham {
             return Collections.emptyList();
         }
     }
-    // Thêm vào SanPham.java — alias cho template
+
+    // Template/JS aliases so both old (Data.Product) and new (SanPham) property
+    // names work in the same Thymeleaf expressions where needed.
+
     @Transient
     public String getName() { return ten; }
 
     @Transient
-    public String getImage() { return "/uploads/" + hinhAnh; }
-
-    @Transient
-    public String getShortTextAlias() { return shortText; } // đã có getShortText()
-
-    @Transient
     public String getDescription() { return moTa; }
+
+    @Transient
+    public String getCategory() { return danhMuc; }
+
+    /**
+     * Returns a usable image URL for templates.
+     * Migrated products store the full path ("/images/pump1.jpg"); uploaded
+     * products store just the filename ("uuid_name.jpg").
+     */
+    @Transient
+    public String getImage() {
+        if (hinhAnh == null || hinhAnh.isBlank()) return "/images/placeholder.png";
+        if (hinhAnh.startsWith("/")) return hinhAnh;
+        return "/uploads/" + hinhAnh;
+    }
 
     private List<String> parseStringList(String json) {
         if (json == null || json.isBlank()) return Collections.emptyList();
@@ -103,14 +117,14 @@ public class SanPham {
         }
     }
 
-    // ── Inner class cho specs ───────────────────────────────────────
+    // ── Inner type for specs ─────────────────────────────────────────────────
 
     public static class SpecEntry {
         public String label;
         public String value;
     }
 
-    // ── Getters / Setters ───────────────────────────────────────────
+    // ── Getters & Setters ────────────────────────────────────────────────────
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -138,6 +152,9 @@ public class SanPham {
 
     public Double getGia() { return gia; }
     public void setGia(Double gia) { this.gia = gia; }
+
+    public String getRangeId() { return rangeId; }
+    public void setRangeId(String rangeId) { this.rangeId = rangeId; }
 
     public String getApplications() { return applications; }
     public void setApplications(String applications) { this.applications = applications; }

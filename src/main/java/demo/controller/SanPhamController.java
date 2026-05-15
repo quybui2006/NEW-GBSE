@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import demo.model.Data;
 import demo.model.SanPham;
 import demo.model.YeuCau;
+import demo.service.ContactRateLimiter;
 import demo.service.DashboardService;
 import demo.service.SanPhamService;
 import demo.service.YeuCauService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Controller
 public class SanPhamController {
 
-    // ========== SERVICES ==========
     @Autowired
     private SanPhamService sanPhamService;
 
@@ -37,31 +37,31 @@ public class SanPhamController {
     @Autowired
     private DashboardService dashboardService;
 
+    @Autowired
+    private ContactRateLimiter contactRateLimiter;
+
     // ================================================================
     //  TRANG CÔNG KHAI
     // ================================================================
 
     @GetMapping("/")
-    public String trangChu(Model model) {
-        model.addAttribute("customers", Data.CUSTOMERS);
-        model.addAttribute("projects", Data.PROJECTS);
+    public String trangChu() {
         return "home";
     }
 
     @GetMapping("/about")     public String about()    { return "about"; }
 
     @GetMapping("/projects")
-    public String projects(org.springframework.ui.Model model) {
-    model.addAttribute("projects", demo.model.Data.PROJECTS);
-    return "projects";
+    public String projects() {
+        return "projects";
     }
     
     @GetMapping("/news")      public String news()     { return "news"; }
 
     @GetMapping("/products")
     public String danhSachSanPham(Model model) {
-        model.addAttribute("ranges", Data.RANGES);
-        model.addAttribute("allProducts", Data.allProducts());
+        model.addAttribute("ranges", sanPhamService.getRangeGroups());
+        model.addAttribute("allProducts", sanPhamService.layTatCa());
         return "products";
     }
 
@@ -72,10 +72,10 @@ public class SanPhamController {
     }
 
     @GetMapping("/products/{id}")
-    public String chiTietSanPham(@PathVariable String id, Model model) {
-        Map<String, Object> result = Data.findProduct(id);
-        if (result == null) return "redirect:/products";
-        model.addAllAttributes(result);
+    public String chiTietSanPham(@PathVariable Long id, Model model) {
+        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
+        if (sp == null) return "redirect:/products";
+        model.addAttribute("product", sp);
         return "product-detail";
     }
 
@@ -87,7 +87,12 @@ public class SanPhamController {
     @PostMapping("/contact")
     public String guiYeuCau(@Valid @ModelAttribute("yeuCau") YeuCau yeuCau,
                             BindingResult bindingResult,
+                            HttpServletRequest request,
                             Model model) {
+        if (!contactRateLimiter.isAllowed(getClientIp(request))) {
+            model.addAttribute("rateLimitError", true);
+            return "contact";
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
             return "contact";
@@ -96,6 +101,14 @@ public class SanPhamController {
         model.addAttribute("thanhCong", true);
         model.addAttribute("yeuCau", new YeuCau());
         return "contact";
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (forwarded != null && !forwarded.isBlank()) {
+            return forwarded.split(",")[0].trim();
+        }
+        return request.getRemoteAddr();
     }
 
     // ================================================================
@@ -132,6 +145,9 @@ public class SanPhamController {
     @GetMapping("/admin/san-pham/sua/{id}")
     public String adminSuaSanPham(@PathVariable Long id, Model model) {
         SanPham sp = sanPhamService.timTheoId(id).orElse(null);
+        if (sp == null) {
+            return "redirect:/admin/san-pham";
+        }
         model.addAttribute("sp", sp);
         return "admin/form-san-pham";
     }

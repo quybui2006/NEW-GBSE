@@ -22,17 +22,13 @@ public interface YeuCauRepository extends JpaRepository<YeuCau, Long> {
     @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from ORDER BY y.thoiGian DESC")
     List<YeuCau> findByDateRangeFrom(@Param("from") LocalDateTime from);
 
-    // ✅ CÁCH 2: Dùng Native Query (làm việc chắc chắn với PostgreSQL)
-    @Query(value = "SELECT * FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to) ORDER BY thoi_gian DESC", 
-           nativeQuery = true)
+    @Query("SELECT y FROM YeuCau y WHERE y.thoiGian >= :from AND y.thoiGian < :to ORDER BY y.thoiGian DESC")
     List<YeuCau> findByDateRangeNative(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
-    // Phân trang với Native Query
-    @Query(value = "SELECT * FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to) ORDER BY thoi_gian DESC",
-           countQuery = "SELECT COUNT(*) FROM yeu_cau WHERE thoi_gian >= :from AND (CAST(:to AS TIMESTAMP) IS NULL OR thoi_gian < :to)",
-           nativeQuery = true)
-    Page<YeuCau> findByDateRangeCoPhanTrang(@Param("from") LocalDateTime from, 
-                                            @Param("to") LocalDateTime to, 
+    @Query(value = "SELECT y FROM YeuCau y WHERE y.thoiGian >= :from AND y.thoiGian < :to ORDER BY y.thoiGian DESC",
+           countQuery = "SELECT COUNT(y) FROM YeuCau y WHERE y.thoiGian >= :from AND y.thoiGian < :to")
+    Page<YeuCau> findByDateRangeCoPhanTrang(@Param("from") LocalDateTime from,
+                                            @Param("to") LocalDateTime to,
                                             Pageable pageable);
 
     // Phân trang tất cả

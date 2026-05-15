@@ -231,12 +231,12 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
     <div class="detail-hero">
       <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}"/></div>
       <div>
-        <p class="eyebrow" th:text="${range.brand}">Brand</p>
+        <p class="eyebrow" th:text="${product.brand}">Brand</p>
         <h1 th:text="${product.name}">Name</h1>
         <p style="margin-top:1rem;font-size:1.1rem;color:#334155" th:text="${product.shortText}">short</p>
         <p style="margin-top:1rem;color:#475569;line-height:1.7" th:text="${product.description}">desc</p>
         <div class="tags">
-          <span class="tag" th:each="a : ${product.applications}" th:text="${a}">app</span>
+          <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
         </div>
         <a th:if="${product.link}" th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:1.5rem">Truy cập website hãng →</a>
       </div>
@@ -250,18 +250,18 @@ form input:focus,form textarea:focus{border-color:#1e3a8a}
       <div class="spec-card">
         <h2>Key Features</h2>
         <ul>
-          <li th:each="f : ${product.features}" th:text="${f}">feat</li>
+          <li th:each="f : ${product.featuresList}" th:text="${f}">feat</li>
         </ul>
       </div>
       <div class="spec-card">
         <h2>Technical Specs</h2>
-        <div th:if="${not #lists.isEmpty(product.specs)}" class="spec-table">
-          <th:block th:each="s : ${product.specs}">
+        <div th:if="${not #lists.isEmpty(product.specsList)}" class="spec-table">
+          <th:block th:each="s : ${product.specsList}">
             <div class="lbl" th:text="${s.label}">label</div>
             <div class="val" th:text="${s.value}">value</div>
           </th:block>
         </div>
-        <p th:if="${#lists.isEmpty(product.specs)}" style="color:#64748b;font-size:.875rem">Contact us for detailed specifications tailored to your project.</p>
+        <p th:if="${#lists.isEmpty(product.specsList)}" style="color:#64748b;font-size:.875rem">Contact us for detailed specifications tailored to your project.</p>
         <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem">Request a quote →</a>
       </div>
     </div>
