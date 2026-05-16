@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
@@ -22,6 +23,15 @@ public class SecurityConfig {
             // to the cookie is not required.
             .csrf(csrf -> csrf
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
+                // Spring Security 6 stores a DeferredCsrfToken (Supplier) in the "_csrf"
+                // request attribute instead of the actual CsrfToken. Templates that access
+                // ${_csrf.parameterName} or ${_csrf.token} fail because Supplier has no
+                // such properties. This handler eagerly resolves the token so templates work.
+                .csrfTokenRequestHandler((request, response, deferredToken) -> {
+                    CsrfToken token = deferredToken.get();
+                    request.setAttribute("_csrf", token);
+                    request.setAttribute(CsrfToken.class.getName(), token);
+                })
             )
 
             // ── Authorization ────────────────────────────────────────────────
