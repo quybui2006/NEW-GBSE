@@ -18,21 +18,21 @@
   <div class="container header-inner">
     <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
-      <a th:class="${#request.requestURI == '/' ? 'active' : ''}" href="/">Home</a>
-      <a th:class="${#request.requestURI.startsWith('/products') or #request.requestURI.startsWith('/product/') ? 'active' : ''}" href="/products">Products</a>
-      <a th:class="${#request.requestURI == '/about' ? 'active' : ''}" href="/about">About</a>
-      <a th:class="${#request.requestURI == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
-      <a th:class="${#request.requestURI == '/news' ? 'active' : ''}" href="/news">News</a>
-      <a th:class="${#request.requestURI == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
+      <a th:class="${currentUri == '/' ? 'active' : ''}" href="/">Home</a>
+      <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
+      <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
+      <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
+      <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
+      <a th:class="${currentUri == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
     </nav>
   </div>
   <nav class="mobile-nav">
-    <a th:class="${#request.requestURI == '/' ? 'active' : ''}" href="/">Home</a>
-    <a th:class="${#request.requestURI.startsWith('/products') or #request.requestURI.startsWith('/product/') ? 'active' : ''}" href="/products">Products</a>
-    <a th:class="${#request.requestURI == '/about' ? 'active' : ''}" href="/about">About</a>
-    <a th:class="${#request.requestURI == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
-    <a th:class="${#request.requestURI == '/news' ? 'active' : ''}" href="/news">News</a>
-    <a th:class="${#request.requestURI == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
+    <a th:class="${currentUri == '/' ? 'active' : ''}" href="/">Home</a>
+    <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
+    <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
+    <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
+    <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
+    <a th:class="${currentUri == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
   </nav>
 </header>
 
