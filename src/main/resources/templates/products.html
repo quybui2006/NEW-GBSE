@@ -87,7 +87,7 @@
   input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
   input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
 </script>
-<div th:replace="~{fragments/layout :: ticker}"></div>
+<div th:replace="~{fragments/layout :: ticker-home}"></div>
 <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
 </html>
