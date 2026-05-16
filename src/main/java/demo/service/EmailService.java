@@ -27,6 +27,10 @@ public class EmailService {
 
     @Async
     public void guiThongBao(YeuCau yeuCau) {
+        if (emailNhan == null || emailNhan.isBlank()) {
+            log.warn("[EmailService] MAIL_RECEIVER not configured — skipping notification email.");
+            return;
+        }
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             if (emailTu != null && !emailTu.isBlank()) {
