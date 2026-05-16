@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ── HEAD ──────────────────────────────────────────────────────────────── -->
+<th:block th:fragment="head(pageTitle)">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title th:text="${pageTitle}">OMEAX</title>
+<meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/css/main.css}"/>
+</th:block>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
+<header th:fragment="navbar" class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
+    <nav class="nav">
+      <a th:class="${#request.requestURI == '/' ? 'active' : ''}" href="/">Home</a>
+      <a th:class="${#request.requestURI.startsWith('/products') or #request.requestURI.startsWith('/product/') ? 'active' : ''}" href="/products">Products</a>
+      <a th:class="${#request.requestURI == '/about' ? 'active' : ''}" href="/about">About</a>
+      <a th:class="${#request.requestURI == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
+      <a th:class="${#request.requestURI == '/news' ? 'active' : ''}" href="/news">News</a>
+      <a th:class="${#request.requestURI == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
+    </nav>
+  </div>
+  <nav class="mobile-nav">
+    <a th:class="${#request.requestURI == '/' ? 'active' : ''}" href="/">Home</a>
+    <a th:class="${#request.requestURI.startsWith('/products') or #request.requestURI.startsWith('/product/') ? 'active' : ''}" href="/products">Products</a>
+    <a th:class="${#request.requestURI == '/about' ? 'active' : ''}" href="/about">About</a>
+    <a th:class="${#request.requestURI == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
+    <a th:class="${#request.requestURI == '/news' ? 'active' : ''}" href="/news">News</a>
+    <a th:class="${#request.requestURI == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ── TICKER (standard — all pages except home) ──────────────────────────── -->
+<div th:fragment="ticker" class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Pumps <span class="diamond">◆</span></span>
+    <span class="ticker-item">Valves <span class="diamond">◆</span></span>
+    <span class="ticker-item">Heatpump <span class="diamond">◆</span></span>
+    <span class="ticker-item">Plate Heat Exchanger <span class="diamond">◆</span></span>
+    <span class="ticker-item">Measurement Equipment <span class="diamond">◆</span></span>
+    <span class="ticker-item">Pumps <span class="diamond">◆</span></span>
+    <span class="ticker-item">Valves <span class="diamond">◆</span></span>
+    <span class="ticker-item">Heatpump <span class="diamond">◆</span></span>
+    <span class="ticker-item">Plate Heat Exchanger <span class="diamond">◆</span></span>
+    <span class="ticker-item">Measurement Equipment <span class="diamond">◆</span></span>
+  </div>
+</div>
+
+<!-- ── TICKER (home — two-track infinite scroll) ──────────────────────────── -->
+<div th:fragment="ticker-home" class="ticker-wrap">
+  <div class="ticker-track">
+    <span>PUMPS</span><span>VALVES</span><span>HEAT PUMPS</span><span>PLATE HEAT EXCHANGER</span><span>MEASUREMENT EQUIPMENT</span><span>PUMPS</span><span>VALVES</span><span>HEAT PUMPS</span><span>PLATE HEAT EXCHANGER</span><span>MEASUREMENT EQUIPMENT</span>
+  </div>
+  <div class="ticker-track">
+    <span>PUMPS</span><span>VALVES</span><span>HEAT PUMPS</span><span>PLATE HEAT EXCHANGER</span><span>MEASUREMENT EQUIPMENT</span><span>PUMPS</span><span>VALVES</span><span>HEAT PUMPS</span><span>PLATE HEAT EXCHANGER</span><span>MEASUREMENT EQUIPMENT</span>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer th:fragment="footer" class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="logo" style="color:#152352">OMEAX<span class="slogan" style="color:#64748b">SIMPLIFIES LIFE</span></div>
+      <p style="color:#64748b;font-size:.875rem;margin-top:1rem">Your partner for mechanical and electrical equipment.</p>
+    </div>
+    <div>
+      <h4>HANOI Office</h4>
+      <p><span class="icon-pin"></span> Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</p>
+    </div>
+    <div>
+      <h4>HCMC Branch</h4>
+      <p><span class="icon-pin"></span> 11B Hong Ha, Tan Binh, HCMC.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><span class="icon-mail"></span> info@omeax.com</p>
+      <p><span class="icon-phone"></span> +84 (0) 24 0000 0000</p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© 2026 OMEAX Joint Stock Company. All rights reserved.</span>
+    <span>Registration number: 0110535209 — Established Nov 8th, 2023</span>
+  </div>
+</footer>
+
+</html>

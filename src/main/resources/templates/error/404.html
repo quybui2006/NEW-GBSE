@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="~{fragments/layout :: head('404 – Page Not Found | OMEAX')}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<main>
+  <section class="error-section">
+    <div class="container">
+      <div class="error-code">404</div>
+      <h1 class="error-title">Page Not Found</h1>
+      <p class="error-desc">
+        The page you are looking for doesn't exist or may have been moved.
+        Use the links below to get back on track.
+      </p>
+      <div class="error-actions">
+        <a class="btn btn-primary" href="/">← Back to Home</a>
+        <a class="btn btn-outline" href="/products">View Products</a>
+        <a class="btn btn-outline" href="/contact">Contact Us</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

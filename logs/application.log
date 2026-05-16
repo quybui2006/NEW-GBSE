@@ -938,3 +938,196 @@ com.microsoft.sqlserver.jdbc.SQLServerException: Explicit conversion from data t
 2026-05-15T12:10:53.324+07:00  INFO 16248 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2026-05-15T12:10:53.325+07:00  INFO 16248 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2026-05-15T12:10:53.327+07:00  INFO 16248 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-05-15T13:11:18.493+07:00  INFO 11516 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 11516 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T13:11:18.495+07:00  INFO 11516 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T13:11:19.067+07:00  INFO 11516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T13:11:19.123+07:00  INFO 11516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 49 ms. Found 4 JPA repository interfaces.
+2026-05-15T13:11:19.540+07:00  INFO 11516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T13:11:19.550+07:00  INFO 11516 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T13:11:19.551+07:00  INFO 11516 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T13:11:19.602+07:00  INFO 11516 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T13:11:19.602+07:00  INFO 11516 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1071 ms
+2026-05-15T13:11:20.006+07:00  INFO 11516 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T13:11:20.032+07:00  INFO 11516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T13:11:20.286+07:00  INFO 11516 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 6826ef68-453c-4f74-bace-7cead9701086
+2026-05-15T13:11:20.287+07:00  INFO 11516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T13:11:21.528+07:00  INFO 11516 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:11:21.806+07:00  INFO 11516 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T13:11:22.697+07:00  WARN 11516 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T13:11:22.732+07:00  INFO 11516 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T13:11:23.315+07:00  INFO 11516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T13:11:23.325+07:00  INFO 11516 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 5.208 seconds (process running for 5.467)
+2026-05-15T13:11:23.399+07:00  INFO 11516 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T13:11:23.687+07:00  INFO 11516 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)
+2026-05-15T13:11:24.813+07:00  INFO 11516 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T13:11:24.813+07:00  INFO 11516 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T13:11:24.815+07:00  INFO 11516 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-05-15T13:18:02.695+07:00  INFO 11516 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-15T13:18:02.891+07:00  INFO 11516 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-15T13:18:02.896+07:00  INFO 11516 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:18:02.898+07:00  INFO 11516 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-15T13:18:02.901+07:00  INFO 11516 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-15T13:18:09.466+07:00  INFO 16368 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 16368 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T13:18:09.467+07:00  INFO 16368 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T13:18:09.951+07:00  INFO 16368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T13:18:10.003+07:00  INFO 16368 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 44 ms. Found 4 JPA repository interfaces.
+2026-05-15T13:18:10.446+07:00  INFO 16368 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T13:18:10.457+07:00  INFO 16368 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T13:18:10.457+07:00  INFO 16368 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T13:18:10.505+07:00  INFO 16368 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T13:18:10.506+07:00  INFO 16368 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1010 ms
+2026-05-15T13:18:10.890+07:00  INFO 16368 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T13:18:10.910+07:00  INFO 16368 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T13:18:11.154+07:00  INFO 16368 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 66e24b54-9f71-486f-a342-d7b040825733
+2026-05-15T13:18:11.155+07:00  INFO 16368 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T13:18:12.136+07:00  INFO 16368 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:18:12.414+07:00  INFO 16368 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T13:18:13.370+07:00  WARN 16368 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T13:18:13.430+07:00  INFO 16368 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T13:18:14.123+07:00  INFO 16368 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T13:18:14.135+07:00  INFO 16368 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 4.996 seconds (process running for 5.245)
+2026-05-15T13:18:14.244+07:00  INFO 16368 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T13:18:14.526+07:00  INFO 16368 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)
+2026-05-15T13:18:14.565+07:00  INFO 16368 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T13:18:14.565+07:00  INFO 16368 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T13:18:14.566+07:00  INFO 16368 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-15T13:18:47.151+07:00  INFO 16368 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-15T13:18:47.427+07:00  INFO 16368 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-15T13:18:47.433+07:00  INFO 16368 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:18:47.437+07:00  INFO 16368 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-15T13:18:47.442+07:00  INFO 16368 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-15T13:36:10.427+07:00  INFO 16104 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 16104 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T13:36:10.429+07:00  INFO 16104 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T13:36:10.956+07:00  INFO 16104 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T13:36:11.006+07:00  INFO 16104 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 4 JPA repository interfaces.
+2026-05-15T13:36:11.385+07:00  INFO 16104 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T13:36:11.394+07:00  INFO 16104 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T13:36:11.395+07:00  INFO 16104 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T13:36:11.442+07:00  INFO 16104 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T13:36:11.443+07:00  INFO 16104 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 981 ms
+2026-05-15T13:36:11.758+07:00  INFO 16104 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T13:36:11.777+07:00  INFO 16104 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T13:36:12.008+07:00  INFO 16104 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: de81cf76-40f7-494e-b809-0647b443b23b
+2026-05-15T13:36:12.009+07:00  INFO 16104 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T13:36:12.940+07:00  INFO 16104 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:36:13.086+07:00  INFO 16104 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T13:36:13.545+07:00  WARN 16104 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T13:36:13.568+07:00  INFO 16104 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T13:36:13.918+07:00  INFO 16104 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T13:36:13.925+07:00  INFO 16104 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 3.816 seconds (process running for 4.065)
+2026-05-15T13:36:13.981+07:00  INFO 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T13:36:14.033+07:00  INFO 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: found 4 row(s) with null rangeId.
+2026-05-15T13:36:14.033+07:00  WARN 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=17) — skipped.
+2026-05-15T13:36:14.033+07:00  WARN 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=18) — skipped.
+2026-05-15T13:36:14.034+07:00  WARN 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=19) — skipped.
+2026-05-15T13:36:14.034+07:00  WARN 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=20) — skipped.
+2026-05-15T13:36:14.034+07:00  INFO 16104 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill complete — 0 row(s) updated.
+2026-05-15T13:36:14.156+07:00  INFO 16104 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)
+2026-05-15T13:36:22.486+07:00  INFO 16104 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T13:36:22.486+07:00  INFO 16104 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T13:36:22.487+07:00  INFO 16104 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-15T13:40:26.542+07:00  INFO 16104 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-15T13:40:26.742+07:00  INFO 16104 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-15T13:40:26.745+07:00  INFO 16104 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:40:26.748+07:00  INFO 16104 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-15T13:40:26.750+07:00  INFO 16104 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-15T13:40:33.629+07:00  INFO 16308 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 16308 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T13:40:33.629+07:00  INFO 16308 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T13:40:34.110+07:00  INFO 16308 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T13:40:34.153+07:00  INFO 16308 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 4 JPA repository interfaces.
+2026-05-15T13:40:34.524+07:00  INFO 16308 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T13:40:34.538+07:00  INFO 16308 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T13:40:34.538+07:00  INFO 16308 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T13:40:34.575+07:00  INFO 16308 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T13:40:34.575+07:00  INFO 16308 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 899 ms
+2026-05-15T13:40:34.908+07:00  INFO 16308 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T13:40:34.928+07:00  INFO 16308 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T13:40:35.149+07:00  INFO 16308 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 525a04c0-f141-4eb8-bb7b-12d3967144a6
+2026-05-15T13:40:35.150+07:00  INFO 16308 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T13:40:36.042+07:00  INFO 16308 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:40:36.338+07:00  INFO 16308 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T13:40:37.404+07:00  WARN 16308 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T13:40:37.462+07:00  INFO 16308 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T13:40:38.196+07:00  INFO 16308 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T13:40:38.205+07:00  INFO 16308 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 4.995 seconds (process running for 5.244)
+2026-05-15T13:40:38.299+07:00  INFO 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T13:40:38.366+07:00  INFO 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: found 4 row(s) with null rangeId.
+2026-05-15T13:40:38.367+07:00  WARN 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=17) — skipped.
+2026-05-15T13:40:38.367+07:00  WARN 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=18) — skipped.
+2026-05-15T13:40:38.368+07:00  WARN 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=19) — skipped.
+2026-05-15T13:40:38.368+07:00  WARN 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=20) — skipped.
+2026-05-15T13:40:38.368+07:00  INFO 16308 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill complete — 0 row(s) updated.
+2026-05-15T13:40:38.637+07:00  INFO 16308 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)
+2026-05-15T13:40:40.391+07:00  INFO 16308 --- [http-nio-8080-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T13:40:40.391+07:00  INFO 16308 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T13:40:40.393+07:00  INFO 16308 --- [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-15T13:42:05.396+07:00  INFO 16308 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-15T13:42:05.555+07:00  INFO 16308 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-15T13:42:05.558+07:00  INFO 16308 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T13:42:05.561+07:00  INFO 16308 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-15T13:42:05.563+07:00  INFO 16308 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-15T14:00:51.584+07:00  INFO 17740 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 17740 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T14:00:51.584+07:00  INFO 17740 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T14:00:52.076+07:00  INFO 17740 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T14:00:52.122+07:00  INFO 17740 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 39 ms. Found 4 JPA repository interfaces.
+2026-05-15T14:00:52.531+07:00  INFO 17740 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T14:00:52.539+07:00  INFO 17740 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T14:00:52.540+07:00  INFO 17740 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T14:00:52.585+07:00  INFO 17740 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T14:00:52.586+07:00  INFO 17740 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 968 ms
+2026-05-15T14:00:52.911+07:00  INFO 17740 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T14:00:52.934+07:00  INFO 17740 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T14:00:53.196+07:00  INFO 17740 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: e960d2ee-e17c-4ba7-8517-d46db829ee03
+2026-05-15T14:00:53.198+07:00  INFO 17740 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T14:00:54.117+07:00  INFO 17740 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T14:00:54.269+07:00  INFO 17740 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T14:00:54.727+07:00  WARN 17740 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T14:00:54.752+07:00  INFO 17740 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T14:00:55.106+07:00  INFO 17740 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T14:00:55.117+07:00  INFO 17740 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 3.867 seconds (process running for 4.111)
+2026-05-15T14:00:55.216+07:00  INFO 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T14:00:55.284+07:00  INFO 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: found 4 row(s) with null rangeId.
+2026-05-15T14:00:55.284+07:00  WARN 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=17) — skipped.
+2026-05-15T14:00:55.285+07:00  WARN 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=18) — skipped.
+2026-05-15T14:00:55.285+07:00  WARN 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=19) — skipped.
+2026-05-15T14:00:55.285+07:00  WARN 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=20) — skipped.
+2026-05-15T14:00:55.285+07:00  INFO 17740 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill complete — 0 row(s) updated.
+2026-05-15T14:00:55.577+07:00  INFO 17740 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)
+2026-05-15T14:00:57.753+07:00  INFO 17740 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T14:00:57.753+07:00  INFO 17740 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T14:00:57.754+07:00  INFO 17740 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-15T14:01:19.061+07:00  INFO 17740 --- [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-15T14:01:19.214+07:00  INFO 17740 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-05-15T14:01:19.218+07:00  INFO 17740 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T14:01:19.220+07:00  INFO 17740 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-15T14:01:19.222+07:00  INFO 17740 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-15T14:05:45.982+07:00  INFO 7096 --- [main] demo.QuyWebApplication                   : Starting QuyWebApplication using Java 17.0.12 with PID 7096 (D:\VSCode\quy-web\quy-web\target\classes started by LO PC in D:\VSCode\quy-web\quy-web)
+2026-05-15T14:05:45.985+07:00  INFO 7096 --- [main] demo.QuyWebApplication                   : The following 1 profile is active: "local"
+2026-05-15T14:05:46.527+07:00  INFO 7096 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-15T14:05:46.586+07:00  INFO 7096 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 4 JPA repository interfaces.
+2026-05-15T14:05:47.031+07:00  INFO 7096 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-15T14:05:47.042+07:00  INFO 7096 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-15T14:05:47.043+07:00  INFO 7096 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.53]
+2026-05-15T14:05:47.100+07:00  INFO 7096 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-15T14:05:47.101+07:00  INFO 7096 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1079 ms
+2026-05-15T14:05:47.463+07:00  INFO 7096 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-15T14:05:47.484+07:00  INFO 7096 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-15T14:05:47.753+07:00  INFO 7096 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection ConnectionID:1 ClientConnectionId: 108241e3-c533-4c05-8ed2-0b7a6664dc8e
+2026-05-15T14:05:47.754+07:00  INFO 7096 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-15T14:05:49.096+07:00  INFO 7096 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-15T14:05:49.405+07:00  INFO 7096 --- [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-15T14:05:50.230+07:00  WARN 7096 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-15T14:05:50.279+07:00  INFO 7096 --- [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-05-15T14:05:50.935+07:00  INFO 7096 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-05-15T14:05:50.953+07:00  INFO 7096 --- [main] demo.QuyWebApplication                   : Started QuyWebApplication in 5.398 seconds (process running for 5.759)
+2026-05-15T14:05:51.047+07:00  INFO 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] san_pham table already has data — skipping seed.
+2026-05-15T14:05:51.119+07:00  INFO 7096 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-15T14:05:51.120+07:00  INFO 7096 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-15T14:05:51.121+07:00  INFO 7096 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-05-15T14:05:51.142+07:00  INFO 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: found 4 row(s) with null rangeId.
+2026-05-15T14:05:51.142+07:00  WARN 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=17) — skipped.
+2026-05-15T14:05:51.142+07:00  WARN 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=18) — skipped.
+2026-05-15T14:05:51.143+07:00  WARN 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=19) — skipped.
+2026-05-15T14:05:51.143+07:00  WARN 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill: no rangeId mapping for brand 'null' (id=20) — skipped.
+2026-05-15T14:05:51.143+07:00  INFO 7096 --- [main] demo.config.DataMigrationService         : [DataMigration] Backfill complete — 0 row(s) updated.
+2026-05-15T14:05:51.307+07:00  INFO 7096 --- [main] demo.config.DataInitializer              : [DataInitializer] Admin password updated from config (username: admin)

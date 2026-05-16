@@ -1,5 +1,7 @@
 package demo.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -11,6 +13,8 @@ import demo.model.YeuCau;
 
 @Service
 public class EmailService {
+
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     private JavaMailSender mailSender;
@@ -39,8 +43,7 @@ public class EmailService {
             );
             mailSender.send(message);
         } catch (Exception e) {
-            System.err.println("[EmailService] Failed to send notification email: " + e.getMessage());
-            e.printStackTrace();
+            log.error("[EmailService] Failed to send notification email: {}", e.getMessage(), e);
         }
     }
 }

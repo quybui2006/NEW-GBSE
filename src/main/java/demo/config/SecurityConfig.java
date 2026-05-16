@@ -2,6 +2,7 @@ package demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +37,15 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/admin", true)
-                .failureUrl("/login?error=true")
+                // Distinguish a locked account from bad credentials so the login page
+                // can show a more helpful message. LockedException is thrown by
+                // CustomUserDetailsService when LoginAttemptService reports a blocked key.
+                .failureHandler((request, response, exception) -> {
+                    String redirect = (exception instanceof LockedException)
+                            ? "/login?locked=true"
+                            : "/login?error=true";
+                    response.sendRedirect(redirect);
+                })
                 .permitAll()
             )
 

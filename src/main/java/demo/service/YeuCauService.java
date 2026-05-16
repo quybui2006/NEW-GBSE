@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,28 @@ public class YeuCauService {
         } else {
             return yeuCauRepository.findByDateRangeFrom(fromDateTime);
         }
+    }
+
+    /**
+     * Returns page {@code page} (0-based, 20 rows, newest first) of quote requests.
+     * When {@code from} is provided the result is restricted to that date window.
+     * Invalid date strings fall back to an unfiltered query so bad URL params never
+     * cause a 500 — they just silently load all records.
+     */
+    public Page<YeuCau> layTrangCoLoc(String from, String to, int page) {
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("thoiGian").descending());
+        if (from != null && !from.isEmpty()) {
+            try {
+                LocalDateTime fromDt = LocalDate.parse(from).atStartOfDay();
+                LocalDateTime toDt = (to != null && !to.isEmpty())
+                        ? LocalDate.parse(to).plusDays(1).atStartOfDay()
+                        : LocalDate.now().plusDays(1).atStartOfDay();
+                return yeuCauRepository.findByDateRangeCoPhanTrang(fromDt, toDt, pageable);
+            } catch (Exception ignored) {
+                // Invalid date format — fall through to unfiltered
+            }
+        }
+        return yeuCauRepository.findAll(pageable);
     }
 
     public void xoa(Long id) {

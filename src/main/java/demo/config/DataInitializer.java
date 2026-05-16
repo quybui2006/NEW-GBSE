@@ -54,10 +54,17 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEnabled(true);
             userRepository.save(admin);
 
-            log.warn("=== ADMIN CREATED — SAVE IMMEDIATELY ===");
-            log.warn("  Username : {}", adminUsername);
-            log.warn("  Password : {}", password);
-            log.warn("=========================================");
+            if (adminPassword != null && !adminPassword.trim().isEmpty()) {
+                log.info("[DataInitializer] Admin '{}' created using ADMIN_PASSWORD env var.", adminUsername);
+            } else {
+                // Password is NOT logged — logging plaintext credentials is a security risk.
+                // Set ADMIN_PASSWORD as an environment variable before first deployment so the
+                // password is known. If you missed this, reset the hash directly in the database.
+                log.warn("[DataInitializer] Admin '{}' created with a randomly-generated password. " +
+                         "Set the ADMIN_PASSWORD environment variable and restart to configure a " +
+                         "known password, or reset the hash directly in the database.",
+                         adminUsername);
+            }
 
         } else if (adminPassword != null && !adminPassword.trim().isEmpty()) {
             userRepository.findByUsername(adminUsername).ifPresent(admin -> {

@@ -3,6 +3,8 @@ package demo.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,11 +107,12 @@ public class SanPhamController {
         return "contact";
     }
 
+    // server.forward-headers-strategy=NATIVE causes Tomcat's RemoteIpValve to
+    // resolve the real client IP before this method is called, so getRemoteAddr()
+    // already returns the correct value. Manual X-Forwarded-For parsing is removed
+    // because it was trivially spoofable: any client could set that header themselves
+    // and bypass the rate limiter with a fresh fake IP on every request.
     private String getClientIp(HttpServletRequest request) {
-        String forwarded = request.getHeader("X-Forwarded-For");
-        if (forwarded != null && !forwarded.isBlank()) {
-            return forwarded.split(",")[0].trim();
-        }
         return request.getRemoteAddr();
     }
 
@@ -127,8 +130,18 @@ public class SanPhamController {
     }
 
     @GetMapping("/admin/yeu-cau")
-    public String danhSachYeuCau(Model model) {
-        model.addAttribute("danhSachYeuCau", yeuCauService.layTatCa());
+    public String danhSachYeuCau(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to,
+            Model model) {
+        Page<YeuCau> yeuCauPage = yeuCauService.layTrangCoLoc(from, to, page);
+        model.addAttribute("danhSachYeuCau", yeuCauPage.getContent());
+        model.addAttribute("currentPage",   yeuCauPage.getNumber());
+        model.addAttribute("totalPages",    yeuCauPage.getTotalPages());
+        model.addAttribute("totalItems",    yeuCauPage.getTotalElements());
+        model.addAttribute("from", from);
+        model.addAttribute("to",   to);
         return "admin/yeu-cau";
     }
 
