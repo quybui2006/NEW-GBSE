@@ -82,26 +82,29 @@
 
             <div class="mb-3">
                 <label class="form-label">Applications
-                    <small class="text-muted">(JSON array, e.g. ["HVAC","Fire Protection"])</small>
+                    <small class="text-muted">(one per line)</small>
                 </label>
-                <input type="text" th:field="*{applications}" class="form-control"
-                    placeholder='["HVAC","Plumbing","Fire Protection"]'>
+                <textarea name="applicationsRaw" class="form-control" rows="4"
+                          th:text="${applicationsLines}"
+                          placeholder="HVAC&#10;Plumbing&#10;Fire Protection"></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Key Features
-                    <small class="text-muted">(JSON array)</small>
+                    <small class="text-muted">(one per line)</small>
                 </label>
-                <textarea th:field="*{features}" class="form-control" rows="3"
-                    placeholder='["Max pressure 16 bar","Cast iron body","UL/FM certified"]'></textarea>
+                <textarea name="featuresRaw" class="form-control" rows="4"
+                          th:text="${featuresLines}"
+                          placeholder="Max pressure 16 bar&#10;Cast iron body&#10;UL/FM certified"></textarea>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Technical Specs
-                    <small class="text-muted">(JSON array of {label, value})</small>
+                    <small class="text-muted">(Label: Value, one per line)</small>
                 </label>
-                <textarea th:field="*{specs}" class="form-control" rows="4"
-                    placeholder='[{"label":"DN","value":"50–200"},{"label":"PN","value":"16"}]'></textarea>
+                <textarea name="specsRaw" class="form-control" rows="4"
+                          th:text="${specsLines}"
+                          placeholder="DN: 50–200&#10;PN: 16&#10;Flow rate: up to 500 m³/h"></textarea>
             </div>
 
             <div class="mb-3">

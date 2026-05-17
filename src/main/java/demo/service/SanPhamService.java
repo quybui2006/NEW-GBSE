@@ -1,10 +1,12 @@
 package demo.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -130,6 +133,78 @@ public class SanPhamService {
             return sanPhamRepository.findAll();
         }
         return sanPhamRepository.timKiem(keyword.trim());
+    }
+
+    // ── Admin form text ↔ JSON converters ────────────────────────────────────
+
+    /** ["A","B"] → "A\nB".  Returns "" on null/blank/bad JSON. */
+    public String jsonArrayToLines(String json) {
+        if (json == null || json.isBlank()) return "";
+        try {
+            List<String> items = mapper.readValue(json, new TypeReference<List<String>>() {});
+            return String.join("\n", items);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /** "A\nB\nC" → ["A","B","C"] as JSON string.  Returns null when blank. */
+    public String linesToJsonArray(String lines) {
+        if (lines == null || lines.isBlank()) return null;
+        List<String> items = Arrays.stream(lines.split("\n"))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(Collectors.toList());
+        if (items.isEmpty()) return null;
+        try {
+            return mapper.writeValueAsString(items);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /** [{"label":"DN","value":"50"}] → "DN: 50".  Returns "" on null/blank/bad JSON. */
+    public String jsonSpecsToLines(String json) {
+        if (json == null || json.isBlank()) return "";
+        try {
+            List<SanPham.SpecEntry> specs =
+                mapper.readValue(json, new TypeReference<List<SanPham.SpecEntry>>() {});
+            return specs.stream()
+                .map(s -> s.label + ": " + s.value)
+                .collect(Collectors.joining("\n"));
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
+     * "DN: 50–200\nPN: 16" → [{"label":"DN","value":"50–200"},…] as JSON string.
+     * Lines without ": " are stored with an empty value.  Returns null when blank.
+     */
+    public String linesToJsonSpecs(String lines) {
+        if (lines == null || lines.isBlank()) return null;
+        List<Map<String, String>> specs = Arrays.stream(lines.split("\n"))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .map(line -> {
+                Map<String, String> entry = new LinkedHashMap<>();
+                int idx = line.indexOf(": ");
+                if (idx > 0) {
+                    entry.put("label", line.substring(0, idx).trim());
+                    entry.put("value", line.substring(idx + 2).trim());
+                } else {
+                    entry.put("label", line);
+                    entry.put("value", "");
+                }
+                return entry;
+            })
+            .collect(Collectors.toList());
+        if (specs.isEmpty()) return null;
+        try {
+            return mapper.writeValueAsString(specs);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

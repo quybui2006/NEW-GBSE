@@ -171,6 +171,9 @@ public class SanPhamController {
     @GetMapping("/admin/san-pham/them")
     public String adminThemSanPham(Model model) {
         model.addAttribute("sp", new SanPham());
+        model.addAttribute("featuresLines", "");
+        model.addAttribute("applicationsLines", "");
+        model.addAttribute("specsLines", "");
         return "admin/form-san-pham";
     }
 
@@ -181,13 +184,22 @@ public class SanPhamController {
             return "redirect:/admin/san-pham";
         }
         model.addAttribute("sp", sp);
+        model.addAttribute("featuresLines",      sanPhamService.jsonArrayToLines(sp.getFeatures()));
+        model.addAttribute("applicationsLines",  sanPhamService.jsonArrayToLines(sp.getApplications()));
+        model.addAttribute("specsLines",         sanPhamService.jsonSpecsToLines(sp.getSpecs()));
         return "admin/form-san-pham";
     }
 
     @PostMapping("/admin/san-pham/luu")
     public String adminLuuSanPham(@ModelAttribute SanPham sp,
                                   @RequestParam("hinhAnhFile") MultipartFile hinhAnhFile,
+                                  @RequestParam(name = "featuresRaw",     required = false) String featuresRaw,
+                                  @RequestParam(name = "applicationsRaw", required = false) String applicationsRaw,
+                                  @RequestParam(name = "specsRaw",        required = false) String specsRaw,
                                   RedirectAttributes redirectAttributes) {
+        sp.setFeatures(sanPhamService.linesToJsonArray(featuresRaw));
+        sp.setApplications(sanPhamService.linesToJsonArray(applicationsRaw));
+        sp.setSpecs(sanPhamService.linesToJsonSpecs(specsRaw));
         try {
             sanPhamService.luu(sp, hinhAnhFile);
             return "redirect:/admin/san-pham";
