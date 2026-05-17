@@ -18,7 +18,6 @@
   <div class="container header-inner">
     <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
-      <a th:class="${currentUri == '/' ? 'active' : ''}" href="/">Home</a>
       <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
       <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
@@ -27,7 +26,6 @@
     </nav>
   </div>
   <nav class="mobile-nav">
-    <a th:class="${currentUri == '/' ? 'active' : ''}" href="/">Home</a>
     <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
     <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
     <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
