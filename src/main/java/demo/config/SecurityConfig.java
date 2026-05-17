@@ -41,7 +41,7 @@ public class SecurityConfig {
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
                                  "/error").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
 
             // ── Form login ───────────────────────────────────────────────────
@@ -69,13 +69,19 @@ public class SecurityConfig {
             // ── Security headers ─────────────────────────────────────────────
             // Spring Security already sets X-Content-Type-Options: nosniff and
             // Strict-Transport-Security by default. We override only what differs.
-            .headers(headers -> headers
-                // Allow same-origin framing (admin may embed pages); DENY blocks all.
-                .frameOptions(frame -> frame.sameOrigin())
-                // Limit referrer info sent to third parties.
-                .referrerPolicy(referrer -> referrer
-                    .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-            );
+        .headers(headers -> headers
+            .frameOptions(frame -> frame.sameOrigin())
+            .referrerPolicy(referrer -> referrer
+                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+            .contentSecurityPolicy(csp -> csp.policyDirectives(
+          "default-src 'self'; " +
+          "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
+          "font-src 'self' https://fonts.gstatic.com; " +
+          "img-src 'self' data: /uploads/; " +
+          "connect-src 'self'"
+      ))
+  );
 
         return http.build();
     }

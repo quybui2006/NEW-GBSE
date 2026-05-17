@@ -43,7 +43,7 @@
         <div class="range-body">
           <div class="product-grid">
             <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.danhMuc}">
-              <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}"/></div>
+              <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}"></div>
               <div class="pbody">
                 <h4 th:text="${p.name}">Name</h4>
                 <p class="pshort" th:text="${p.shortText}">short</p>
