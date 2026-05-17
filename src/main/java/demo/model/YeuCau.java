@@ -35,7 +35,7 @@ public class YeuCau {
     @Column(columnDefinition = "varchar(255)")
     private String email;
 
-    @Column(columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "text")
     private String sanPhamQuanTam;
 
     @Size(max = 1000, message = "Message must not exceed 1000 characters")

@@ -3,6 +3,7 @@ package demo.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.data.domain.Page;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,12 @@ import jakarta.validation.Valid;
 
 @Controller
 public class SanPhamController {
+
+    // Treat blank price field as null instead of throwing a binding error.
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Double.class, new CustomNumberEditor(Double.class, true));
+    }
 
     @Autowired
     private SanPhamService sanPhamService;
@@ -72,6 +81,7 @@ public class SanPhamController {
     @GetMapping("/contact")
     public String trangLienHe(Model model) {
         model.addAttribute("yeuCau", new YeuCau());
+        model.addAttribute("allProducts", sanPhamService.layTatCa());
         return "contact";
     }
 
@@ -91,19 +101,26 @@ public class SanPhamController {
     @PostMapping("/contact")
     public String guiYeuCau(@Valid @ModelAttribute("yeuCau") YeuCau yeuCau,
                             BindingResult bindingResult,
+                            @RequestParam(name = "selectedProducts", required = false) List<String> selectedProducts,
                             HttpServletRequest request,
                             Model model) {
         if (!contactRateLimiter.isAllowed(getClientIp(request))) {
             model.addAttribute("rateLimitError", true);
+            model.addAttribute("allProducts", sanPhamService.layTatCa());
             return "contact";
         }
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
+            model.addAttribute("allProducts", sanPhamService.layTatCa());
             return "contact";
+        }
+        if (selectedProducts != null && !selectedProducts.isEmpty()) {
+            yeuCau.setSanPhamQuanTam(String.join(", ", selectedProducts));
         }
         yeuCauService.luuYeuCau(yeuCau);
         model.addAttribute("thanhCong", true);
         model.addAttribute("yeuCau", new YeuCau());
+        model.addAttribute("allProducts", sanPhamService.layTatCa());
         return "contact";
     }
 

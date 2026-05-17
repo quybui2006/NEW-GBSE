@@ -29,9 +29,9 @@
       <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:1rem">
         <div style="display:flex;gap:.75rem"><span class="icon-pin"></span><div><div style="font-weight:600;color:#152352">Hanoi – Operating address</div><div style="color:#64748b">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div></div></div>
         <div style="display:flex;gap:.75rem"><span class="icon-pin"></span><div><div style="font-weight:600;color:#152352">HCMC branch</div><div style="color:#64748b">11B Hong Ha, Tan Binh, HCMC.</div></div></div>
-        <div style="display:flex;gap:.75rem"><span class="icon-pin"></span><div><div style="font-weight:600;color:#152352">Registered address</div><div style="color:#64748b">134A Giang Vo, Ba Dinh, Ha Noi.</div></div></div>
-        <div style="display:flex;gap:.75rem;align-items:center"><span class="icon-mail"></span><span>info@omeax.com</span></div>
-        <div style="display:flex;gap:.75rem;align-items:center"><span class="icon-phone"></span><span>+84 (0) 24 0000 0000</span></div>
+        <div style="display:flex;gap:.75rem"><div><div style="font-weight:600;color:#152352">Registered address</div><div style="color:#64748b">134A Giang Vo, Ba Dinh, Ha Noi.</div></div></div>
+        <div style="display:flex;gap:.75rem;align-items:center"><span>info@omeax.com</span></div>
+        <div style="display:flex;gap:.75rem;align-items:center"></span><span>+84 (0) 24 0000 0000</span></div>
       </div>
     </div>
     <form th:action="@{/contact}" method="post" th:object="${yeuCau}">
@@ -57,8 +57,14 @@
       <label>Email</label>
       <input type="email" th:field="*{email}" placeholder="your@email.com"/>
       <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
-      <label>Product of interest</label>
-      <input type="text" th:field="*{sanPhamQuanTam}" placeholder="e.g. HVAC Pump, PICV valve..."/>
+      <label>Products of interest</label>
+      <select name="selectedProducts" multiple size="5"
+              style="width:100%;padding:.5rem;border:1px solid #d1d5db;border-radius:.375rem;font-size:.95rem">
+        <option th:each="p : ${allProducts}"
+                th:value="${p.ten}"
+                th:text="${p.ten}"></option>
+      </select>
+      <small style="color:#64748b;font-size:.8rem">Hold Ctrl (Windows) or Cmd (Mac) to select multiple.</small>
       <label>Message</label>
       <textarea th:field="*{noiDung}" rows="5" placeholder="Tell us about your project or requirement..."></textarea>
       <span th:if="${#fields.hasErrors('noiDung')}" th:errors="*{noiDung}" style="color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem"></span>
