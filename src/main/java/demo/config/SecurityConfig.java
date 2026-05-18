@@ -35,13 +35,16 @@ public class SecurityConfig {
             )
 
             // ── Authorization ────────────────────────────────────────────────
+            // Explicit allowlist — every unmatched route is DENIED by default.
+            // New controller methods are NOT accidentally public.
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/products", "/products/**", "/product/**",
+                .requestMatchers("/", "/products", "/products/**",
                                  "/contact", "/about", "/projects", "/news",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
+                                 "/actuator/health",
                                  "/error").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().denyAll()
             )
 
             // ── Form login ───────────────────────────────────────────────────

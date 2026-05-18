@@ -66,15 +66,13 @@ public class DataInitializer implements CommandLineRunner {
                          adminUsername);
             }
 
-        } else if (adminPassword != null && !adminPassword.trim().isEmpty()) {
-            userRepository.findByUsername(adminUsername).ifPresent(admin -> {
-                admin.setPassword(passwordEncoder.encode(adminPassword));
-                userRepository.save(admin);
-            });
-            log.info("[DataInitializer] Admin password updated from config (username: {})", adminUsername);
-
         } else {
-            log.info("[DataInitializer] Admin '{}' already exists. Set ADMIN_PASSWORD env var to reset.", adminUsername);
+            // Admin exists. Do NOT auto-update the password on every restart —
+            // anyone who can set env vars on the hosting platform could silently
+            // hijack the admin account. To change the password, update the BCrypt
+            // hash directly in the database:
+            //   UPDATE users SET password = '<bcrypt_hash>' WHERE username = 'admin';
+            log.info("[DataInitializer] Admin '{}' already exists — no changes made.", adminUsername);
         }
     }
 }

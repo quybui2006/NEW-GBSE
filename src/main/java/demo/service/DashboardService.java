@@ -11,7 +11,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import demo.model.YeuCau;
 import demo.repository.YeuCauRepository;
 
 @Service
@@ -23,80 +22,59 @@ public class DashboardService {
     @Autowired
     private SanPhamService sanPhamService;
 
+    /**
+     * Builds dashboard stats for the given date range.
+     * Chart data is aggregated in the database with GROUP BY DATE — only one
+     * lightweight row per day is transferred, not all YeuCau entities.
+     */
     public Map<String, Object> getDashboardData(String from, String to) {
         LocalDate fromDate = parseDate(from, LocalDate.now().minusDays(6));
         LocalDate toDate   = parseDate(to,   LocalDate.now());
 
         if (fromDate.isAfter(toDate)) {
-            LocalDate temp = fromDate;
-            fromDate = toDate;
-            toDate = temp;
+            LocalDate temp = fromDate; fromDate = toDate; toDate = temp;
         }
 
         LocalDateTime startDateTime = fromDate.atStartOfDay();
         LocalDateTime endDateTime   = toDate.plusDays(1).atStartOfDay();
 
-        List<YeuCau> filteredYeuCau = yeuCauRepository.findByDateRangeNative(startDateTime, endDateTime);
+        // Aggregate in the DB — one row per day, not full entity load
+        List<Object[]> dayCounts = yeuCauRepository.countByDay(startDateTime, endDateTime);
 
+        // Build a label→count lookup from the DB result
+        Map<String, Long> countByLabel = new HashMap<>();
+        long totalRequests = 0;
+        for (Object[] row : dayCounts) {
+            // row[0] = java.sql.Date, row[1] = Long
+            String label = row[0].toString().substring(5).replace("-", "/"); // MM/DD → dd/MM
+            long count = ((Number) row[1]).longValue();
+            // Reformat to dd/MM to match the chart label format
+            String[] parts = label.split("/");
+            String ddMM = parts[1] + "/" + parts[0];
+            countByLabel.put(ddMM, count);
+            totalRequests += count;
+        }
+
+        DateTimeFormatter labelFmt = DateTimeFormatter.ofPattern("dd/MM");
         List<String> labels      = new ArrayList<>();
         List<Long>   requestData = new ArrayList<>();
 
         for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-            labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
-            requestData.add(countRequestsOnDate(filteredYeuCau, d));
+            String label = d.format(labelFmt);
+            labels.add(label);
+            requestData.add(countByLabel.getOrDefault(label, 0L));
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("tongSanPham",      (long) sanPhamService.demTong());
-        result.put("tongYeuCau",       (long) filteredYeuCau.size());
-        result.put("hasData",          !filteredYeuCau.isEmpty());
+        result.put("tongSanPham",      sanPhamService.demTong());
+        result.put("tongYeuCau",       totalRequests);
+        result.put("hasData",          totalRequests > 0);
         result.put("chartLabels",      labels);
         result.put("chartRequestData", requestData);
         result.put("fromDate",         fromDate.toString());
         result.put("toDate",           toDate.toString());
         return result;
     }
-
-    public Map<String, Object> getDashboardDataWithPagination(String from, String to, int page, int size) {
-        LocalDate fromDate = parseDate(from, LocalDate.now().minusDays(6));
-        LocalDate toDate   = parseDate(to,   LocalDate.now());
-
-        if (fromDate.isAfter(toDate)) {
-            LocalDate temp = fromDate;
-            fromDate = toDate;
-            toDate = temp;
-        }
-
-        LocalDateTime startDateTime = fromDate.atStartOfDay();
-        LocalDateTime endDateTime   = toDate.plusDays(1).atStartOfDay();
-
-        var pageable   = org.springframework.data.domain.PageRequest.of(page, size);
-        var yeuCauPage = yeuCauRepository.findByDateRangeCoPhanTrang(startDateTime, endDateTime, pageable);
-
-        List<String> labels      = new ArrayList<>();
-        List<Long>   requestData = new ArrayList<>();
-
-        for (LocalDate d = fromDate; !d.isAfter(toDate); d = d.plusDays(1)) {
-            labels.add(d.format(DateTimeFormatter.ofPattern("dd/MM")));
-            requestData.add(countRequestsOnDate(yeuCauPage.getContent(), d));
-        }
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("tongSanPham",      (long) sanPhamService.demTong());
-        result.put("tongYeuCau",       yeuCauPage.getTotalElements());
-        result.put("hasData",          yeuCauPage.getTotalElements() > 0);
-        result.put("chartLabels",      labels);
-        result.put("chartRequestData", requestData);
-        result.put("fromDate",         fromDate.toString());
-        result.put("toDate",           toDate.toString());
-        result.put("yeuCauList",       yeuCauPage.getContent());
-        result.put("currentPage",      yeuCauPage.getNumber());
-        result.put("totalPages",       yeuCauPage.getTotalPages());
-        result.put("totalItems",       yeuCauPage.getTotalElements());
-        return result;
-    }
-
-    // ── private helpers ──────────────────────────────────────────────────────
 
     private LocalDate parseDate(String dateStr, LocalDate defaultDate) {
         try {
@@ -104,15 +82,5 @@ public class DashboardService {
         } catch (Exception e) {
             return defaultDate;
         }
-    }
-
-    private long countRequestsOnDate(List<YeuCau> list, LocalDate date) {
-        LocalDateTime start = date.atStartOfDay();
-        LocalDateTime end   = date.plusDays(1).atStartOfDay();
-        return list.stream()
-                .filter(yc -> yc.getThoiGian() != null
-                        && !yc.getThoiGian().isBefore(start)
-                        &&  yc.getThoiGian().isBefore(end))
-                .count();
     }
 }

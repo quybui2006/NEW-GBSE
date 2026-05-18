@@ -91,11 +91,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Keep email sending logic straightforward
 - Prefer configuration through application.properties
 
-### Forms & Email
-- Validate contact form inputs
-- Prevent HTTP 500 errors on invalid submission
-- Return user-friendly messages
-- Keep mail functionality easy to debug
 
 ### Project Constraints
 - This is a business showcase website, not a large enterprise system

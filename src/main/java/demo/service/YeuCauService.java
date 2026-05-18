@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import demo.model.YeuCau;
 import demo.repository.YeuCauRepository;
@@ -23,20 +24,25 @@ public class YeuCauService {
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Persists the request then fires the async email notification.
+     * @Transactional ensures the DB write either fully succeeds or rolls back.
+     * The email fires after the transaction commits — if the email fails,
+     * the persisted record is not rolled back (data is never lost).
+     */
+    @Transactional
     public YeuCau luuYeuCau(YeuCau yeuCau) {
         YeuCau saved = yeuCauRepository.save(yeuCau);
         emailService.guiThongBao(saved);
         return saved;
     }
 
+    @Transactional(readOnly = true)
     public List<YeuCau> layTatCa() {
         return yeuCauRepository.findAll(Sort.by("thoiGian").descending());
     }
 
-    public Page<YeuCau> layTatCaCoPhanTrang(int page, int size) {
-        return yeuCauRepository.findAll(PageRequest.of(page, size, Sort.by("thoiGian").descending()));
-    }
-
+    @Transactional(readOnly = true)
     public List<YeuCau> locTheoThoiGian(String period, String from, String to) {
         LocalDateTime fromDateTime;
         LocalDateTime toDateTime = null;
@@ -56,21 +62,16 @@ public class YeuCauService {
             };
         }
 
-        // When toDateTime is null the JPQL "< :to" comparison returns 0 rows;
-        // use the open-ended query instead.
-        if (toDateTime != null) {
-            return yeuCauRepository.findByDateRange(fromDateTime, toDateTime);
-        } else {
-            return yeuCauRepository.findByDateRangeFrom(fromDateTime);
-        }
+        return (toDateTime != null)
+                ? yeuCauRepository.findByDateRange(fromDateTime, toDateTime)
+                : yeuCauRepository.findByDateRangeFrom(fromDateTime);
     }
 
     /**
-     * Returns page {@code page} (0-based, 20 rows, newest first) of quote requests.
-     * When {@code from} is provided the result is restricted to that date window.
-     * Invalid date strings fall back to an unfiltered query so bad URL params never
-     * cause a 500 — they just silently load all records.
+     * Returns page {@code page} (0-based, 20 rows, newest first).
+     * Invalid date strings silently fall back to an unfiltered query.
      */
+    @Transactional(readOnly = true)
     public Page<YeuCau> layTrangCoLoc(String from, String to, int page) {
         Pageable pageable = PageRequest.of(page, 20, Sort.by("thoiGian").descending());
         if (from != null && !from.isEmpty()) {
@@ -79,14 +80,15 @@ public class YeuCauService {
                 LocalDateTime toDt = (to != null && !to.isEmpty())
                         ? LocalDate.parse(to).plusDays(1).atStartOfDay()
                         : LocalDate.now().plusDays(1).atStartOfDay();
-                return yeuCauRepository.findByDateRangeCoPhanTrang(fromDt, toDt, pageable);
+                return yeuCauRepository.findByDateRangePaged(fromDt, toDt, pageable);
             } catch (Exception ignored) {
-                // Invalid date format — fall through to unfiltered
+                // bad date format — fall through to unfiltered
             }
         }
         return yeuCauRepository.findAll(pageable);
     }
 
+    @Transactional
     public void xoa(Long id) {
         yeuCauRepository.deleteById(id);
     }

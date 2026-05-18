@@ -68,17 +68,26 @@
     return ALL.filter(p => (p.name + ' ' + p.shortText).toLowerCase().includes(q)).slice(0,6);
   }
 
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
   function renderSug(items){
     if(!items.length){ sug.classList.remove('open'); sug.innerHTML=''; return; }
-    sug.innerHTML = items.map(p => `
-      <a href="/products/${p.id}">
-        <img src="${p.image}" alt=""/>
-        <div style="min-width:0;flex:1">
-          <div class="name">${p.name}</div>
-          <div class="short">${p.shortText}</div>
-        </div>
-        <span class="brand">${p.brand}</span>
-      </a>`).join('');
+    // All product data is inserted via esc() to prevent stored XSS.
+    // Never use template literals with untrusted data directly in innerHTML.
+    sug.innerHTML = items.map(p =>
+      '<a href="/products/' + p.id + '">'
+      + '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '"/>'
+      + '<div style="min-width:0;flex:1">'
+      + '<div class="name">' + esc(p.name) + '</div>'
+      + '<div class="short">' + esc(p.shortText) + '</div>'
+      + '</div>'
+      + '<span class="brand">' + esc(p.brand) + '</span>'
+      + '</a>'
+    ).join('');
     sug.classList.add('open');
   }
 

@@ -9,8 +9,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import demo.model.RangeGroup;
 import demo.model.SanPham;
+import demo.repository.SanPhamDropdown;
 import demo.repository.SanPhamRepository;
 
 @Service
@@ -49,41 +53,47 @@ public class SanPhamService {
 
     // ── Public catalogue ─────────────────────────────────────────────────────
 
-    /** Fetches all products from DB then delegates to the list overload. */
-    public List<RangeGroup> getRangeGroups() {
-        return getRangeGroups(sanPhamRepository.findAll(Sort.by("id").ascending()));
+    /**
+     * Returns all products, cached for 10 minutes.
+     * Cache is evicted on any save/delete so the public site stays current.
+     */
+    @Cacheable("products")
+    @Transactional(readOnly = true)
+    public List<SanPham> layTatCa() {
+        return sanPhamRepository.findAll(Sort.by("id").ascending());
     }
 
-    /**
-     * Groups a pre-fetched product list by rangeId in canonical order.
-     * Null or blank rangeId products are silently excluded (not rendered).
-     */
+    /** Lightweight projection — only id + ten fetched. Use for dropdowns. */
+    @Transactional(readOnly = true)
+    public List<SanPhamDropdown> layDanhSachDropdown() {
+        return sanPhamRepository.findAllProjectedBy(Sort.by("ten").ascending());
+    }
+
+    /** Groups a pre-fetched product list by rangeId in canonical order. */
     public List<RangeGroup> getRangeGroups(List<SanPham> all) {
         Map<String, List<SanPham>> byRange = new LinkedHashMap<>();
         for (SanPham sp : all) {
             String rId = sp.getRangeId();
-            // Null or blank rangeId → bucket as __other__ (never rendered)
             String key = (rId == null || rId.isBlank()) ? "__other__" : rId.trim().toLowerCase();
             byRange.computeIfAbsent(key, k -> new ArrayList<>()).add(sp);
         }
 
         List<RangeGroup> groups = new ArrayList<>();
-
-        // Emit known ranges in canonical order.
         for (String rangeId : RANGE_ORDER) {
             List<SanPham> products = byRange.get(rangeId);
             if (products != null && !products.isEmpty()) {
-                String brand   = RANGE_BRANDS.getOrDefault(rangeId, rangeId.toUpperCase());
-                String tagline = RANGE_TAGLINES.getOrDefault(rangeId, "");
-                groups.add(new RangeGroup(rangeId, brand, tagline, products));
+                groups.add(new RangeGroup(
+                    rangeId,
+                    RANGE_BRANDS.getOrDefault(rangeId, rangeId.toUpperCase()),
+                    RANGE_TAGLINES.getOrDefault(rangeId, ""),
+                    products
+                ));
             }
         }
 
-        // Append any unrecognised (but non-blank) rangeIds after the known ones.
         byRange.forEach((rangeId, products) -> {
             if (!RANGE_ORDER.contains(rangeId) && !"__other__".equals(rangeId) && !products.isEmpty()) {
-                String brand = RANGE_BRANDS.getOrDefault(rangeId, rangeId.toUpperCase());
-                groups.add(new RangeGroup(rangeId, brand, "", products));
+                groups.add(new RangeGroup(rangeId, RANGE_BRANDS.getOrDefault(rangeId, rangeId.toUpperCase()), "", products));
             }
         });
 
@@ -92,18 +102,13 @@ public class SanPhamService {
 
     // ── Admin CRUD ───────────────────────────────────────────────────────────
 
-    public List<SanPham> layTatCa() {
-        return sanPhamRepository.findAll(Sort.by("id").ascending());
-    }
-
+    @Transactional(readOnly = true)
     public Optional<SanPham> timTheoId(Long id) {
         return sanPhamRepository.findById(id);
     }
 
-    /**
-     * Validates JSON array fields, then saves the product.
-     * Throws IllegalArgumentException with a user-readable message on bad input.
-     */
+    @CacheEvict(value = "products", allEntries = true)
+    @Transactional
     public SanPham luu(SanPham sanPham, MultipartFile hinhAnhFile) {
         validateJsonField(sanPham.getFeatures(), "Key Features");
         validateJsonField(sanPham.getApplications(), "Applications");
@@ -111,23 +116,26 @@ public class SanPhamService {
 
         if (hinhAnhFile != null && !hinhAnhFile.isEmpty()) {
             try {
-                String tenFile = fileUploadService.luuFile(hinhAnhFile);
-                sanPham.setHinhAnh(tenFile);
+                sanPham.setHinhAnh(fileUploadService.luuFile(hinhAnhFile));
             } catch (Exception e) {
-                throw new RuntimeException("Không thể lưu ảnh: " + e.getMessage(), e);
+                throw new RuntimeException("Cannot save image: " + e.getMessage(), e);
             }
         }
         return sanPhamRepository.save(sanPham);
     }
 
+    @CacheEvict(value = "products", allEntries = true)
+    @Transactional
     public void xoa(Long id) {
         sanPhamRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public long demTong() {
         return sanPhamRepository.count();
     }
 
+    @Transactional(readOnly = true)
     public List<SanPham> timKiem(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return sanPhamRepository.findAll();
@@ -137,7 +145,6 @@ public class SanPhamService {
 
     // ── Admin form text ↔ JSON converters ────────────────────────────────────
 
-    /** ["A","B"] → "A\nB".  Returns "" on null/blank/bad JSON. */
     public String jsonArrayToLines(String json) {
         if (json == null || json.isBlank()) return "";
         try {
@@ -148,44 +155,28 @@ public class SanPhamService {
         }
     }
 
-    /** "A\nB\nC" → ["A","B","C"] as JSON string.  Returns null when blank. */
     public String linesToJsonArray(String lines) {
         if (lines == null || lines.isBlank()) return null;
         List<String> items = Arrays.stream(lines.split("\n"))
-            .map(String::trim)
-            .filter(s -> !s.isEmpty())
-            .collect(Collectors.toList());
+            .map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
         if (items.isEmpty()) return null;
-        try {
-            return mapper.writeValueAsString(items);
-        } catch (Exception e) {
-            return null;
-        }
+        try { return mapper.writeValueAsString(items); } catch (Exception e) { return null; }
     }
 
-    /** [{"label":"DN","value":"50"}] → "DN: 50".  Returns "" on null/blank/bad JSON. */
     public String jsonSpecsToLines(String json) {
         if (json == null || json.isBlank()) return "";
         try {
-            List<SanPham.SpecEntry> specs =
-                mapper.readValue(json, new TypeReference<List<SanPham.SpecEntry>>() {});
-            return specs.stream()
-                .map(s -> s.label + ": " + s.value)
-                .collect(Collectors.joining("\n"));
+            List<SanPham.SpecEntry> specs = mapper.readValue(json, new TypeReference<List<SanPham.SpecEntry>>() {});
+            return specs.stream().map(s -> s.label + ": " + s.value).collect(Collectors.joining("\n"));
         } catch (Exception e) {
             return "";
         }
     }
 
-    /**
-     * "DN: 50–200\nPN: 16" → [{"label":"DN","value":"50–200"},…] as JSON string.
-     * Lines without ": " are stored with an empty value.  Returns null when blank.
-     */
     public String linesToJsonSpecs(String lines) {
         if (lines == null || lines.isBlank()) return null;
         List<Map<String, String>> specs = Arrays.stream(lines.split("\n"))
-            .map(String::trim)
-            .filter(s -> !s.isEmpty())
+            .map(String::trim).filter(s -> !s.isEmpty())
             .map(line -> {
                 Map<String, String> entry = new LinkedHashMap<>();
                 int idx = line.indexOf(": ");
@@ -200,11 +191,7 @@ public class SanPhamService {
             })
             .collect(Collectors.toList());
         if (specs.isEmpty()) return null;
-        try {
-            return mapper.writeValueAsString(specs);
-        } catch (Exception e) {
-            return null;
-        }
+        try { return mapper.writeValueAsString(specs); } catch (Exception e) { return null; }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -214,12 +201,10 @@ public class SanPhamService {
         try {
             JsonNode node = mapper.readTree(value);
             if (!node.isArray()) {
-                throw new IllegalArgumentException(
-                    fieldName + ": phải là JSON array, ví dụ [\"a\",\"b\"]");
+                throw new IllegalArgumentException(fieldName + ": must be a JSON array");
             }
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException(
-                fieldName + ": JSON không hợp lệ — " + e.getOriginalMessage());
+            throw new IllegalArgumentException(fieldName + ": invalid JSON — " + e.getOriginalMessage());
         }
     }
 }

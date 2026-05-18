@@ -1,16 +1,19 @@
 package demo.service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import demo.model.YeuCau;
@@ -20,7 +23,9 @@ public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     private static final String RESEND_URL = "https://api.resend.com/emails";
-    private static final RestTemplate restTemplate = new RestTemplate();
+    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+    private final RestTemplate restTemplate;
 
     @Value("${resend.api-key:}")
     private String apiKey;
@@ -31,43 +36,79 @@ public class EmailService {
     @Value("${email.nhan:}")
     private String emailNhan;
 
+    public EmailService(@Qualifier("emailRestTemplate") RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Async
     public void guiThongBao(YeuCau yeuCau) {
         if (apiKey == null || apiKey.isBlank()) {
-            log.warn("[EmailService] RESEND_API_KEY not configured — skipping notification email.");
+            log.warn("[EmailService] RESEND_API_KEY not configured — skipping notification.");
             return;
         }
         if (emailNhan == null || emailNhan.isBlank()) {
-            log.warn("[EmailService] MAIL_RECEIVER not configured — skipping notification email.");
+            log.warn("[EmailService] MAIL_RECEIVER not configured — skipping notification.");
             return;
         }
         if (emailFrom == null || emailFrom.isBlank()) {
-            log.warn("[EmailService] MAIL_FROM not configured — skipping notification email.");
+            log.warn("[EmailService] MAIL_FROM not configured — skipping notification.");
             return;
         }
+
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(apiKey);
 
+            String time = yeuCau.getThoiGian() != null
+                    ? yeuCau.getThoiGian().format(FMT) : "—";
+
             Map<String, Object> body = Map.of(
                 "from",    emailFrom,
                 "to",      List.of(emailNhan),
-                "subject", "New quote request from: " + yeuCau.getHoTen(),
-                "text",
-                    "Name:    " + yeuCau.getHoTen()         + "\n" +
-                    "Phone:   " + yeuCau.getSoDienThoai()   + "\n" +
-                    "Email:   " + yeuCau.getEmail()         + "\n" +
-                    "Product: " + yeuCau.getSanPhamQuanTam()+ "\n" +
-                    "Message: " + yeuCau.getNoiDung()
+                "subject", "[OMEAX] New quote request from " + yeuCau.getHoTen(),
+                "html",    buildHtml(yeuCau, time)
             );
 
-            restTemplate.postForObject(RESEND_URL,
-                    new HttpEntity<>(body, headers), String.class);
+            restTemplate.postForObject(RESEND_URL, new HttpEntity<>(body, headers), String.class);
+            log.info("[EmailService] Notification sent for request id={}", yeuCau.getId());
 
-            log.info("[EmailService] Notification sent for request from: {}", yeuCau.getHoTen());
-        } catch (Exception e) {
-            log.error("[EmailService] Failed to send notification email: {}", e.getMessage(), e);
+        } catch (RestClientException e) {
+            // Request is already persisted in DB — no data is lost.
+            // Logged with stack trace for manual follow-up via Railway logs.
+            log.error("[EmailService] Failed to send notification (id={}): {}",
+                      yeuCau.getId(), e.getMessage(), e);
         }
+    }
+
+    private String buildHtml(YeuCau yc, String time) {
+        String product = yc.getSanPhamQuanTam() != null ? yc.getSanPhamQuanTam() : "—";
+        String message = yc.getNoiDung() != null
+                ? yc.getNoiDung().replace("&", "&amp;").replace("<", "&lt;").replace("\n", "<br>")
+                : "—";
+        String email = yc.getEmail() != null ? yc.getEmail() : "—";
+
+        return "<div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto\">"
+             + "<div style=\"background:#283A82;padding:24px 32px;border-radius:8px 8px 0 0\">"
+             + "<h2 style=\"color:#fff;margin:0\">New Quote Request</h2>"
+             + "<p style=\"color:rgba(255,255,255,.7);margin:4px 0 0\">OMEAX Admin Notification</p>"
+             + "</div>"
+             + "<div style=\"background:#f8fafc;padding:32px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 8px 8px\">"
+             + "<table style=\"width:100%;border-collapse:collapse\">"
+             + row("Full name", "<strong>" + yc.getHoTen() + "</strong>")
+             + row("Phone",     "<strong>" + yc.getSoDienThoai() + "</strong>")
+             + row("Email",     email)
+             + row("Products",  product)
+             + row("Message",   message)
+             + row("Time",      time)
+             + "</table>"
+             + "</div></div>";
+    }
+
+    private static String row(String label, String value) {
+        return "<tr>"
+             + "<td style=\"padding:8px 0;color:#64748b;width:120px\">" + label + "</td>"
+             + "<td style=\"padding:8px 0;color:#0f172a\">" + value + "</td>"
+             + "</tr>";
     }
 }

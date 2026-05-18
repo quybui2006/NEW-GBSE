@@ -2,6 +2,7 @@ package demo.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,8 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
     List<SanPham> timKiem(@Param("keyword") String keyword);
 
     List<SanPham> findByRangeIdIsNull();
+
+    // Lightweight projection for dropdowns — fetches only id + ten columns.
+    // Use this instead of findAll() when you only need product names.
+    List<SanPhamDropdown> findAllProjectedBy(Sort sort);
 }

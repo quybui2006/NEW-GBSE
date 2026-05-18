@@ -37,8 +37,17 @@ public class DataMigrationService implements CommandLineRunner {
     public void run(String... args) {
         if (sanPhamRepository.count() == 0) {
             seed();
-        } else {
-            log.info("[DataMigration] san_pham table already has data — skipping seed.");
+            // After a fresh seed all products have rangeId set — no backfill needed.
+            return;
+        }
+        log.info("[DataMigration] san_pham table already has data — skipping seed.");
+
+        // Only run the backfill query if there are actually rows with null rangeId.
+        // This avoids a full table scan on every startup once the data is clean.
+        long nullCount = sanPhamRepository.findByRangeIdIsNull().size();
+        if (nullCount == 0) {
+            log.info("[DataMigration] Backfill: all rows already have rangeId — skipping.");
+            return;
         }
         backfillRangeIds();
     }

@@ -1,14 +1,15 @@
 package demo.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,87 +20,72 @@ public class FileUploadService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    // ✅ Danh sách loại file ảnh được phép
-    private static final List<String> ALLOWED_CONTENT_TYPES = Arrays.asList(
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp"
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024L;
+
+    // Tika-detected MIME types that are actually safe image formats.
+    // Content-Type from the browser is client-controlled and can be spoofed.
+    // Tika reads the file's magic bytes — it cannot be faked.
+    private static final Set<String> ALLOWED_MIME_TYPES = Set.of(
+        "image/jpeg", "image/png", "image/gif", "image/webp"
     );
 
-    // ✅ Danh sách đuôi file được phép (kiểm tra cả 2 lớp)
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList(
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
         ".jpg", ".jpeg", ".png", ".gif", ".webp"
     );
 
-    // ✅ Giới hạn kích thước tối đa: 5MB
-    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final Tika tika = new Tika();
 
     public String luuFile(MultipartFile file) throws IOException {
-        // ========== BƯỚC 1: Kiểm tra file có rỗng không ==========
         if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("File không được để trống");
+            throw new IllegalArgumentException("File cannot be empty");
         }
 
-        // ========== BƯỚC 2: Kiểm tra kích thước ==========
         if (file.getSize() > MAX_FILE_SIZE) {
-            throw new IllegalArgumentException(
-                "File quá lớn. Kích thước tối đa là 5MB. File của bạn: " + 
-                String.format("%.2f", file.getSize() / (1024.0 * 1024.0)) + "MB"
-            );
+            throw new IllegalArgumentException(String.format(
+                "File too large (%.1f MB). Maximum is 5 MB.",
+                file.getSize() / (1024.0 * 1024.0)
+            ));
         }
 
-        // ========== BƯỚC 3: Kiểm tra content type ==========
-        String contentType = file.getContentType();
-        if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType)) {
-            throw new IllegalArgumentException(
-                "Loại file không được phép. Chỉ chấp nhận: JPG, PNG, GIF, WebP"
-            );
-        }
-
-        // ========== BƯỚC 4: Kiểm tra đuôi file ==========
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IllegalArgumentException("Tên file không hợp lệ");
+        if (originalFilename == null || originalFilename.isBlank()) {
+            throw new IllegalArgumentException("Invalid filename");
         }
 
         String extension = "";
-        int dotIndex = originalFilename.lastIndexOf(".");
-        if (dotIndex > 0) {
-            extension = originalFilename.substring(dotIndex).toLowerCase();
+        int dot = originalFilename.lastIndexOf('.');
+        if (dot > 0) {
+            extension = originalFilename.substring(dot).toLowerCase();
         }
-
         if (!ALLOWED_EXTENSIONS.contains(extension)) {
             throw new IllegalArgumentException(
-                "Đuôi file không được phép. Chỉ chấp nhận: .jpg, .jpeg, .png, .gif, .webp"
-            );
+                "Extension not allowed. Accepted: .jpg, .jpeg, .png, .gif, .webp");
         }
 
-        // ========== BƯỚC 5: Làm sạch tên file (chống path traversal) ==========
-        // Chỉ giữ chữ cái, số, dấu chấm, dấu gạch ngang
-        String safeFilename = originalFilename.replaceAll("[^a-zA-Z0-9.]", "_");
-        // Không cho phép .. (path traversal)
-        safeFilename = safeFilename.replace("..", "_");
+        // Read magic bytes via Tika — this is the only reliable check.
+        // The browser Content-Type header is ignored intentionally.
+        String detectedType;
+        try (InputStream is = file.getInputStream()) {
+            detectedType = tika.detect(is);
+        }
+        if (!ALLOWED_MIME_TYPES.contains(detectedType)) {
+            throw new IllegalArgumentException(
+                "File content does not match an allowed image type. Detected: " + detectedType);
+        }
 
-        // ========== BƯỚC 6: Tạo tên file duy nhất ==========
-        String tenFile = UUID.randomUUID() + "_" + safeFilename;
+        // Sanitize filename and prevent path traversal
+        String safeName = originalFilename.replaceAll("[^a-zA-Z0-9.]", "_").replace("..", "_");
+        String uniqueName = UUID.randomUUID() + "_" + safeName;
 
-        // ========== BƯỚC 7: Tạo thư mục nếu chưa tồn tại ==========
         Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+        Files.createDirectories(uploadPath);
+
+        Path dest = uploadPath.resolve(uniqueName).normalize();
+        if (!dest.startsWith(uploadPath.normalize())) {
+            throw new SecurityException("Path traversal attempt detected");
         }
 
-        // ========== BƯỚC 8: Kiểm tra lần cuối đường dẫn an toàn ==========
-        Path filePath = uploadPath.resolve(tenFile).normalize();
-        // Đảm bảo filePath nằm trong uploadDir (chống path traversal)
-        if (!filePath.startsWith(uploadPath.normalize())) {
-            throw new SecurityException("Đường dẫn file không hợp lệ");
-        }
-
-        // ========== BƯỚC 9: Lưu file ==========
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        
-        return tenFile;
+        Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
+        return uniqueName;
     }
 }
