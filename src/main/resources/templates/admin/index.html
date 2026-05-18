@@ -87,44 +87,26 @@
 
     <!-- Stat Cards -->
     <div class="row g-3 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="stat-card shadow-sm text-center">
                 <div class="small mb-1" style="color:#aaa;">Total Products</div>
                 <div class="fs-1 fw-bold" th:text="${tongSanPham}">0</div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="stat-card shadow-sm text-center">
                 <div class="small mb-1" style="color:#aaa;">Quote Requests</div>
                 <div th:if="${hasData}" class="fs-1 fw-bold" th:text="${tongYeuCau}">0</div>
                 <div th:unless="${hasData}" class="no-data-message">No data</div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card shadow-sm text-center">
-                <div class="small mb-1" style="color:#aaa;">Total Visits</div>
-                <div th:if="${hasData}" class="fs-1 fw-bold" th:text="${tongTruyCap}">0</div>
-                <div th:unless="${hasData}" class="no-data-message">No data</div>
-            </div>
-        </div>
     </div>
 
-    <!-- Charts -->
+    <!-- Chart: Requests per day -->
     <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-12">
             <div class="chart-box shadow-sm">
-                <h6 class="fw-bold mb-3">Visits</h6>
-                <div th:if="${hasData}">
-                    <canvas id="accessChart" style="max-height: 300px;"></canvas>
-                </div>
-                <div th:unless="${hasData}" class="no-data-message text-center">
-                    No data for this period
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="chart-box shadow-sm">
-                <h6 class="fw-bold mb-3">Quote Requests</h6>
+                <h6 class="fw-bold mb-3">Quote Requests (last 7 days)</h6>
                 <div th:if="${hasData}">
                     <canvas id="requestChart" style="max-height: 300px;"></canvas>
                 </div>
@@ -141,80 +123,48 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     const chartLabels = /*[[${chartLabels}]]*/ [];
-    const chartAccessData = /*[[${chartAccessData}]]*/ [];
     const chartRequestData = /*[[${chartRequestData}]]*/ [];
     const hasData = /*[[${hasData}]]*/ false;
 
-    // Hàm lấy CSRF token từ form ẩn
-    function getCsrfParam() {
-        const csrfInput = document.querySelector('#csrfForm input');
-        return {
-            name: csrfInput.name,
-            value: csrfInput.value
-        };
-    }
-
     if (hasData) {
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {
-                duration: 800,
-                easing: 'easeInOutQuart'
-            },
-            plugins: { 
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1a1a2e',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    cornerRadius: 8,
-                    padding: 12,
-                    displayColors: false
-                }
-            },
-            scales: {
-                y: { 
-                    beginAtZero: true, 
-                    grid: { color: '#f0f0f0' },
-                    ticks: { 
-                        font: { size: 12 },
-                        stepSize: 1
-                    }
-                },
-                x: { 
-                    grid: { display: false },
-                    ticks: { font: { size: 11 } }
-                }
-            }
-        };
-
-        new Chart(document.getElementById('accessChart'), {
-            type: 'bar',
-            data: { 
-                labels: chartLabels, 
-                datasets: [{ 
-                    data: chartAccessData, 
-                    backgroundColor: '#1a1a2e', 
-                    borderRadius: 4,
-                    maxBarThickness: 50
-                }] 
-            },
-            options: commonOptions
-        });
-
         new Chart(document.getElementById('requestChart'), {
             type: 'bar',
-            data: { 
-                labels: chartLabels, 
-                datasets: [{ 
-                    data: chartRequestData, 
-                    backgroundColor: '#4e4e6a', 
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    data: chartRequestData,
+                    backgroundColor: '#4e4e6a',
                     borderRadius: 4,
                     maxBarThickness: 50
-                }] 
+                }]
             },
-            options: commonOptions
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 800, easing: 'easeInOutQuart' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1a2e',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f0f0f0' },
+                        ticks: { font: { size: 12 }, stepSize: 1 }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            }
         });
     }
 
