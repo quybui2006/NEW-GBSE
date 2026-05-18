@@ -1,133 +1,131 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<th:block th:replace="~{fragments/layout :: head('Contact | OMEAX')}"></th:block>
+  <th:block th:replace="~{fragments/layout :: head('Contact | OMEAX')}"></th:block>
 </head>
+
 <body>
-<div th:replace="~{fragments/layout :: navbar}"></div>
-<main>
+  <div th:replace="~{fragments/layout :: navbar}"></div>
+  <main>
 
-<section class="page-header">
-  <div class="container">
-    <p class="eyebrow">Get in touch</p>
-    <h1>Contact OMEAX</h1>
-    <p class="subtitle">Thank you — let's simplify your project together.</p>
-  </div>
-</section>
+    <section class="page-header">
+      <div class="container">
+        <p class="eyebrow">Get in touch</p>
+        <h1>Contact OMEAX</h1>
+        <p class="subtitle">Thank you — let's simplify your project together.</p>
+      </div>
+    </section>
 
-<section class="crumb">
-  <div class="container">
-    <a href="/">Home</a><span class="sep">/</span>
-    <span class="crumb-current">Contact</span>
-  </div>
-</section>
+    <section class="crumb">
+      <div class="container">
+        <a href="/">Home</a><span class="sep">/</span>
+        <span class="crumb-current">Contact</span>
+      </div>
+    </section>
 
-<section class="contact-section">
-  <div class="container grid grid-2 contact-grid">
+    <section class="contact-section">
+      <div class="container grid grid-2 contact-grid">
 
-    <!-- Company info -->
-    <div class="contact-info">
-      <h2 class="contact-company-name">OMEAX Joint Stock Company</h2>
-      <div class="contact-details">
-        <div class="contact-row">
-          <span class="icon-pin" aria-hidden="true"></span>
-          <div>
-            <div class="contact-label">Hanoi – Operating address</div>
-            <div class="contact-value">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div>
+        <!-- Company info -->
+        <div class="contact-info">
+          <h2 class="contact-company-name">OMEAX Joint Stock Company</h2>
+          <div class="contact-details">
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">Hanoi – Operating address</div>
+                <div class="contact-value">Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">HCMC branch</div>
+                <div class="contact-value">11B Hong Ha, Tan Binh, HCMC.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div>
+                <div class="contact-label">Registered address</div>
+                <div class="contact-value">134A Giang Vo, Ba Dinh, Ha Noi.</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <span class="icon-pin" aria-hidden="true"></span>
+              <span aria-hidden="true">✉</span>
+              <span>info@omeax.com</span>
+            </div>
+            <div class="contact-row">
+              <span aria-hidden="true">☎</span>
+              <span>+84 (0) 24 0000 0000</span>
+            </div>
           </div>
         </div>
-        <div class="contact-row">
-          <span class="icon-pin" aria-hidden="true"></span>
-          <div>
-            <div class="contact-label">HCMC branch</div>
-            <div class="contact-value">11B Hong Ha, Tan Binh, HCMC.</div>
+
+        <!-- Contact form -->
+        <form th:action="@{/contact}" method="post" th:object="${contactForm}" novalidate>
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+          <!-- Honeypot — bots fill this, humans don't -->
+          <div style="display:none" aria-hidden="true">
+            <label for="website">Leave blank</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
           </div>
-        </div>
-        <div class="contact-row">
-          <span class="icon-pin" aria-hidden="true"></span>
-          <div>
-            <div class="contact-label">Registered address</div>
-            <div class="contact-value">134A Giang Vo, Ba Dinh, Ha Noi.</div>
+
+          <div th:if="${thanhCong}" class="alert alert-success" role="alert">
+            Your message has been sent. We will get back to you shortly.
           </div>
-        </div>
-        <div class="contact-row">
-          <span aria-hidden="true">✉</span>
-          <span>info@omeax.com</span>
-        </div>
-        <div class="contact-row">
-          <span aria-hidden="true">☎</span>
-          <span>+84 (0) 24 0000 0000</span>
-        </div>
+          <div th:if="${rateLimitError}" class="alert alert-error" role="alert">
+            Too many requests. Please wait a few minutes before trying again.
+          </div>
+
+          <div class="grid grid-2 form-row-gap" style="margin-top:.75rem">
+            <div class="form-group" style="margin-top:0">
+              <label for="hoTen">Full Name <span class="required" aria-label="required">*</span></label>
+              <input type="text" id="hoTen" th:field="*{hoTen}" placeholder="Your full name" autocomplete="name"
+                aria-required="true" />
+              <span class="field-error" th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}" role="alert"></span>
+            </div>
+            <div class="form-group" style="margin-top:0">
+              <label for="soDienThoai">Phone <span class="required" aria-label="required">*</span></label>
+              <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="Your phone number"
+                autocomplete="tel" aria-required="true" />
+              <span class="field-error" th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"
+                role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email<span class="required" aria-label="required">*</span></label>
+            <input type="email" id="email" th:field="*{email}" placeholder="your@email.com" autocomplete="email" />
+            <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label>Products of interest</label>
+            <div class="product-checkbox-list" role="group" aria-label="Products of interest">
+              <label class="checkbox-item" th:each="p : ${productDropdown}">
+                <input type="checkbox" name="selectedProducts" th:value="${p.ten}" />
+                <span th:text="${p.ten}">Product name</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="noiDung">Message</label>
+            <textarea id="noiDung" th:field="*{noiDung}" rows="5"
+              placeholder="Tell us about your project or requirement..."></textarea>
+            <span class="field-error" th:if="${#fields.hasErrors('noiDung')}" th:errors="*{noiDung}"
+              role="alert"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">Send message →</button>
+        </form>
+
       </div>
-    </div>
+    </section>
 
-    <!-- Contact form -->
-    <form th:action="@{/contact}" method="post" th:object="${contactForm}" novalidate>
-      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-      <!-- Honeypot — bots fill this, humans don't -->
-      <div style="display:none" aria-hidden="true">
-        <label for="website">Leave blank</label>
-        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"/>
-      </div>
-
-      <div th:if="${thanhCong}" class="alert alert-success" role="alert">
-        Your message has been sent. We will get back to you shortly.
-      </div>
-      <div th:if="${rateLimitError}" class="alert alert-error" role="alert">
-        Too many requests. Please wait a few minutes before trying again.
-      </div>
-
-      <div class="grid grid-2 form-row-gap">
-        <div class="form-group">
-          <label for="hoTen">Full Name <span class="required" aria-label="required">*</span></label>
-          <input type="text" id="hoTen" th:field="*{hoTen}" placeholder="Your full name"
-                 autocomplete="name" aria-required="true"/>
-          <span class="field-error" th:if="${#fields.hasErrors('hoTen')}"
-                th:errors="*{hoTen}" role="alert"></span>
-        </div>
-        <div class="form-group">
-          <label for="soDienThoai">Phone <span class="required" aria-label="required">*</span></label>
-          <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="Your phone number"
-                 autocomplete="tel" aria-required="true"/>
-          <span class="field-error" th:if="${#fields.hasErrors('soDienThoai')}"
-                th:errors="*{soDienThoai}" role="alert"></span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email<span class="required" aria-label="required">*</span></label>
-        <input type="email" id="email" th:field="*{email}" placeholder="your@email.com"
-               autocomplete="email"/>
-        <span class="field-error" th:if="${#fields.hasErrors('email')}"
-              th:errors="*{email}" role="alert"></span>
-      </div>
-
-      <div class="form-group">
-        <label>Products of interest</label>
-        <div class="product-checkbox-list" role="group" aria-label="Products of interest">
-          <label class="checkbox-item" th:each="p : ${productDropdown}">
-            <input type="checkbox" name="selectedProducts" th:value="${p.ten}"/>
-            <span th:text="${p.ten}">Product name</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="noiDung">Message</label>
-        <textarea id="noiDung" th:field="*{noiDung}" rows="5"
-                  placeholder="Tell us about your project or requirement..."></textarea>
-        <span class="field-error" th:if="${#fields.hasErrors('noiDung')}"
-              th:errors="*{noiDung}" role="alert"></span>
-      </div>
-
-      <button type="submit" class="btn btn-primary btn-full">Send message →</button>
-    </form>
-
-  </div>
-</section>
-
-</main>
-<div th:replace="~{fragments/layout :: footer}"></div>
+  </main>
+  <div th:replace="~{fragments/layout :: footer}"></div>
 </body>
+
 </html>
