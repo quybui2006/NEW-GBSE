@@ -67,8 +67,9 @@
         <!-- Schema migrations — replaces ddl-auto=update -->
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
+
         <!-- Health check + metrics endpoints -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
