@@ -304,6 +304,7 @@ form input:focus,form textarea:focus{border-color:var(--navy)}
 .crumb-current{color:#152352;font-weight:600}
 .form-group{margin-top:.75rem}
 .form-group:first-child{margin-top:0}
+form label { margin-top: 0 }
 .form-row-gap{gap:1rem}
 .field-error{color:#dc2626;font-size:.8rem;display:block;margin-top:.25rem}
 .alert{border-radius:.5rem;padding:.75rem 1rem;margin-bottom:1rem;font-size:.9rem}

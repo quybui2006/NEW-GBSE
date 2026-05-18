@@ -35,7 +35,7 @@
 <section style="background:#fff;padding:0 0 4rem">
   <div class="container">
     <div class="range-list">
-      <div class="range" th:each="r,it : ${ranges}" th:classappend="${it.first} ? 'open' : ''" th:id="|range-${r.id}|">
+      <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
           <span><h3 th:text="${r.brand}">Brand</h3><span class="tagline" th:text="${r.tagline}"></span></span>
           <span class="chevron"></span>

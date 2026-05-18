@@ -44,6 +44,7 @@
           </div>
         </div>
         <div class="contact-row">
+          <span class="icon-pin" aria-hidden="true"></span>
           <div>
             <div class="contact-label">Registered address</div>
             <div class="contact-value">134A Giang Vo, Ba Dinh, Ha Noi.</div>
@@ -87,7 +88,7 @@
         </div>
         <div class="form-group">
           <label for="soDienThoai">Phone <span class="required" aria-label="required">*</span></label>
-          <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="e.g. 0912345678"
+          <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="Your phone number"
                  autocomplete="tel" aria-required="true"/>
           <span class="field-error" th:if="${#fields.hasErrors('soDienThoai')}"
                 th:errors="*{soDienThoai}" role="alert"></span>
@@ -95,7 +96,7 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Email<span class="required" aria-label="required">*</span></label>
         <input type="email" id="email" th:field="*{email}" placeholder="your@email.com"
                autocomplete="email"/>
         <span class="field-error" th:if="${#fields.hasErrors('email')}"
