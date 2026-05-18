@@ -1,96 +1,415 @@
-/* Admin shared layout */
-.admin-nav { background: #1a1a2e; }
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*  admin.css — OMEAX Admin Panel                                              */
+/*  Design tokens match main.css                                               */
+/* ─────────────────────────────────────────────────────────────────────────── */
 
-.admin-nav a {
-    color: #ccc !important;
-    text-decoration: none !important;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    display: inline-block;
-    font-weight: 500;
+:root {
+  --navy:         #283A82;
+  --blue:         #729AFF;
+  --muted:        #8A97C0;
+  --light:        #f4f7ff;
+  --border:       #dce4ff;
+  --ease:         cubic-bezier(.4, 0, .2, 1);
+  --sidebar-w:    220px;
+  --mobile-bar-h: 56px;
 }
 
-.admin-nav a:hover {
-    background: rgba(255,255,255,0.15) !important;
-    color: #fff !important;
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #0f172a;
+  background: var(--light);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+  margin: 0;
 }
 
-.admin-nav a.active {
-    background: rgba(255,255,255,0.25) !important;
-    color: #b8b8d0 !important;
-    font-weight: 600;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  color: var(--navy);
 }
 
-/* Logout button */
-.logout-btn, .logout-link {
-    color: #ff6b6b !important;
-    cursor: pointer;
-    text-decoration: none !important;
-    background: none;
-    border: none;
-    padding: 8px 16px;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    font-size: inherit;
-    font-family: inherit;
+a { text-decoration: none; color: inherit; }
+
+/* ── Layout ───────────────────────────────────────────────────────────────── */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-.logout-btn:hover, .logout-link:hover {
-    background: rgba(255,107,107,0.2) !important;
-    color: #ff4444 !important;
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+  margin-left: var(--sidebar-w);
 }
 
-/* Filter bar */
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0 1.25rem;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 0 1.25rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 0.75rem;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s var(--ease);
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 0.75rem 0.75rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+}
+
+.sidebar-footer form { margin: 0; }
+
+.sidebar-logout {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  background: none;
+  border: none;
+  color: rgba(255, 100, 100, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s var(--ease);
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 107, 107, 0.15);
+  color: #ff6b6b;
+}
+
+/* ── Mobile header ────────────────────────────────────────────────────────── */
+.admin-mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--mobile-bar-h);
+  background: var(--navy);
+  padding: 0 1.25rem;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(40, 58, 130, 0.25);
+}
+
+.admin-mobile-header .brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #fff;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.admin-mobile-header .toggle-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  transition: background 0.2s;
+}
+
+.admin-mobile-header .toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Mobile offcanvas ─────────────────────────────────────────────────────── */
+.admin-offcanvas {
+  --bs-offcanvas-bg: var(--navy);
+  width: var(--sidebar-w) !important;
+}
+
+.admin-offcanvas .offcanvas-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem;
+}
+
+.admin-offcanvas .offcanvas-body {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-offcanvas .offcanvas-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.75rem;
+}
+
+.admin-offcanvas .offcanvas-nav a {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s var(--ease);
+}
+
+.admin-offcanvas .offcanvas-nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.admin-offcanvas .offcanvas-nav a.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Page title ───────────────────────────────────────────────────────────── */
+.page-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Stat cards ───────────────────────────────────────────────────────────── */
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.12);
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.no-data-message {
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding: 0.25rem 0;
+}
+
+/* ── Chart box ────────────────────────────────────────────────────────────── */
+.chart-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.12);
+}
+
+.chart-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+  margin-bottom: 1.25rem;
+}
+
+.chart-canvas { max-height: 300px; }
+
+/* ── Filter bar ───────────────────────────────────────────────────────────── */
 .filter-bar {
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border: 1px solid #eee;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.08);
+}
+
+.filter-bar label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
 }
 
 input[type="date"] {
-    border: 1px solid #ced4da;
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input[type="date"]:focus {
-    outline: none;
-    border-color: #1a1a2e;
-    box-shadow: 0 0 0 2px rgba(26,26,46,0.15);
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(40, 58, 130, 0.1);
+}
+
+/* ── Filter buttons ───────────────────────────────────────────────────────── */
+.btn-filter, .btn-reset, .btn-today {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s var(--ease);
 }
 
 .btn-filter {
-    background: #1a1a2e;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 7px 18px;
-    transition: 0.2s;
-    cursor: pointer;
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
 }
 
-.btn-filter:hover {
-    background: #2d2d44;
-    color: white;
-}
+.btn-filter:hover { background: #1e2d6b; border-color: #1e2d6b; }
 
 .btn-reset {
-    background: transparent;
-    border: 1px solid #aaa;
-    border-radius: 8px;
-    padding: 7px 18px;
-    color: #555;
-    transition: 0.2s;
-    text-decoration: none;
-    display: inline-block;
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--border);
 }
 
-.btn-reset:hover {
-    background: #eee;
-    color: #333;
+.btn-reset:hover { border-color: var(--navy); background: var(--light); }
+
+.btn-today {
+  background: var(--light);
+  color: var(--navy);
+  border-color: var(--border);
+}
+
+.btn-today:hover { background: var(--border); }
+
+/* ── Badges & pagination ──────────────────────────────────────────────────── */
+.badge-count {
+  display: inline-block;
+  background: var(--light);
+  color: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.page-info {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ── Table ────────────────────────────────────────────────────────────────── */
+.admin-table thead th {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--navy) !important;
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  padding: 0.75rem 1rem;
+}
+
+.admin-table tbody td {
+  font-size: 0.875rem;
+  padding: 0.65rem 1rem;
+  vertical-align: middle;
+  border-color: var(--border);
+}
+
+.admin-table tbody tr:hover td { background: var(--light); }
+
+/* ── Form container ───────────────────────────────────────────────────────── */
+.admin-form-container { max-width: 600px; }
+
+.img-preview { max-width: 200px; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 991px) {
+  .admin-sidebar { display: none; }
+  .admin-mobile-header { display: flex; }
+  .admin-main {
+    margin-left: 0;
+    padding: 1.5rem 1rem;
+    padding-top: calc(var(--mobile-bar-h) + 1.5rem);
+  }
 }
