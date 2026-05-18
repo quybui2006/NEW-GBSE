@@ -68,7 +68,7 @@
                     <tr>
                         <th>Product Name</th>
                         <th>Category</th>
-                        <th>Price</th>
+                        <th>Range</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -76,7 +76,7 @@
                     <tr th:each="sp : ${danhSach}">
                         <td th:text="${sp.ten}"></td>
                         <td th:text="${sp.danhMuc}"></td>
-                        <td th:text="${sp.gia}"></td>
+                        <td th:text="${sp.rangeId}"></td>
                         <td>
                             <a th:href="@{/admin/san-pham/sua/{id}(id=${sp.id})}"
                                class="btn btn-sm btn-warning">Edit</a>

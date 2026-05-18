@@ -45,8 +45,6 @@ public class SanPham {
     @Column(columnDefinition = "varchar(500)")
     private String link;
 
-    private Double gia;
-
     // Groups this product under a named range (e.g. "omeax", "gbse", "partners").
     @Column(columnDefinition = "varchar(50)")
     private String rangeId;
@@ -148,9 +146,6 @@ public class SanPham {
 
     public String getLink() { return link; }
     public void setLink(String link) { this.link = link; }
-
-    public Double getGia() { return gia; }
-    public void setGia(Double gia) { this.gia = gia; }
 
     public String getRangeId() { return rangeId; }
     public void setRangeId(String rangeId) { this.rangeId = rangeId; }

@@ -114,6 +114,11 @@ public class SanPhamService {
         validateJsonField(sanPham.getApplications(), "Applications");
         validateJsonField(sanPham.getSpecs(), "Technical Specs");
 
+        // Only Partners products may store external URLs.
+        if (!"partners".equals(sanPham.getRangeId())) {
+            sanPham.setLink(null);
+        }
+
         if (hinhAnhFile != null && !hinhAnhFile.isEmpty()) {
             try {
                 sanPham.setHinhAnh(fileUploadService.luuFile(hinhAnhFile));

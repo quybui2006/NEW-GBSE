@@ -27,7 +27,8 @@
         <div class="tags">
           <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
         </div>
-        <a th:if="${product.link}" th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:1.5rem">Truy cập website hãng →</a>
+        <a th:if="${'partners'.equals(product.rangeId) and product.link != null and !product.link.isBlank()}"
+           th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:1.5rem">Visit Website →</a>
       </div>
     </div>
   </div>
