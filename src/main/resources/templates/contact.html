@@ -50,12 +50,10 @@
               </div>
             </div>
             <div class="contact-row">
-              <span aria-hidden="true">✉</span>
-              <span>info@omeax.com</span>
+              <span>Email: info@omeax.com</span>
             </div>
-            <div class="contact-row">
-              <span aria-hidden="true">☎</span>
-              <span>+84 (0) 24 0000 0000</span>
+            <div class="contact-row">            
+              <span>Phone: +84 (0) 24 0000 0000</span>
             </div>
           </div>
         </div>
@@ -97,16 +95,6 @@
             <label for="email">Email<span class="required" aria-label="required">*</span></label>
             <input type="email" id="email" th:field="*{email}" placeholder="your@email.com" autocomplete="email" />
             <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" role="alert"></span>
-          </div>
-
-          <div class="form-group">
-            <label>Products of interest</label>
-            <div class="product-checkbox-list" role="group" aria-label="Products of interest">
-              <label class="checkbox-item" th:each="p : ${productDropdown}">
-                <input type="checkbox" name="selectedProducts" th:value="${p.ten}" />
-                <span th:text="${p.ten}">Product name</span>
-              </label>
-            </div>
           </div>
 
           <div class="form-group">

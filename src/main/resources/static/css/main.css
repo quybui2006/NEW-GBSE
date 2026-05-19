@@ -65,15 +65,24 @@ a{color:inherit;text-decoration:none}
 }
 .nav a:hover::after,.nav a.active::after{width:100%}
 
-.mobile-nav{display:none;flex-direction:column;padding:1rem 5%;background:#fff;border-top:1px solid #eef0fa}
-.mobile-nav a{padding:.75rem 0;font-size:.95rem;font-weight:500;color:var(--navy);border-bottom:1px solid #f0f2fb}
-.mobile-nav a:last-child{border-bottom:none}
-.mobile-nav a.active{color:var(--blue)}
+/* Hamburger button */
+.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:10px;width:44px;height:44px;flex-shrink:0}
+.hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:transform .3s var(--ease),opacity .25s var(--ease);transform-origin:center}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile slide-down menu */
+.mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
+.mobile-menu.open{max-height:400px}
+.mobile-menu a{padding:1rem 1.25rem;font-size:.95rem;font-weight:500;color:var(--navy);border-bottom:1px solid #f0f2fb;transition:background .15s,color .15s;display:block}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{background:var(--light);color:var(--blue)}
 
 @media(max-width:768px){
   .nav{display:none}
-  .mobile-nav{display:flex !important;flex-direction:row;overflow-x:auto;padding:.5rem 1rem;border-top:1px solid #eef0fa}
-  .mobile-nav a{padding:.4rem .85rem;font-size:.78rem;border-bottom:none;white-space:nowrap}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
 }
 
 /* ── PAGE HEADER ──────────────────────────────────────────────────────────── */
@@ -192,24 +201,26 @@ a{color:inherit;text-decoration:none}
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /*  FOOTER — bỏ hết icon                                                      */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.footer{background:#fff;color:#0f172a;border-top:1.5px solid var(--border);padding-top:3.5rem}
-.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;padding-bottom:3rem}
-@media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.footer-grid{grid-template-columns:1fr}}
+.footer{background:var(--navy);color:#fff;padding-top:3rem}
+.footer-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.1)}
+@media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr);gap:2rem}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr;gap:1.5rem}}
 
-.footer .logo{color:var(--navy);margin-bottom:1rem;width:fit-content}
-.footer .logo .slogan{color:var(--muted)}
+.footer .logo{color:#fff;margin-bottom:.75rem;width:fit-content}
+.footer .logo .slogan{color:rgba(255,255,255,.55)}
+.footer-brand p{color:rgba(255,255,255,.6);font-size:.875rem;margin:.5rem 0 0;line-height:1.65}
 
 .footer-grid h4{
-  font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;
-  color:var(--navy);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.85rem;
+  font-family:'Nunito',sans-serif;font-size:.68rem;font-weight:700;
+  color:rgba(255,255,255,.45);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.85rem;
 }
-.footer-grid p{font-size:.875rem;color:var(--muted);margin:.3rem 0;line-height:1.6}
+.footer-grid p{font-size:.875rem;color:rgba(255,255,255,.7);margin:.35rem 0;line-height:1.6}
 
 .footer-bottom{
-  border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);
   padding:1.25rem 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;
+  font-size:.75rem;color:rgba(255,255,255,.4);
 }
+@media(max-width:560px){.footer-bottom{flex-direction:column;gap:.35rem}}
 
 /* ── Sections ─────────────────────────────────────────────────────────────── */
 section{padding:4rem 0}
@@ -313,16 +324,18 @@ form label { margin-top: 0 }
 .btn-full{width:100%;margin-top:1rem;justify-content:center}
 .required{color:#dc2626;margin-left:.1rem}
 
-/* Product checkbox list — replaces the multi-select */
-.product-checkbox-list{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem;
-  max-height:240px;overflow-y:auto;
-  border:1px solid #e2e8f0;border-radius:.5rem;padding:.75rem;
-  background:#fafbff;
+/* ── Mobile layout improvements ─────────────────────────────────────────── */
+@media(max-width:768px){
+  section{padding:2.5rem 0}
+  .page-header{padding:3rem 0}
+  .contact-section{padding:2rem 0 3rem}
+  .detail-hero .img-box{min-height:260px}
 }
-.checkbox-item{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.9rem}
-.checkbox-item input[type=checkbox]{accent-color:var(--navy);width:16px;height:16px;flex-shrink:0}
-@media(max-width:560px){.product-checkbox-list{grid-template-columns:1fr}}
+@media(max-width:560px){
+  .page-header h1{font-size:1.75rem}
+  .prod-card .pbody{padding:.6rem}
+  .prod-card h4{font-size:.78rem}
+}
 
 /* ── Error pages (giữ nguyên) ────────────────────────────────────────────── */
 .error-section{min-height:60vh;display:flex;align-items:center;padding:5rem 0}

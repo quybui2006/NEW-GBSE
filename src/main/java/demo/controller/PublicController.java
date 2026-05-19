@@ -68,15 +68,12 @@ public class PublicController {
     @GetMapping("/contact")
     public String contact(Model model) {
         model.addAttribute("contactForm", new YeuCauFormDto());
-        // Lightweight projection — only id + name fetched for the checkbox list
-        model.addAttribute("productDropdown", sanPhamService.layDanhSachDropdown());
         return "contact";
     }
 
     @PostMapping("/contact")
     public String submitContact(@Valid @ModelAttribute("contactForm") YeuCauFormDto form,
                                 BindingResult bindingResult,
-                                @RequestParam(name = "selectedProducts", required = false) List<String> selectedProducts,
                                 @RequestParam(name = "website", required = false) String honeypot,
                                 HttpServletRequest request,
                                 Model model) {
@@ -85,18 +82,15 @@ public class PublicController {
         if (honeypot != null && !honeypot.isBlank()) {
             model.addAttribute("thanhCong", true);
             model.addAttribute("contactForm", new YeuCauFormDto());
-            model.addAttribute("productDropdown", sanPhamService.layDanhSachDropdown());
             return "contact";
         }
 
         if (!contactRateLimiter.isAllowed(request.getRemoteAddr())) {
             model.addAttribute("rateLimitError", true);
-            model.addAttribute("productDropdown", sanPhamService.layDanhSachDropdown());
             return "contact";
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productDropdown", sanPhamService.layDanhSachDropdown());
             return "contact";
         }
 
@@ -107,15 +101,10 @@ public class PublicController {
         yeuCau.setEmail(form.getEmail());
         yeuCau.setNoiDung(form.getNoiDung());
 
-        if (selectedProducts != null && !selectedProducts.isEmpty()) {
-            yeuCau.setSanPhamQuanTam(String.join(", ", selectedProducts));
-        }
-
         yeuCauService.luuYeuCau(yeuCau);
 
         model.addAttribute("thanhCong", true);
         model.addAttribute("contactForm", new YeuCauFormDto());
-        model.addAttribute("productDropdown", sanPhamService.layDanhSachDropdown());
         return "contact";
     }
 

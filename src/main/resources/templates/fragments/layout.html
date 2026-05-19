@@ -25,14 +25,45 @@
       <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
       <a th:class="${currentUri == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
     </nav>
+    <button class="hamburger" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <nav class="mobile-nav">
+  <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
     <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
     <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
     <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
     <a th:class="${currentUri == '/contact' ? 'active' : ''}" href="/contact">Contact</a>
   </nav>
+  <script>
+    (function(){
+      var btn = document.getElementById('menuToggle');
+      var menu = document.getElementById('mobileMenu');
+      btn.addEventListener('click', function(){
+        var open = btn.classList.toggle('open');
+        menu.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        menu.setAttribute('aria-hidden', String(!open));
+      });
+      menu.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){
+          btn.classList.remove('open');
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+        });
+      });
+      document.addEventListener('click', function(e){
+        if(!btn.contains(e.target) && !menu.contains(e.target)){
+          btn.classList.remove('open');
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-hidden', 'true');
+        }
+      });
+    })();
+  </script>
 </header>
 
 
@@ -49,28 +80,30 @@
 
 <!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
 <footer th:fragment="footer" class="footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="logo" style="color:#152352">OMEAX<span class="slogan" style="color:#64748b">SIMPLIFIES LIFE</span></div>
-      <p style="color:#64748b;font-size:.875rem;margin-top:1rem">Your partner for mechanical and electrical equipment.</p>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></div>
+        <p>Your partner for mechanical and electrical equipment.</p>
+      </div>
+      <div>
+        <h4>Hanoi Office</h4>
+        <p>Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</p>
+      </div>
+      <div>
+        <h4>HCMC Branch</h4>
+        <p>11B Hong Ha, Tan Binh, HCMC.</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>info@omeax.com</p>
+        <p>+84 (0) 24 0000 0000</p>
+      </div>
     </div>
-    <div>
-      <h4>HANOI Office</h4>
-      <p><span class="icon-pin"></span> Villa 7 HDI Homes, 201 Nguyen Tuan, Thanh Xuan, Hanoi.</p>
+    <div class="footer-bottom">
+      <span>© 2026 OMEAX Joint Stock Company. All rights reserved.</span>
+      <span>Registration number: 0110535209 — Established Nov 8th, 2023</span>
     </div>
-    <div>
-      <h4>HCMC Branch</h4>
-      <p><span class="icon-pin"></span> 11B Hong Ha, Tan Binh, HCMC.</p>
-    </div>
-    <div>
-      <h4>Contact</h4>
-      <p><span class="icon-mail"></span> info@omeax.com</p>
-      <p><span class="icon-phone"></span> +84 (0) 24 0000 0000</p>
-    </div>
-  </div>
-  <div class="container footer-bottom">
-    <span>© 2026 OMEAX Joint Stock Company. All rights reserved.</span>
-    <span>Registration number: 0110535209 — Established Nov 8th, 2023</span>
   </div>
 </footer>
 
