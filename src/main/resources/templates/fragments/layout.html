@@ -17,10 +17,7 @@
 <!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
 <header th:fragment="navbar" class="header">
   <div class="container header-inner">
-    <a href="/" class="logo">
-      <img class="site-logo" th:src="@{/images/logo.png}" alt="">
-      <span class="logo-wordmark">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></span>
-    </a>
+    <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
       <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
@@ -86,10 +83,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="logo">
-          <img class="site-logo" th:src="@{/images/logo.png}" alt="">
-          <span class="logo-wordmark">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></span>
-        </a>
+        <div class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></div>
         <p>Your partner for mechanical and electrical equipment.</p>
       </div>
       <div>
