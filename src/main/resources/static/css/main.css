@@ -174,8 +174,9 @@ a{color:inherit;text-decoration:none}
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
 /* Nav row: always rendered so height never jumps; hidden via visibility not display */
 .proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem;min-height:44px;align-items:center}
-.proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s}
+.proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s,opacity .2s}
 .proj-arrow:hover{background:var(--navy);color:#fff}
+.proj-arrow:disabled{opacity:.3;cursor:default;pointer-events:none;box-shadow:none}
 /* Desktop (≥769 px): hide nav when ≤3 cards fit without scrolling */
 @media(min-width:769px){
   .proj-slider[data-count="1"] .proj-nav,
