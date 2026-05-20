@@ -98,7 +98,6 @@ public class EmailService {
              + row("Full name", "<strong>" + yc.getHoTen() + "</strong>")
              + row("Phone",     "<strong>" + yc.getSoDienThoai() + "</strong>")
              + row("Email",     email)
-             + row("Products",  product)
              + row("Message",   message)
              + row("Time",      time)
              + "</table>"
