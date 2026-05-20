@@ -7,10 +7,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-
 @Configuration
 public class SecurityConfig {
 
@@ -43,7 +43,7 @@ public class SecurityConfig {
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
                                  "/actuator/health",
                                  "/error").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").access(new WebExpressionAuthorizationManager("hasIPAddress('42.113.243.150') and hasRole('ADMIN')"))
                 .anyRequest().denyAll()
             )
 
