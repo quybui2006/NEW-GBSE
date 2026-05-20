@@ -3,6 +3,7 @@ package demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import demo.dto.YeuCauFormDto;
 import demo.model.SanPham;
@@ -110,4 +112,8 @@ public class PublicController {
 
     @GetMapping("/login")
     public String login() { return "login"; }
+
+    @GetMapping("/access-denied")
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String accessDenied() { return "error/403"; }
 }

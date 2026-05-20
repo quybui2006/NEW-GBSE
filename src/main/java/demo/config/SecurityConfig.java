@@ -1,5 +1,6 @@
 package demo.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.LockedException;
@@ -7,15 +8,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+
 @Configuration
 public class SecurityConfig {
 
+    // Prevent Spring Boot from auto-registering the filter in the servlet chain.
+    // It is registered exclusively inside the Spring Security chain via addFilterBefore().
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public FilterRegistrationBean<AdminIpWhitelistFilter> ipWhitelistFilterRegistration(
+            AdminIpWhitelistFilter filter) {
+        FilterRegistrationBean<AdminIpWhitelistFilter> reg = new FilterRegistrationBean<>(filter);
+        reg.setEnabled(false);
+        return reg;
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           AdminIpWhitelistFilter ipWhitelistFilter) throws Exception {
         http
+            .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
             // ── CSRF ────────────────────────────────────────────────────────
             // HttpOnly=true (default) prevents JavaScript from reading the cookie.
             // All form submissions use the Thymeleaf-rendered token, so JS access
@@ -41,7 +56,7 @@ public class SecurityConfig {
                                  "/contact", "/about", "/projects", "/news",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
                                  "/actuator/health",
-                                 "/error", "/debug/**").permitAll()
+                                 "/error", "/access-denied", "/debug/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             )
