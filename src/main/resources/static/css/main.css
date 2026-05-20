@@ -163,29 +163,29 @@ a{color:inherit;text-decoration:none}
 /* ── Projects ─────────────────────────────────────────────────────────────── */
 .proj-section{margin-bottom:4rem}
 .proj-section h2{font-size:1.75rem;font-weight:800;margin-bottom:1.5rem}
-.proj-slider{display:flex;align-items:center;gap:.5rem}
-.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.5rem;scroll-behavior:smooth}
-.proj-row::-webkit-scrollbar{height:8px}
-.proj-row::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
-.proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:280px}
+/* Slider is a plain block — arrows live below the row, not beside it.
+   This ensures .proj-row always fills 100% width regardless of arrow visibility. */
+.proj-slider{position:relative}
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.proj-row::-webkit-scrollbar{display:none}
+/* Desktop: 3 cards. gap cost = 2×1.5rem = 3rem */
+.proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:0}
+/* ≤900 px: 2 cards. gap cost = 1×1.5rem = 1.5rem */
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
-@media(max-width:560px){.proj-row .card{flex:0 0 100%}}
-.proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem}
-.proj-nav button{width:36px;height:36px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.1rem}
-.proj-nav button:hover{background:var(--navy);color:#fff}
-.proj-arrow{flex-shrink:0;width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s}
+/* Nav row: always rendered so height never jumps; hidden via visibility not display */
+.proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem;min-height:44px;align-items:center}
+.proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s}
 .proj-arrow:hover{background:var(--navy);color:#fff}
-.proj-slider .proj-row{flex:1;min-width:0}
-/* Desktop (≥769 px): arrows only when count > 3 */
+/* Desktop (≥769 px): hide nav when ≤3 cards fit without scrolling */
 @media(min-width:769px){
-  .proj-slider[data-count="1"] .proj-arrow,
-  .proj-slider[data-count="2"] .proj-arrow,
-  .proj-slider[data-count="3"] .proj-arrow{display:none}
+  .proj-slider[data-count="1"] .proj-nav,
+  .proj-slider[data-count="2"] .proj-nav,
+  .proj-slider[data-count="3"] .proj-nav{visibility:hidden}
 }
-/* Mobile (≤768 px): arrows only when count > 2; smaller touch target */
+/* Mobile (≤768 px): hide nav when ≤2 cards; smaller touch targets */
 @media(max-width:768px){
-  .proj-slider[data-count="1"] .proj-arrow,
-  .proj-slider[data-count="2"] .proj-arrow{display:none}
+  .proj-slider[data-count="1"] .proj-nav,
+  .proj-slider[data-count="2"] .proj-nav{visibility:hidden}
   .proj-arrow{width:36px;height:36px;font-size:1.1rem}
 }
 
