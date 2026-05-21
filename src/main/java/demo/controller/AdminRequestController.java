@@ -35,12 +35,17 @@ public class AdminRequestController {
     public String update(
             @PathVariable Long id,
             @ModelAttribute @Valid AdminYeuCauUpdateDto dto,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin/yeu-cau";
+            BindingResult bindingResult,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String from,
+            @RequestParam(required = false) String to) {
+        if (!bindingResult.hasErrors()) {
+            yeuCauService.updateContactStatus(id, dto);
         }
-        yeuCauService.updateContactStatus(id, dto);
-        return "redirect:/admin/yeu-cau";
+        StringBuilder url = new StringBuilder("redirect:/admin/yeu-cau?page=").append(page);
+        if (from != null && !from.isBlank()) url.append("&from=").append(from);
+        if (to   != null && !to.isBlank())   url.append("&to=").append(to);
+        return url.toString();
     }
 
     @GetMapping("/yeu-cau")
@@ -72,7 +77,7 @@ public class AdminRequestController {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             var sheet  = workbook.createSheet("Yeu Cau");
             var header = sheet.createRow(0);
-            String[] cols = {"STT", "Họ tên", "SĐT", "Email", "Nội dung", "Thời gian"};
+            String[] cols = {"STT", "Họ tên", "SĐT", "Email", "Nội dung", "Thời gian", "Trạng thái", "Ghi chú admin"};
             for (int i = 0; i < cols.length; i++) {
                 header.createCell(i).setCellValue(cols[i]);
             }
@@ -85,6 +90,8 @@ public class AdminRequestController {
                 row.createCell(3).setCellValue(yc.getEmail());
                 row.createCell(4).setCellValue(yc.getNoiDung());
                 row.createCell(5).setCellValue(yc.getThoiGian() != null ? yc.getThoiGian().toString() : "");
+                row.createCell(6).setCellValue(yc.isContacted() ? "Contacted" : "Not Contacted");
+                row.createCell(7).setCellValue(yc.getAdminNote() != null ? yc.getAdminNote() : "");
             }
             workbook.write(response.getOutputStream());
         }
