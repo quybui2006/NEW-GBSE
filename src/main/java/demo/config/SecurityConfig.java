@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -27,10 +26,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,
-                                           AdminIpWhitelistFilter ipWhitelistFilter) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // IP whitelist filter temporarily disabled — re-enable by:
+        // 1. adding AdminIpWhitelistFilter ipWhitelistFilter back as a parameter
+        // 2. uncommenting: .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
+        // 3. updating admin.allowed-ip in Railway env vars with the correct static IP
         http
-            .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
+            // .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
             // ── CSRF ────────────────────────────────────────────────────────
             // HttpOnly=true (default) prevents JavaScript from reading the cookie.
             // All form submissions use the Thymeleaf-rendered token, so JS access
