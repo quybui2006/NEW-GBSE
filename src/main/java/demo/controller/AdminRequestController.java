@@ -55,7 +55,7 @@ public class AdminRequestController {
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
             var sheet  = workbook.createSheet("Yeu Cau");
             var header = sheet.createRow(0);
-            String[] cols = {"STT", "Họ tên", "SĐT", "Email", "Sản phẩm quan tâm", "Nội dung", "Thời gian"};
+            String[] cols = {"STT", "Họ tên", "SĐT", "Email", "Nội dung", "Thời gian"};
             for (int i = 0; i < cols.length; i++) {
                 header.createCell(i).setCellValue(cols[i]);
             }
@@ -66,9 +66,8 @@ public class AdminRequestController {
                 row.createCell(1).setCellValue(yc.getHoTen());
                 row.createCell(2).setCellValue(yc.getSoDienThoai());
                 row.createCell(3).setCellValue(yc.getEmail());
-                row.createCell(4).setCellValue(yc.getSanPhamQuanTam());
-                row.createCell(5).setCellValue(yc.getNoiDung());
-                row.createCell(6).setCellValue(yc.getThoiGian() != null ? yc.getThoiGian().toString() : "");
+                row.createCell(4).setCellValue(yc.getNoiDung());
+                row.createCell(5).setCellValue(yc.getThoiGian() != null ? yc.getThoiGian().toString() : "");
             }
             workbook.write(response.getOutputStream());
         }

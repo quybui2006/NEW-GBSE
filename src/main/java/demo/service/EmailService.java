@@ -82,7 +82,6 @@ public class EmailService {
     }
 
     private String buildHtml(YeuCau yc, String time) {
-        String product = yc.getSanPhamQuanTam() != null ? yc.getSanPhamQuanTam() : "—";
         String message = yc.getNoiDung() != null
                 ? yc.getNoiDung().replace("&", "&amp;").replace("<", "&lt;").replace("\n", "<br>")
                 : "—";

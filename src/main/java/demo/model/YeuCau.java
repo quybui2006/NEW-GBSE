@@ -43,6 +43,11 @@ public class YeuCau {
     private String noiDung;
 
     private LocalDateTime thoiGian;
+    
+    @Column(nullable = false)
+    private boolean contacted;
+
+    private String admin_note;
 
     @PrePersist
     public void prePersist() {
@@ -61,12 +66,15 @@ public class YeuCau {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getSanPhamQuanTam() { return sanPhamQuanTam; }
-    public void setSanPhamQuanTam(String sanPhamQuanTam) { this.sanPhamQuanTam = sanPhamQuanTam; }
-
     public String getNoiDung() { return noiDung; }
     public void setNoiDung(String noiDung) { this.noiDung = noiDung; }
 
     public LocalDateTime getThoiGian() { return thoiGian; }
     public void setThoiGian(LocalDateTime thoiGian) { this.thoiGian = thoiGian; }
+
+    public boolean isContacted() { return contacted; }
+    public void setContacted(boolean contacted) { this.contacted = contacted; }
+
+    public String getAdmin_note() { return admin_note; }
+    public void setAdmin_note(String admin_note) { this.admin_note = admin_note; }
 }
