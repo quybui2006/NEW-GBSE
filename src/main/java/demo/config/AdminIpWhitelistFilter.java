@@ -22,10 +22,10 @@ public class AdminIpWhitelistFilter extends OncePerRequestFilter {
 
     private final List<String> allowedIps;
 
-    public AdminIpWhitelistFilter(@Value("${admin.allowed-ip}") String allowedIpConfig) {
-        this.allowedIps = Arrays.stream(allowedIpConfig.split(","))
-                .map(String::trim)
-                .toList();
+    public AdminIpWhitelistFilter(@Value("${admin.allowed-ip:}") String allowedIpConfig) {
+        this.allowedIps = allowedIpConfig.isBlank()
+                ? List.of()
+                : Arrays.stream(allowedIpConfig.split(",")).map(String::trim).toList();
     }
 
     @Override
