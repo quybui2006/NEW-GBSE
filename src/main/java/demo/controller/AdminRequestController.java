@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import demo.dto.AdminYeuCauUpdateDto;
 import demo.model.YeuCau;
 import demo.service.YeuCauService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -25,6 +30,17 @@ public class AdminRequestController {
     @Autowired
     public AdminRequestController(YeuCauService yeuCauService) {
         this.yeuCauService = yeuCauService;
+    }
+    @PostMapping("/yeu-cau/{id}/cap-nhat")
+    public String update(
+            @PathVariable Long id,
+            @ModelAttribute @Valid AdminYeuCauUpdateDto dto,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin/yeu-cau";
+        }
+        yeuCauService.updateContactStatus(id, dto);
+        return "redirect:/admin/yeu-cau";
     }
 
     @GetMapping("/yeu-cau")
@@ -41,7 +57,8 @@ public class AdminRequestController {
         model.addAttribute("to",   to);
         return "admin/yeu-cau";
     }
-
+    
+    
     @PostMapping("/bao-cao/excel")
     public void exportExcel(@RequestParam(defaultValue = "all") String period,
                             @RequestParam(required = false) String from,

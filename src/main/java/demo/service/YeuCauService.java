@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import demo.dto.AdminYeuCauUpdateDto;
 import demo.model.YeuCau;
 import demo.repository.YeuCauRepository;
 
@@ -35,6 +36,17 @@ public class YeuCauService {
         YeuCau saved = yeuCauRepository.save(yeuCau);
         emailService.guiThongBao(saved);
         return saved;
+    }
+
+    @Transactional
+    public void updateContactStatus(Long id, AdminYeuCauUpdateDto dto) {
+
+        YeuCau yeuCau = yeuCauRepository.findById(id)
+            .orElseThrow(() ->
+                    new IllegalArgumentException("YeuCau not found: " + id));
+
+    yeuCau.setContacted(dto.isContacted());
+    yeuCau.setAdminNote(dto.getAdminNote());
     }
 
     @Transactional(readOnly = true)

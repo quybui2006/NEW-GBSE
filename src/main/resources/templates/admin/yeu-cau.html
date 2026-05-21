@@ -110,6 +110,8 @@
                             <th>Email</th>
                             <th>Message</th>
                             <th>Date</th>
+                            <th>Status</th>
+                            <th>Admin Note</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -120,6 +122,34 @@
                             <td th:text="${yc.email}"></td>
                             <td th:text="${yc.noiDung}"></td>
                             <td th:text="${yc.thoiGian}"></td>
+                            <td>
+                                <span th:if="${yc.contacted}"
+                                      class="badge bg-success">Contacted</span>
+                                <span th:unless="${yc.contacted}"
+                                      class="badge bg-secondary">Not Contacted</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/yeu-cau/{id}/cap-nhat(id=${yc.id})}" method="post">
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="contacted" value="true"
+                                                   th:checked="${yc.contacted}"
+                                                   th:id="${'contacted-' + yc.id}"/>
+                                            <label class="form-check-label" th:for="${'contacted-' + yc.id}">
+                                                Contacted
+                                            </label>
+                                        </div>
+                                        <textarea class="form-control form-control-sm"
+                                                  name="adminNote"
+                                                  rows="2"
+                                                  maxlength="1000"
+                                                  th:text="${yc.adminNote}"></textarea>
+                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

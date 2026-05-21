@@ -44,7 +44,7 @@ public class YeuCau {
     @Column(nullable = false)
     private boolean contacted;
 
-    private String admin_note;
+    private String adminNote;
 
     @PrePersist
     public void prePersist() {
@@ -72,6 +72,6 @@ public class YeuCau {
     public boolean isContacted() { return contacted; }
     public void setContacted(boolean contacted) { this.contacted = contacted; }
 
-    public String getAdmin_note() { return admin_note; }
-    public void setAdmin_note(String admin_note) { this.admin_note = admin_note; }
+    public String getAdminNote() { return adminNote; }
+    public void setAdminNote(String adminNote) { this.adminNote = adminNote; }
 }
