@@ -35,15 +35,12 @@ public class YeuCau {
     @Column(columnDefinition = "varchar(255)")
     private String email;
 
-    @Column(columnDefinition = "text")
-    private String sanPhamQuanTam;
-
     @Size(max = 1000, message = "Message must not exceed 1000 characters")
     @Column(columnDefinition = "varchar(1000)")
     private String noiDung;
 
     private LocalDateTime thoiGian;
-    
+
     @Column(nullable = false)
     private boolean contacted;
 
