@@ -305,11 +305,12 @@ section{padding:4rem 0}
 .market h1{color:#fff;font-weight:800;font-size:clamp(1.75rem,4vw,2.5rem)}
 .market .chip{display:inline-block;padding:.35rem .85rem;border-radius:9999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.85rem;font-weight:500;margin:.25rem .25rem 0 0}
 
-/* ── Forms (giữ nguyên) ──────────────────────────────────────────────────── */
+/* ── Forms ───────────────────────────────────────────────────────────────── */
 form{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;padding:1.5rem;box-shadow:0 4px 20px -8px rgba(40,58,130,.15)}
-form label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.35rem;margin-top:.75rem}
-form input,form textarea{width:100%;padding:.6rem .8rem;border:1px solid #e2e8f0;border-radius:.5rem;font-size:.9rem;font-family:inherit;outline:none}
+form label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.35rem}
+form input,form textarea{width:100%;padding:.6rem .8rem;border:1px solid #e2e8f0;border-radius:.5rem;font-size:.9rem;font-family:inherit;line-height:1.55;color:#0f172a;background:#fff;outline:none}
 form input:focus,form textarea:focus{border-color:var(--navy)}
+form textarea{resize:none;min-height:9rem;overflow-y:auto}
 
 /* ── About info cards (giữ nguyên) ───────────────────────────────────────── */
 .info-card{background:#fff;border-radius:.75rem;padding:1.25rem;box-shadow:0 4px 20px -8px rgba(40,58,130,.15);display:flex;gap:1rem}
@@ -328,8 +329,6 @@ form input:focus,form textarea:focus{border-color:var(--navy)}
 .contact-value{color:#64748b}
 .crumb-current{color:#152352;font-weight:600}
 .form-group{margin-top:.75rem}
-.form-group:first-child{margin-top:0}
-form label{margin-top:0}
 .alert{border-radius:.5rem;padding:.75rem 1rem;margin-bottom:1rem;font-size:.9rem}
 .alert-success{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
 .alert-error{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
