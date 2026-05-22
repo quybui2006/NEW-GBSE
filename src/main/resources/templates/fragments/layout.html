@@ -5,7 +5,7 @@
 <th:block th:fragment="head(pageTitle)">
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title th:text="${pageTitle}">OMEAX</title>
+<title th:text="${pageTitle}">ŌMEAX</title>
 <meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 <!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
 <header th:fragment="navbar" class="header">
   <div class="container header-inner">
-    <a href="/" class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
+    <a href="/" class="logo">ŌMEAX<span class="slogan">SIMPLIFIES LIFE</span></a>
     <nav class="nav">
       <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
@@ -83,7 +83,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="logo">OMEAX<span class="slogan">SIMPLIFIES LIFE</span></div>
+        <div class="logo">ŌMEAX<span class="slogan">SIMPLIFIES LIFE</span></div>
         <p>Your partner for mechanical and electrical equipment.</p>
       </div>
       <div>
