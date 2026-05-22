@@ -44,14 +44,14 @@
             <div class="contact-row">
               <span>Email: info@omeax.com</span>
             </div>
-            <div class="contact-row">            
+            <div class="contact-row">
               <span>Phone: +84 (0) 24 0000 0000</span>
             </div>
           </div>
         </div>
 
         <!-- Contact form -->
-        <form th:action="@{/contact}" method="post" th:object="${contactForm}" novalidate>
+        <form id="contactForm" th:action="@{/contact}" method="post" th:object="${contactForm}" novalidate>
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
           <!-- Honeypot — bots fill this, humans don't -->
@@ -68,29 +68,31 @@
           </div>
 
           <div class="form-group" style="margin-top:.75rem">
-            <label for="hoTen">Full Name <span class="required" aria-label="required">*</span></label>
-            <input type="text" id="hoTen" th:field="*{hoTen}" placeholder="Your full name" autocomplete="name" aria-required="true" />
+            <label for="hoTen">Full Name</label>
+            <input type="text" id="hoTen" th:field="*{hoTen}" autocomplete="name" />
           </div>
 
           <div class="form-group">
-            <label for="soDienThoai">Phone <span class="required" aria-label="required">*</span></label>
-            <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="Your phone number" autocomplete="tel" aria-required="true" />
+            <label for="soDienThoai">Phone</label>
+            <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" autocomplete="tel" />
           </div>
 
           <div class="form-group">
-            <label for="email">Email<span class="required" aria-label="required">*</span></label>
-            <input type="email" id="email" th:field="*{email}" placeholder="your@email.com" autocomplete="email" />
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" autocomplete="email" />
           </div>
 
           <div class="form-group">
             <label for="noiDung">Message</label>
-            <textarea id="noiDung" th:field="*{noiDung}" rows="5"
-              placeholder="Tell us about your project or requirement..."></textarea>
+            <textarea id="noiDung" th:field="*{noiDung}" rows="5"></textarea>
           </div>
 
-          <div style="display:flex;align-items:flex-start;gap:.6rem;margin-top:.5rem;margin-bottom:1rem">
-            <input type="checkbox" id="consent" name="consent" required style="width:auto;margin-top:.2rem;flex-shrink:0;cursor:pointer" />
-            <label for="consent" style="margin:0;font-weight:400;font-size:.9rem;cursor:pointer;color:#334155">I agree to the processing and use of my personal data</label>
+          <div class="consent-block">
+            <div class="consent-row">
+              <input type="checkbox" id="consent" name="consent" />
+              <label for="consent">I agree to the processing and use of my personal data</label>
+            </div>
+            <span id="consentError" class="consent-error" role="alert"></span>
           </div>
 
           <button type="submit" class="btn btn-primary btn-full">Send message →</button>
@@ -102,6 +104,25 @@
   </main>
   <div th:replace="~{fragments/layout :: ticker-home}"></div>
   <div th:replace="~{fragments/layout :: footer}"></div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      var consent = document.getElementById('consent');
+      var errorSpan = document.getElementById('consentError');
+
+      form.addEventListener('submit', function (e) {
+        if (!consent.checked) {
+          e.preventDefault();
+          errorSpan.textContent = 'Please confirm your agreement before submitting.';
+        }
+      });
+
+      consent.addEventListener('change', function () {
+        if (this.checked) errorSpan.textContent = '';
+      });
+    })();
+  </script>
 </body>
 
 </html>

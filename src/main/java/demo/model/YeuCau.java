@@ -9,10 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
 @Entity
 @Table(name = "yeu_cau")
 public class YeuCau {
@@ -21,21 +18,15 @@ public class YeuCau {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Full name is required")
-    @Size(min = 2, max = 100, message = "Name must be 2–100 characters")
     @Column(columnDefinition = "varchar(255)")
     private String hoTen;
 
-    @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^[0-9]{9,11}$", message = "Invalid phone number (9–11 digits)")
     @Column(columnDefinition = "varchar(20)")
     private String soDienThoai;
 
-    @Email(message = "Invalid email address")
     @Column(columnDefinition = "varchar(255)")
     private String email;
 
-    @Size(max = 1000, message = "Message must not exceed 1000 characters")
     @Column(columnDefinition = "varchar(1000)")
     private String noiDung;
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,6 @@ import demo.service.ContactRateLimiter;
 import demo.service.SanPhamService;
 import demo.service.YeuCauService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 
 @Controller
 public class PublicController {
@@ -74,13 +72,10 @@ public class PublicController {
     }
 
     @PostMapping("/contact")
-    public String submitContact(@Valid @ModelAttribute("contactForm") YeuCauFormDto form,
-                                BindingResult bindingResult,
+    public String submitContact(@ModelAttribute("contactForm") YeuCauFormDto form,
                                 @RequestParam(name = "website", required = false) String honeypot,
                                 HttpServletRequest request,
                                 Model model) {
-        // Honeypot: the hidden field is empty for humans, filled by bots.
-        // Silently discard — never tell bots why they failed.
         if (honeypot != null && !honeypot.isBlank()) {
             model.addAttribute("thanhCong", true);
             model.addAttribute("contactForm", new YeuCauFormDto());
@@ -89,14 +84,10 @@ public class PublicController {
 
         if (!contactRateLimiter.isAllowed(request.getRemoteAddr())) {
             model.addAttribute("rateLimitError", true);
+            model.addAttribute("contactForm", form);
             return "contact";
         }
 
-        if (bindingResult.hasErrors()) {
-            return "contact";
-        }
-
-        // Map DTO → entity (only the four allowed fields are copied)
         YeuCau yeuCau = new YeuCau();
         yeuCau.setHoTen(form.getHoTen());
         yeuCau.setSoDienThoai(form.getSoDienThoai());
