@@ -24,6 +24,7 @@
 
 <section style="padding:2.5rem 0;background:#fff">
   <div class="container">
+    <p style="font-size:1.1rem;font-weight:600;color:#152352;margin-bottom:0.75rem;">What are you looking for?</p>
     <div class="search-wrap">
       <span class="search-icon"></span>
       <input id="search" type="text" autocomplete="off" placeholder="Search products..."/>
@@ -37,7 +38,7 @@
     <div class="range-list">
       <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
-          <span><h3 th:text="${r.brand}">Brand</h3><span class="tagline" th:text="${r.tagline}"></span></span>
+          <span><h3 th:text="${r.brand}">Brand</h3></span>
           <span class="chevron"></span>
         </button>
         <div class="range-body">
