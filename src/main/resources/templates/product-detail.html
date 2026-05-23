@@ -18,7 +18,7 @@
 <section style="padding:3rem 0">
   <div class="container">
     <div class="detail-hero">
-      <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}"/></div>
+      <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
       <div>
         <p class="eyebrow" th:text="${product.brand}">Brand</p>
         <h1 th:text="${product.name}">Name</h1>
