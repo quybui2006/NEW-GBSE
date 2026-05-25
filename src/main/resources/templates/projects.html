@@ -19,6 +19,7 @@
 </section>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
   const map = L.map('map', {
     attributionControl: false,
     minZoom: 2,
@@ -49,6 +50,7 @@
       .bindTooltip(loc.label, { permanent: false, direction: 'top' })
       .bindPopup(loc.label);
   });
+});
 </script>
 
 <section class="crumb">
