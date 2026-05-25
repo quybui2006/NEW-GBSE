@@ -171,11 +171,16 @@ function updateProjNav(row) {
 
 function scrollProj(id, dir) {
   var row = document.getElementById(id);
+  var card = row.querySelector('.card');
+  if (!card) return;
   var atStart = row.scrollLeft < 1;
   var atEnd   = row.scrollLeft + row.clientWidth > row.scrollWidth - 1;
   if (dir < 0 && atStart) return;
   if (dir > 0 && atEnd)   return;
-  row.scrollBy({ left: dir * row.clientWidth, behavior: 'smooth' });
+  var gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+  var step = Math.round(card.getBoundingClientRect().width + gap);
+  var target = Math.round(row.scrollLeft / step + dir) * step;
+  row.scrollTo({ left: Math.max(0, Math.min(target, row.scrollWidth - row.clientWidth)), behavior: 'smooth' });
 }
 
 document.addEventListener('DOMContentLoaded', function () {

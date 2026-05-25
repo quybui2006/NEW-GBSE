@@ -41,18 +41,8 @@ a{color:inherit;text-decoration:none}
 }
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
 
-.logo{
-  font-family:'Nunito',sans-serif;font-weight:900;
-  font-size:clamp(20px,2.5vw,28px);
-  color:var(--navy);letter-spacing:6px;line-height:1;
-  display:flex;flex-direction:column;align-items:center;
-  cursor:pointer;text-decoration:none;
-}
-.logo .slogan{
-  display:block;font-family:'Nunito',sans-serif;
-  font-size:clamp(8px,1vw,11px);font-weight:700;
-  color:var(--navy);letter-spacing:1px;margin-top:3px;text-transform:uppercase;
-}
+.logo{display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0}
+.logo-img{height:clamp(32px,3.5vw,44px);width:auto;display:block}
 
 .nav{display:flex;align-items:center;gap:2.5rem}
 .nav a{
@@ -81,8 +71,9 @@ a{color:inherit;text-decoration:none}
 
 @media(max-width:768px){
   .nav{display:none}
-  .hamburger{display:flex}
   .mobile-menu{display:flex}
+  .header-inner{position:relative;justify-content:center}
+  .hamburger{display:flex;position:absolute;left:1.25rem;top:50%;transform:translateY(-50%)}
 }
 
 /* ── PAGE HEADER ──────────────────────────────────────────────────────────── */
@@ -161,12 +152,14 @@ a{color:inherit;text-decoration:none}
 /* Slider is a plain block — arrows live below the row, not beside it.
    This ensures .proj-row always fills 100% width regardless of arrow visibility. */
 .proj-slider{position:relative}
-.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
 .proj-row::-webkit-scrollbar{display:none}
 /* Desktop: 3 cards. gap cost = 2×1.5rem = 3rem */
 .proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:0}
 /* ≤900 px: 2 cards. gap cost = 1×1.5rem = 1.5rem */
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
+/* ≤560 px: 1 card full-width — eliminates snap misalignment on small phones */
+@media(max-width:560px){.proj-row{gap:0}.proj-row .card{flex:0 0 100%}}
 /* Nav row: always rendered so height never jumps; hidden via visibility not display */
 .proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem;min-height:44px;align-items:center}
 .proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s,opacity .2s}
@@ -215,8 +208,8 @@ a{color:inherit;text-decoration:none}
 @media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr);gap:2rem}}
 @media(max-width:560px){.footer-grid{grid-template-columns:1fr;gap:1.5rem}}
 
-.footer .logo{color:var(--navy);margin-bottom:.75rem;width:fit-content}
-.footer .logo .slogan{color:var(--muted)}
+.footer-logo{margin-bottom:.75rem}
+.footer-logo .logo-img{height:clamp(28px,3vw,40px)}
 .footer-brand p{color:var(--muted);font-size:.875rem;margin:.5rem 0 0;line-height:1.65}
 
 .footer-grid h4{
