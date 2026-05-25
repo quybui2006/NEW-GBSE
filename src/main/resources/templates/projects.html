@@ -2,27 +2,54 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="~{fragments/layout :: head('Dự án | OMEAX')}"></th:block>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main>
 
-<section class="market">
-  <div class="container market-grid">
-    <img src="/images/proj_global.webp" alt="OMEAX global presence" fetchpriority="high" decoding="async" style="border-radius:.75rem"/>
-    <div>
-      <p class="eyebrow" style="color:rgba(255,255,255,.7)">Global presence</p>
-      <h1>Our Market</h1>
-      <p style="color:rgba(255,255,255,.8);margin-top:.75rem">A global footprint, local expertise.</p>
-      <div style="margin-top:1.5rem">
-        <span class="chip">DACH</span><span class="chip">BENELUX</span><span class="chip">MENA</span><span class="chip">LATAM</span>
-        <span class="chip">South Africa</span><span class="chip">India</span><span class="chip">Pakistan</span>
-        <span class="chip">Indonesia</span><span class="chip">Malaysia</span><span class="chip">Singapore</span>
-        <span class="chip">Thailand</span><span class="chip">Vietnam</span><span class="chip">Hongkong</span>
-      </div>
-    </div>
-  </div>
+<section class="market" style="text-align:center;padding:3rem 0">
+  <h1>Our Market</h1>
+  <p style="color:rgba(255,255,255,.8);margin-top:.75rem">A global footprint, local expertise.</p>
 </section>
+
+<section style="padding:0;margin:0;line-height:0">
+  <div id="map" style="width:100%;height:500px"></div>
+</section>
+
+<script>
+  const map = L.map('map', {
+    attributionControl: false,
+    minZoom: 2,
+    worldCopyJump: true
+  }).setView([30, 60], 3);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  const locations = [
+    { lat: 51.165, lng: 10.451, label: "DACH" },
+    { lat: 50.847, lng: 4.357, label: "BENELUX" },
+    { lat: 25.204, lng: 55.270, label: "MENA" },
+    { lat: -14.235, lng: -51.925, label: "LATAM" },
+    { lat: -30.559, lng: 22.937, label: "South Africa" },
+    { lat: 20.593, lng: 78.962, label: "India" },
+    { lat: 30.375, lng: 69.345, label: "Pakistan" },
+    { lat: -0.789, lng: 113.921, label: "Indonesia" },
+    { lat: 4.210, lng: 101.975, label: "Malaysia" },
+    { lat: 1.352, lng: 103.819, label: "Singapore" },
+    { lat: 15.870, lng: 100.992, label: "Thailand" },
+    { lat: 14.058, lng: 108.277, label: "Vietnam" },
+    { lat: 22.319, lng: 114.169, label: "Hong Kong" },
+  ];
+
+  locations.forEach(loc => {
+    L.marker([loc.lat, loc.lng])
+      .addTo(map)
+      .bindTooltip(loc.label, { permanent: false, direction: 'top' })
+      .bindPopup(loc.label);
+  });
+</script>
 
 <section class="crumb">
   <div class="container">
