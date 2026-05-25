@@ -14,6 +14,7 @@
 /* ── RESET & BASE ─────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
 html,body{margin:0;padding:0}
+html{overflow-x:clip}
 body{font-family:'Open Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;background:#fff;-webkit-font-smoothing:antialiased;line-height:1.55}
 h1,h2,h3,h4,h5{font-family:'Montserrat',sans-serif;margin:0;color:var(--navy)}
 img{max-width:100%;display:block}
@@ -46,7 +47,7 @@ a{color:inherit;text-decoration:none}
 
 .nav{display:flex;align-items:center;gap:2.5rem}
 .nav a{
-  font-size:.88rem;font-weight:500;color:var(--navy);
+  font-size:.88rem;font-weight:500;color:#0048FF;
   letter-spacing:.02em;position:relative;padding-bottom:4px;transition:color .25s;
 }
 .nav a::after{
@@ -54,10 +55,11 @@ a{color:inherit;text-decoration:none}
   width:0;height:2px;background:var(--navy);transition:width .3s var(--ease);
 }
 .nav a:hover::after,.nav a.active::after{width:100%}
+.nav a:hover,.nav a.active{color:var(--navy)}
 
 /* Hamburger button */
 .hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:10px;width:44px;height:44px;flex-shrink:0}
-.hamburger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:transform .3s var(--ease),opacity .25s var(--ease);transform-origin:center}
+.hamburger span{display:block;width:22px;height:2px;background:#0048FF;border-radius:2px;transition:transform .3s var(--ease),opacity .25s var(--ease);transform-origin:center}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
@@ -65,9 +67,10 @@ a{color:inherit;text-decoration:none}
 /* Mobile slide-down menu */
 .mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .35s var(--ease)}
 .mobile-menu.open{max-height:400px}
-.mobile-menu a{padding:1rem 1.25rem;font-size:.95rem;font-weight:500;color:var(--navy);border-bottom:1px solid #f0f2fb;transition:background .15s,color .15s;display:block}
+.mobile-menu a{padding:1rem 1.25rem;font-size:.95rem;font-weight:500;color:#0048FF;border-bottom:1px solid #f0f2fb;transition:background .15s,color .15s;display:block;border-left:3px solid transparent}
 .mobile-menu a:last-child{border-bottom:none}
-.mobile-menu a:hover,.mobile-menu a.active{background:var(--light);color:var(--blue)}
+.mobile-menu a:hover{background:rgba(0,72,255,.06);color:var(--navy)}
+.mobile-menu a.active{background:rgba(40,58,130,.08);color:var(--navy);border-left-color:var(--navy);font-weight:600}
 
 @media(max-width:768px){
   .nav{display:none}
@@ -151,15 +154,15 @@ a{color:inherit;text-decoration:none}
 .proj-section h2{font-size:1.75rem;font-weight:800;margin-bottom:1.5rem}
 /* Slider is a plain block — arrows live below the row, not beside it.
    This ensures .proj-row always fills 100% width regardless of arrow visibility. */
-.proj-slider{position:relative}
-.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.proj-slider{position:relative;overflow:hidden}
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
 .proj-row::-webkit-scrollbar{display:none}
 /* Desktop: 3 cards. gap cost = 2×1.5rem = 3rem */
 .proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:0}
 /* ≤900 px: 2 cards. gap cost = 1×1.5rem = 1.5rem */
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
 /* ≤560 px: 1 card full-width — eliminates snap misalignment on small phones */
-@media(max-width:560px){.proj-row{gap:0}.proj-row .card{flex:0 0 100%}}
+@media(max-width:560px){.proj-row{gap:0;scroll-snap-type:x mandatory}.proj-row .card{flex:0 0 100%;scroll-snap-stop:always}}
 /* Nav row: always rendered so height never jumps; hidden via visibility not display */
 .proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem;min-height:44px;align-items:center}
 .proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s,opacity .2s}
