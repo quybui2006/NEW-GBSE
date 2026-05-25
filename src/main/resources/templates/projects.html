@@ -9,11 +9,12 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main>
 
-<section class="market" style="padding:0;background-image:none">
-  <div style="width:320px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem">
-  <h1 style="color:#fff;margin:0;white-space:nowrap">Our Market</h1>
-  <p style="color:rgba(255,255,255,.7);margin-top:.75rem;white-space:nowrap">A global footprint, local expertise.</p>
-</div>
+<section class="market" style="padding:0;background-image:none;overflow:hidden">
+  <div style="display:flex;align-items:stretch;min-height:400px">
+    <div style="width:320px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem">
+      <h1 style="color:#fff;margin:0;white-space:nowrap">Our Market</h1>
+      <p style="color:rgba(255,255,255,.7);margin-top:.75rem;white-space:nowrap">A global footprint, local expertise.</p>
+    </div>
     <div style="flex:1;min-height:400px" id="map"></div>
   </div>
 </section>
