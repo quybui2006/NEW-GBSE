@@ -76,7 +76,7 @@ a{color:inherit;text-decoration:none}
   .nav{display:none}
   .mobile-menu{display:flex}
   .header-inner{position:relative;justify-content:center}
-  .hamburger{display:flex;position:absolute;left:1.25rem;top:50%;transform:translateY(-50%)}
+  .hamburger{display:flex;position:absolute;right:1.25rem;top:50%;transform:translateY(-50%)}
 }
 
 /* ── PAGE HEADER ──────────────────────────────────────────────────────────── */
@@ -206,7 +206,7 @@ a{color:inherit;text-decoration:none}
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /*  FOOTER — bỏ hết icon                                                      */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.footer{background:#fff;color:#0f172a;border-top:1.5px solid var(--border);padding-top:3rem}
+.footer{background:#fff;color:#0048FF;border-top:1.5px solid var(--border);padding-top:3rem}
 .footer-grid{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border)}
 @media(max-width:900px){.footer-grid{grid-template-columns:repeat(2,1fr);gap:2rem}}
 @media(max-width:560px){.footer-grid{grid-template-columns:1fr;gap:1.5rem}}
