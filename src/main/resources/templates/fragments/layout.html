@@ -17,7 +17,7 @@
 <!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
 <header th:fragment="navbar" class="header">
   <div class="container header-inner">
-    <a href="/" class="logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img"/></a>
+    <a href="/" class="logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img" fetchpriority="high" decoding="async"/></a>
     <nav class="nav">
       <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
