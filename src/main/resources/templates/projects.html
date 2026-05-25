@@ -9,32 +9,14 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main>
 
-<section class="market" style="padding:3rem 0;background-image:none">
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap">
-    <div>
+<section class="market" style="padding:0;background-image:none">
+  <div style="display:flex;align-items:stretch;min-height:400px">
+    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem">
       <h1 style="color:#fff;margin:0">Our Market</h1>
       <p style="color:rgba(255,255,255,.7);margin-top:.75rem">A global footprint, local expertise.</p>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:.5rem;max-width:600px">
-      <span class="chip">DACH</span>
-      <span class="chip">BENELUX</span>
-      <span class="chip">MENA</span>
-      <span class="chip">LATAM</span>
-      <span class="chip">South Africa</span>
-      <span class="chip">India</span>
-      <span class="chip">Pakistan</span>
-      <span class="chip">Indonesia</span>
-      <span class="chip">Malaysia</span>
-      <span class="chip">Singapore</span>
-      <span class="chip">Thailand</span>
-      <span class="chip">Vietnam</span>
-      <span class="chip">Hong Kong</span>
-    </div>
+    <div style="flex:1;min-height:400px" id="map"></div>
   </div>
-</section>
-
-<section style="padding:0;margin:0;line-height:0">
-  <div id="map" style="width:100%;height:500px"></div>
 </section>
 
 <script>
