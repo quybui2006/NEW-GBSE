@@ -19,9 +19,6 @@ public class DashboardService {
     @Autowired
     private YeuCauRepository yeuCauRepository;
 
-    @Autowired
-    private SanPhamService sanPhamService;
-
     /**
      * Builds dashboard stats for the given date range.
      * Chart data is aggregated in the database with GROUP BY DATE — only one
@@ -66,7 +63,6 @@ public class DashboardService {
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("tongSanPham",      sanPhamService.demTong());
         result.put("tongYeuCau",       totalRequests);
         result.put("hasData",          totalRequests > 0);
         result.put("chartLabels",      labels);

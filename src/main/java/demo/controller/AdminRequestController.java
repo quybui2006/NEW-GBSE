@@ -4,11 +4,8 @@ import java.util.List;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +28,7 @@ public class AdminRequestController {
     public AdminRequestController(YeuCauService yeuCauService) {
         this.yeuCauService = yeuCauService;
     }
+
     @PostMapping("/yeu-cau/{id}/cap-nhat")
     public String update(
             @PathVariable Long id,
@@ -42,28 +40,12 @@ public class AdminRequestController {
         if (!bindingResult.hasErrors()) {
             yeuCauService.updateContactStatus(id, dto);
         }
-        StringBuilder url = new StringBuilder("redirect:/admin/yeu-cau?page=").append(page);
+        StringBuilder url = new StringBuilder("redirect:/admin?page=").append(page);
         if (from != null && !from.isBlank()) url.append("&from=").append(from);
         if (to   != null && !to.isBlank())   url.append("&to=").append(to);
         return url.toString();
     }
 
-    @GetMapping("/yeu-cau")
-    public String list(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(required = false) String from,
-                       @RequestParam(required = false) String to,
-                       Model model) {
-        Page<YeuCau> yeuCauPage = yeuCauService.layTrangCoLoc(from, to, page);
-        model.addAttribute("danhSachYeuCau", yeuCauPage.getContent());
-        model.addAttribute("currentPage",    yeuCauPage.getNumber());
-        model.addAttribute("totalPages",     yeuCauPage.getTotalPages());
-        model.addAttribute("totalItems",     yeuCauPage.getTotalElements());
-        model.addAttribute("from", from);
-        model.addAttribute("to",   to);
-        return "admin/yeu-cau";
-    }
-    
-    
     @PostMapping("/bao-cao/excel")
     public void exportExcel(@RequestParam(defaultValue = "all") String period,
                             @RequestParam(required = false) String from,
