@@ -4,18 +4,32 @@
 <th:block th:replace="~{fragments/layout :: head('Dự án | OMEAX')}"></th:block>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<style>
+.market-hero{display:flex;align-items:stretch;min-height:400px}
+.market-hero-text{width:320px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem}
+.market-hero-text h1{color:#fff;margin:0;white-space:nowrap}
+.market-hero-text p{color:rgba(255,255,255,.7);margin-top:.75rem;white-space:nowrap}
+.market-hero-map{flex:1;min-height:400px;isolation:isolate}
+@media(max-width:767px){
+  .market-hero{flex-direction:column;min-height:unset}
+  .market-hero-text{width:100%;padding:1.75rem 1.25rem}
+  .market-hero-text h1{white-space:normal}
+  .market-hero-text p{white-space:normal}
+  .market-hero-map{min-height:280px}
+}
+</style>
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main>
 
 <section class="market" style="padding:0;background-image:none;overflow:hidden">
-  <div style="display:flex;align-items:stretch;min-height:400px">
-    <div style="width:320px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem">
-      <h1 style="color:#fff;margin:0;white-space:nowrap">Our Market</h1>
-      <p style="color:rgba(255,255,255,.7);margin-top:.75rem;white-space:nowrap">A global footprint, local expertise.</p>
+  <div class="market-hero">
+    <div class="market-hero-text">
+      <h1>Our Market</h1>
+      <p>A global footprint, local expertise.</p>
     </div>
-    <div style="flex:1;min-height:400px;isolation:isolate" id="map"></div>
+    <div class="market-hero-map" id="map"></div>
   </div>
 </section>
 
@@ -41,12 +55,26 @@
     { lat: 4.210, lng: 101.975, label: "Malaysia" },
     { lat: 1.352, lng: 103.819, label: "Singapore" },
     { lat: 15.870, lng: 100.992, label: "Thailand" },
-    { lat: 14.058, lng: 108.277, label: "Vietnam" },
+    { lat: 21.000369, lng: 105.801549, label: "Vietnam" },
     { lat: 22.319, lng: 114.169, label: "Hong Kong" },
   ];
 
   locations.forEach(loc => {
-    L.marker([loc.lat, loc.lng])
+    const isVietnam = loc.label === "Vietnam";
+
+    const icon = L.icon({
+      iconUrl: isVietnam
+        ? 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png'
+        : 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png',
+      shadowUrl: 'https://unpkg.com/leaflet/dist/images/marker-shadow.png',
+      iconSize: [16, 26],
+      iconAnchor: [8, 26],
+      popupAnchor: [0, -26],
+      shadowSize: [26, 16],
+      shadowAnchor: [8, 16]
+    });
+
+    L.marker([loc.lat, loc.lng], { icon })
       .addTo(map)
       .bindTooltip(loc.label, { permanent: false, direction: 'top' })
       .bindPopup(loc.label);
