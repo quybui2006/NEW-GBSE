@@ -7,7 +7,7 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main>
 
-<section class="hero">
+<section class="hero" style="min-height:100vh;display:flex;align-items:center;justify-content:center">
   <div class="container">
     <p style="margin:0 0 2rem;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.5em;color:#e2e8f0;text-align:center;text-transform:uppercase">COMPANY INTRODUCTION</p>
     <h1 style="margin:0;font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.2rem,5vw,4.5rem);line-height:1;color:#fff;text-align:center;letter-spacing:.02em">OMEAX JOINT STOCK COMPANY</h1>
@@ -38,54 +38,72 @@
       <div class="cust-group">
         <h3>Developers</h3>
         <div class="cust-box">
-          <div class="cust-grid">
-            <div class="cell"><img src="/images/cust_vingroup.webp" alt="Vingroup" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_sungroup.webp" alt="Sun Group" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_dojiland.webp" alt="DojiLand" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_ecopark.webp" alt="Ecopark" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_cmc.webp" alt="CMC Corporation" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_brg.webp" alt="BRG Group" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_tnr.webp" alt="TNR" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_capitaland.webp" alt="CapitaLand" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_everland.webp" alt="Everland Group" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_t&t.webp" alt="T&amp;T Group" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_mik.webp" alt="MIK Group" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_bitexco.webp" alt="Bitexco Group" loading="lazy" decoding="async"/></div>
+          <div class="cust-slider">
+            <div class="cust-track">
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_vingroup.webp" alt="Vingroup" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_sungroup.webp" alt="Sun Group" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_dojiland.webp" alt="DojiLand" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_ecopark.webp" alt="Ecopark" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_cmc.webp" alt="CMC Corporation" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_brg.webp" alt="BRG Group" loading="lazy" decoding="async"/></div>
+              </div>
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_tnr.webp" alt="TNR" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_capitaland.webp" alt="CapitaLand" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_everland.webp" alt="Everland Group" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_t&t.webp" alt="T&amp;T Group" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_mik.webp" alt="MIK Group" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_bitexco.webp" alt="Bitexco Group" loading="lazy" decoding="async"/></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="cust-group">
         <h3>Contractors</h3>
         <div class="cust-box">
-          <div class="cust-grid">
-            <div class="cell"><img src="/images/cust_ree.webp" alt="REE M&amp;E" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_coteccons.webp" alt="Coteccons" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_searefico.webp" alt="Searefico" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_sol.webp" alt="SOL E&amp;C" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_sigma.webp" alt="Sigma Engineering" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_kg.webp" alt="KG" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_unicons.webp" alt="Unicons" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_newtecons.webp" alt="Newtecons" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_ricons.webp" alt="Ricons" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_delta.webp" alt="Delta E&amp;C" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_hoabinh.webp" alt="Hoabinh" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_nsc.webp" alt="North Star Construction" loading="lazy" decoding="async"/></div>
+          <div class="cust-slider">
+            <div class="cust-track">
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_ree.webp" alt="REE M&amp;E" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_coteccons.webp" alt="Coteccons" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_searefico.webp" alt="Searefico" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_sol.webp" alt="SOL E&amp;C" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_sigma.webp" alt="Sigma Engineering" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_kg.webp" alt="KG" loading="lazy" decoding="async"/></div>
+              </div>
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_unicons.webp" alt="Unicons" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_newtecons.webp" alt="Newtecons" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_ricons.webp" alt="Ricons" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_delta.webp" alt="Delta E&amp;C" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_hoabinh.webp" alt="Hoabinh" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_nsc.webp" alt="North Star Construction" loading="lazy" decoding="async"/></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="cust-group">
         <h3>Designers</h3>
         <div class="cust-box">
-          <div class="cust-grid">
-            <div class="cell"><img src="/images/cust_jncc.webp" alt="JNCC" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_indochine.webp" alt="Indochine Engineering" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_boydens.webp" alt="Boydens Engineering" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_fai.webp" alt="FAI Asia" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_cdc.webp" alt="CDC Construction" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_coninco.webp" alt="Coninco" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_archetype.webp" alt="Archetype" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_sp.webp" alt="SP" loading="lazy" decoding="async"/></div>
-            <div class="cell"><img src="/images/cust_meinhardt.webp" alt="Meinhardt" loading="lazy" decoding="async"/></div>
+          <div class="cust-slider">
+            <div class="cust-track">
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_jncc.webp" alt="JNCC" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_indochine.webp" alt="Indochine Engineering" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_boydens.webp" alt="Boydens Engineering" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_fai.webp" alt="FAI Asia" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_cdc.webp" alt="CDC Construction" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_coninco.webp" alt="Coninco" loading="lazy" decoding="async"/></div>
+              </div>
+              <div class="cust-page">
+                <div class="cell"><img src="/images/cust_archetype.webp" alt="Archetype" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_sp.webp" alt="SP" loading="lazy" decoding="async"/></div>
+                <div class="cell"><img src="/images/cust_meinhardt.webp" alt="Meinhardt" loading="lazy" decoding="async"/></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -96,5 +114,51 @@
 </main>
 <div th:replace="~{fragments/layout :: ticker-home}"></div>
 <div th:replace="~{fragments/layout :: footer}"></div>
+<script>
+(function () {
+  var INTERVAL = 5000;
+  var DURATION = 750;
+
+  var tracks = Array.from(document.querySelectorAll('.cust-track'));
+
+  var rows = tracks.map(function (track) {
+    var realPages = track.children.length;
+    if (realPages > 1) {
+      var clone = track.children[0].cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    }
+    return { track: track, realPages: realPages, page: 0 };
+  });
+
+  var current = 0;
+
+  function advance() {
+    var row = rows[current];
+    current = (current + 1) % rows.length;
+
+    if (row.realPages <= 1) return;
+
+    row.page++;
+    row.track.style.transform = 'translateX(-' + (row.page * 100) + '%)';
+
+    if (row.page >= row.realPages) {
+      row.track.addEventListener('transitionend', function reset() {
+        row.track.removeEventListener('transitionend', reset);
+        row.track.style.transition = 'none';
+        row.page = 0;
+        row.track.style.transform = 'translateX(0)';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            row.track.style.transition = 'transform ' + DURATION + 'ms cubic-bezier(0.4,0,0.2,1)';
+          });
+        });
+      });
+    }
+  }
+
+  setInterval(advance, INTERVAL);
+})();
+</script>
 </body>
 </html>
