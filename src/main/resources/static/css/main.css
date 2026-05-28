@@ -87,10 +87,10 @@ a{color:inherit;text-decoration:none}
 
 /* ── HERO (home) ──────────────────────────────────────────────────────────── */
 .hero{
-  min-height: calc(100vh - 72px);height: calc(100vh - 72px);box-sizing: border-box;
+  min-height:70vh;padding:4rem 0;box-sizing:border-box;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;position:relative;
-  background:var(--navy);padding-top:0;
+  background:var(--navy);
 }
 .hero .logo-big{
   font-family:'Nunito',sans-serif;font-weight:900;
@@ -140,9 +140,9 @@ a{color:inherit;text-decoration:none}
 .card .body{padding:1.25rem;flex:1;display:flex;flex-direction:column}
 
 /* ── Customers ────────────────────────────────────────────────────────────── */
-.cust-group{margin-bottom:1.5rem}
+.cust-group{margin-bottom:2rem}
 .cust-group:last-child{margin-bottom:0}
-.cust-group h3{text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:.75rem}
+.cust-group h3{text-align:center;font-size:1.6rem;font-weight:800;margin-bottom:1rem}
 .cust-wrapper{position:relative}
 .cust-box{background:#fff;border:1px solid #e2e8f0;border-radius:1rem;padding:1.5rem;box-shadow:0 4px 20px -8px rgba(40,58,130,.15)}
 .cust-slider{overflow:hidden;position:relative}
