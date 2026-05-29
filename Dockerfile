@@ -1,12 +1,15 @@
-# Bước 1: Build bằng Maven với JDK 21
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# Stage 1: build with Maven on JDK 17
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 COPY . .
 RUN mvn clean package -DskipTests
 
-# Bước 2: Chạy bằng OpenJDK 21 bản nhẹ (slim)
-FROM eclipse-temurin:21-jre-jammy
+# Stage 2: run on a slim JRE 17, as a non-root user
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
-RUN mkdir -p uploads logs
+RUN mkdir -p uploads logs \
+    && useradd -r -u 1001 appuser \
+    && chown -R appuser /app
 COPY --from=build /target/*.jar app.jar
+USER appuser
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]

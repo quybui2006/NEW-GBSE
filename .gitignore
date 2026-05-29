@@ -38,3 +38,7 @@ build/
 application-local.properties
 src/main/resources/application-local.properties
 
+### Logs ###
+logs/
+*.log
+
