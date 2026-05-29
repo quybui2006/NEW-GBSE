@@ -1,6 +1,5 @@
 package demo.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.LockedException;
@@ -15,24 +14,9 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 @Configuration
 public class SecurityConfig {
 
-    // Prevent Spring Boot from auto-registering the filter in the servlet chain.
-    // It is registered exclusively inside the Spring Security chain via addFilterBefore().
-    @Bean
-    public FilterRegistrationBean<AdminIpWhitelistFilter> ipWhitelistFilterRegistration(
-            AdminIpWhitelistFilter filter) {
-        FilterRegistrationBean<AdminIpWhitelistFilter> reg = new FilterRegistrationBean<>(filter);
-        reg.setEnabled(false);
-        return reg;
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // IP whitelist filter temporarily disabled — re-enable by:
-        // 1. adding AdminIpWhitelistFilter ipWhitelistFilter back as a parameter
-        // 2. uncommenting: .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
-        // 3. updating admin.allowed-ip in Railway env vars with the correct static IP
         http
-            // .addFilterBefore(ipWhitelistFilter, UsernamePasswordAuthenticationFilter.class)
             // ── CSRF ────────────────────────────────────────────────────────
             // HttpOnly=true (default) prevents JavaScript from reading the cookie.
             // All form submissions use the Thymeleaf-rendered token, so JS access
@@ -58,7 +42,7 @@ public class SecurityConfig {
                                  "/contact", "/about", "/projects", "/news",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
                                  "/actuator/health",
-                                 "/error", "/access-denied", "/debug/**").permitAll()
+                                 "/error", "/access-denied").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
             )

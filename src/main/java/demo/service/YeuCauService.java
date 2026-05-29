@@ -99,9 +99,4 @@ public class YeuCauService {
         }
         return yeuCauRepository.findAll(pageable);
     }
-
-    @Transactional
-    public void xoa(Long id) {
-        yeuCauRepository.deleteById(id);
-    }
 }
