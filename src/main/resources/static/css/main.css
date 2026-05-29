@@ -80,10 +80,8 @@ a{color:inherit;text-decoration:none}
 .mega-range-item:hover,.mega-range-item.mega-active{background:var(--light);color:var(--blue)}
 .mega-arr{font-size:1rem;font-weight:400;color:var(--muted)}
 .mega-range-item.mega-active .mega-arr{color:var(--blue)}
-.mega-right{display:none;border-left:1px solid var(--border);padding:.5rem 0;max-height:340px;overflow-y:auto}
-.mega-right.shown{display:block}
 .mega-prods{display:none}
-.mega-prods.mega-active{display:block}
+.mega-range-item.mega-active .mega-prods{display:block}
 .mega-prod-link{
   display:block;padding:.38rem 1rem;
   font-size:.8rem;font-weight:600;color:var(--navy);

@@ -29,13 +29,11 @@
             <div class="mega-range-item" th:each="r : ${navRanges}" th:data-range="${r.id}">
               <span th:text="${r.brand}">Brand</span>
               <span class="mega-arr">›</span>
-            </div>
-          </div>
-          <div class="mega-right">
-            <div class="mega-prods" th:each="r : ${navRanges}" th:data-range="${r.id}">
-              <a class="mega-prod-link" th:each="p : ${r.products}"
-                 th:href="@{'/products/' + ${p.id}}"
-                 th:text="${p.name}">Product</a>
+              <div class="mega-prods">
+                <a class="mega-prod-link" th:each="p : ${r.products}"
+                   th:href="@{'/products/' + ${p.id}}"
+                   th:text="${p.name}">Product</a>
+              </div>
             </div>
           </div>
         </div>
@@ -89,17 +87,11 @@
       var megaPanel = document.querySelector('.mega-panel');
       if (megaPanel) {
         var rangeItems = megaPanel.querySelectorAll('.mega-range-item');
-        var prodPanels = megaPanel.querySelectorAll('.mega-prods');
-        var megaRight  = megaPanel.querySelector('.mega-right');
         function activateRange(rangeId) {
           rangeItems.forEach(function(r){ r.classList.toggle('mega-active', r.dataset.range === rangeId); });
-          prodPanels.forEach(function(p){ p.classList.toggle('mega-active', p.dataset.range === rangeId); });
-          megaRight.classList.add('shown');
         }
         function resetMega() {
           rangeItems.forEach(function(r){ r.classList.remove('mega-active'); });
-          prodPanels.forEach(function(p){ p.classList.remove('mega-active'); });
-          megaRight.classList.remove('shown');
         }
         rangeItems.forEach(function(r){ r.addEventListener('mouseenter', function(){ activateRange(r.dataset.range); }); });
         var navMega = document.querySelector('.nav-mega');
