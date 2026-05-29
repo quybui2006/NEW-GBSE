@@ -63,35 +63,34 @@ a{color:inherit;text-decoration:none}
 .mega-caret{font-size:.6rem;transition:transform .2s var(--ease);display:inline-block}
 .nav-mega:hover .mega-caret{transform:rotate(180deg)}
 .mega-panel{
-  display:none;position:absolute;top:100%;left:50%;
-  transform:translateX(-50%);min-width:700px;
+  display:none;position:absolute;top:100%;left:0;
   background:#fff;border:1px solid var(--border);
   border-radius:.75rem;box-shadow:0 20px 60px -15px rgba(40,58,130,.28);
   z-index:200;overflow:hidden;
 }
 .nav-mega:hover .mega-panel{display:flex}
-.mega-left{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:.5rem 0}
+.mega-left{width:200px;flex-shrink:0;padding:.5rem 0}
 .mega-range-item{
   display:flex;align-items:center;justify-content:space-between;
-  padding:.85rem 1.25rem;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-weight:700;font-size:.78rem;
+  padding:.8rem 1.1rem;cursor:pointer;
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;
   color:var(--navy);letter-spacing:.04em;text-transform:uppercase;
   transition:background .15s,color .15s;
 }
 .mega-range-item:hover,.mega-range-item.mega-active{background:var(--light);color:var(--blue)}
 .mega-arr{font-size:1rem;font-weight:400;color:var(--muted)}
 .mega-range-item.mega-active .mega-arr{color:var(--blue)}
-.mega-right{flex:1;padding:.75rem 1rem;max-height:380px;overflow-y:auto}
-.mega-prods{display:none;flex-direction:column;gap:.2rem}
-.mega-prods.mega-active{display:flex}
+.mega-right{display:none;border-left:1px solid var(--border);padding:.5rem 0;max-height:340px;overflow-y:auto}
+.mega-right.shown{display:block}
+.mega-prods{display:none}
+.mega-prods.mega-active{display:block}
 .mega-prod-link{
-  display:flex;align-items:center;gap:.65rem;
-  padding:.4rem .55rem;border-radius:.4rem;
+  display:block;padding:.38rem 1rem;
   font-size:.8rem;font-weight:600;color:var(--navy);
+  white-space:nowrap;border-radius:.3rem;
   transition:background .12s,color .12s;
 }
 .mega-prod-link:hover{background:var(--light);color:var(--blue)}
-.mega-prod-link img{width:34px;height:34px;object-fit:contain;flex-shrink:0;border-radius:3px}
 
 /* Mobile sub-items under Products */
 .mobile-menu .mobile-sub{
