@@ -16,24 +16,40 @@
 
 <!-- ── NAVBAR ─────────────────────────────────────────────────────────────── -->
 <header th:fragment="navbar" class="header">
+  <div class="mega-backdrop" id="megaBackdrop"></div>
   <div class="container header-inner">
     <a href="/" class="logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img" fetchpriority="high" decoding="async"/></a>
     <nav class="nav">
       <!-- Products with mega-menu -->
-      <div class="nav-mega">
+      <div class="nav-mega" id="navMega">
         <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">
           Products <span class="mega-caret">▾</span>
         </a>
         <div class="mega-panel" th:if="${navRanges != null and !#lists.isEmpty(navRanges)}">
+          <!-- Left: category list -->
           <div class="mega-left">
-            <div class="mega-range-item" th:each="r : ${navRanges}" th:data-range="${r.id}">
+            <div class="mega-cat-item"
+                 th:each="r, iStat : ${navRanges}"
+                 th:data-range="${r.id}"
+                 th:classappend="${iStat.first ? ' mega-active' : ''}">
               <span th:text="${r.brand}">Brand</span>
-              <span class="mega-arr">›</span>
-              <div class="mega-prods">
-                <a class="mega-prod-link" th:each="p : ${r.products}"
+              <span class="mega-cat-arr">›</span>
+            </div>
+          </div>
+          <!-- Right: sub panels (one per category) -->
+          <div class="mega-right">
+            <div class="mega-sub"
+                 th:each="r, iStat : ${navRanges}"
+                 th:data-sub="${r.id}"
+                 th:classappend="${iStat.first ? ' mega-sub-active' : ''}">
+              <p class="mega-sub-heading" th:text="${r.brand}">Brand</p>
+              <div class="mega-sub-links">
+                <a class="mega-prod-link"
+                   th:each="p : ${r.products}"
                    th:href="@{'/products/' + ${p.id}}"
                    th:text="${p.name}">Product</a>
               </div>
+              <a class="mega-view-all" th:href="@{'/products#range-' + ${r.id}}">View all →</a>
             </div>
           </div>
         </div>
@@ -48,10 +64,19 @@
     </button>
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
-    <th:block th:each="r : ${navRanges}">
-      <a class="mobile-sub" th:href="@{'/products#range-' + ${r.id}}" th:text="${r.brand}">Range</a>
-    </th:block>
+    <!-- Products accordion -->
+    <div class="mob-prod-acc">
+      <button class="mob-prod-trigger" id="mobProdToggle"
+              th:classappend="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? ' active' : ''}">
+        Products <span class="mob-acc-caret">▾</span>
+      </button>
+      <div class="mob-prod-body" id="mobProdBody">
+        <a class="mob-prod-link"
+           th:each="r : ${navRanges}"
+           th:href="@{'/products#range-' + ${r.id}}"
+           th:text="${r.brand}">Range</a>
+      </div>
+    </div>
     <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
     <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
     <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
@@ -59,43 +84,85 @@
   </nav>
   <script>
     (function(){
+      // --- Hamburger ---
       var btn = document.getElementById('menuToggle');
-      var menu = document.getElementById('mobileMenu');
-      btn.addEventListener('click', function(){
-        var open = btn.classList.toggle('open');
-        menu.classList.toggle('open', open);
-        btn.setAttribute('aria-expanded', String(open));
-        menu.setAttribute('aria-hidden', String(!open));
-      });
-      menu.querySelectorAll('a').forEach(function(a){
-        a.addEventListener('click', function(){
-          btn.classList.remove('open');
-          menu.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-          menu.setAttribute('aria-hidden', 'true');
+      var mobMenu = document.getElementById('mobileMenu');
+      if (btn && mobMenu) {
+        btn.addEventListener('click', function(){
+          var open = btn.classList.toggle('open');
+          mobMenu.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', String(open));
+          mobMenu.setAttribute('aria-hidden', String(!open));
         });
-      });
-      document.addEventListener('click', function(e){
-        if(!btn.contains(e.target) && !menu.contains(e.target)){
-          btn.classList.remove('open');
-          menu.classList.remove('open');
-          btn.setAttribute('aria-expanded', 'false');
-          menu.setAttribute('aria-hidden', 'true');
+        mobMenu.querySelectorAll('a').forEach(function(a){
+          a.addEventListener('click', function(){
+            btn.classList.remove('open');
+            mobMenu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            mobMenu.setAttribute('aria-hidden', 'true');
+          });
+        });
+        document.addEventListener('click', function(e){
+          if (!btn.contains(e.target) && !mobMenu.contains(e.target)) {
+            btn.classList.remove('open');
+            mobMenu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            mobMenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+
+      // --- Mobile Products accordion ---
+      var mobTrigger = document.getElementById('mobProdToggle');
+      var mobBody = document.getElementById('mobProdBody');
+      if (mobTrigger && mobBody) {
+        if (mobTrigger.classList.contains('active')) {
+          mobTrigger.classList.add('open');
+          mobBody.classList.add('open');
         }
-      });
-      // Mega-menu range switching
-      var megaPanel = document.querySelector('.mega-panel');
-      if (megaPanel) {
-        var rangeItems = megaPanel.querySelectorAll('.mega-range-item');
-        function activateRange(rangeId) {
-          rangeItems.forEach(function(r){ r.classList.toggle('mega-active', r.dataset.range === rangeId); });
+        mobTrigger.addEventListener('click', function(){
+          var isOpen = mobTrigger.classList.toggle('open');
+          mobBody.classList.toggle('open', isOpen);
+        });
+      }
+
+      // --- Desktop mega-menu ---
+      var navMega = document.getElementById('navMega');
+      var megaPanel = navMega && navMega.querySelector('.mega-panel');
+      var backdrop = document.getElementById('megaBackdrop');
+      if (navMega && megaPanel) {
+        var closeTimer = null;
+        function openMega() {
+          clearTimeout(closeTimer);
+          navMega.classList.add('mega-open');
+          if (backdrop) backdrop.classList.add('mega-open');
         }
-        function resetMega() {
-          rangeItems.forEach(function(r){ r.classList.remove('mega-active'); });
+        function closeMega(immediate) {
+          if (immediate) {
+            clearTimeout(closeTimer);
+            navMega.classList.remove('mega-open');
+            if (backdrop) backdrop.classList.remove('mega-open');
+          } else {
+            closeTimer = setTimeout(function(){
+              navMega.classList.remove('mega-open');
+              if (backdrop) backdrop.classList.remove('mega-open');
+            }, 150);
+          }
         }
-        rangeItems.forEach(function(r){ r.addEventListener('mouseenter', function(){ activateRange(r.dataset.range); }); });
-        var navMega = document.querySelector('.nav-mega');
-        if (navMega) { navMega.addEventListener('mouseleave', resetMega); }
+        function activateCat(rangeId) {
+          megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){
+            c.classList.toggle('mega-active', c.dataset.range === String(rangeId));
+          });
+          megaPanel.querySelectorAll('.mega-sub').forEach(function(s){
+            s.classList.toggle('mega-sub-active', s.dataset.sub === String(rangeId));
+          });
+        }
+        navMega.addEventListener('mouseenter', openMega);
+        navMega.addEventListener('mouseleave', function(){ closeMega(false); });
+        if (backdrop) backdrop.addEventListener('click', function(){ closeMega(true); });
+        megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){
+          c.addEventListener('mouseenter', function(){ activateCat(c.dataset.range); });
+        });
       }
     })();
   </script>
