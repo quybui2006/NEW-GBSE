@@ -60,26 +60,24 @@ a{color:inherit;text-decoration:none}
 /* ── Flyout navigation ─────────────────────────────────────────────────────── */
 .mega-backdrop{
   position:fixed;top:72px;left:0;right:0;bottom:0;
-  background:rgba(15,23,42,.38);
-  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  background:transparent;
   z-index:49;
-  opacity:0;visibility:hidden;pointer-events:none;
-  transition:opacity .28s var(--ease),visibility .28s;
+  visibility:hidden;pointer-events:none;
 }
-.mega-backdrop.mega-open{opacity:1;visibility:visible;pointer-events:all}
+.mega-backdrop.mega-open{visibility:visible;pointer-events:all}
 
 .nav-mega{position:relative;display:inline-flex;align-items:center}
 .nav-mega>a{display:flex;align-items:center;gap:.3rem}
-.mega-caret{font-size:.6rem;display:inline-block;line-height:1;transition:transform .25s var(--ease)}
+.mega-caret{font-size:.75rem;display:inline-block;line-height:1;transition:transform .25s var(--ease)}
 .nav-mega.mega-open .mega-caret{transform:rotate(180deg)}
 
 /* Left category panel */
 .mega-panel{
   position:absolute;top:calc(100% + 10px);left:0;
-  background:rgba(22,34,90,.97);
+  background:#fff;
   border-radius:6px;
-  box-shadow:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 8px 32px rgba(40,58,130,.14),0 2px 8px rgba(40,58,130,.08);
+  border:1px solid var(--border);
   padding:4px 0;
   min-width:200px;
   z-index:200;
@@ -102,29 +100,29 @@ a{color:inherit;text-decoration:none}
   display:flex;align-items:center;justify-content:space-between;
   padding:10px 14px;cursor:pointer;
   font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:600;
-  color:rgba(255,255,255,.82);letter-spacing:.04em;
-  border-bottom:1px solid rgba(255,255,255,.06);
-  transition:background .14s,color .14s,padding-left .14s;
+  color:var(--navy);letter-spacing:.04em;
+  border-bottom:1px solid #f0f2fb;border-left:3px solid transparent;
+  transition:background .14s,color .14s,padding-left .14s,border-left-color .14s;
 }
 .mega-cat-item:last-child{border-bottom:none}
 .mega-cat-item:hover,.mega-cat-item.mega-active{
-  background:rgba(255,255,255,.1);color:#fff;padding-left:18px;
+  background:rgba(40,58,130,.08);color:var(--blue);border-left-color:var(--blue);padding-left:18px;
 }
 .mega-cat-arr{
-  font-size:.8rem;color:rgba(255,255,255,.4);flex-shrink:0;
+  font-size:.8rem;color:var(--muted);flex-shrink:0;
   transition:color .14s,transform .18s var(--ease);
 }
 .mega-cat-item:hover .mega-cat-arr,.mega-cat-item.mega-active .mega-cat-arr{
-  color:rgba(255,255,255,.85);transform:translateX(2px);
+  color:var(--blue);transform:translateX(2px);
 }
 
 /* Flyout submenu panel */
 .flyout-sub{
   position:fixed;z-index:201;
-  background:rgba(22,34,90,.97);
+  background:#fff;
   border-radius:6px;
-  box-shadow:0 8px 32px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.18);
-  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 8px 32px rgba(40,58,130,.14),0 2px 8px rgba(40,58,130,.08);
+  border:1px solid var(--border);
   padding:4px 0;
   min-width:190px;
   opacity:0;visibility:hidden;pointer-events:none;
@@ -141,19 +139,19 @@ a{color:inherit;text-decoration:none}
 .flyout-prod-link{
   display:block;padding:9px 16px;
   font-size:.8rem;font-weight:500;
-  color:rgba(255,255,255,.8);
+  color:var(--muted);
   transition:background .12s,color .12s,padding-left .12s;
   white-space:nowrap;
 }
-.flyout-prod-link:hover{background:rgba(255,255,255,.1);color:#fff;padding-left:20px}
+.flyout-prod-link:hover{background:rgba(40,58,130,.08);color:var(--blue);padding-left:20px}
 .flyout-view-all{
   display:block;padding:8px 16px;margin-top:2px;
   font-size:.72rem;font-weight:600;letter-spacing:.03em;
-  color:rgba(114,154,255,.85);
-  border-top:1px solid rgba(255,255,255,.08);
+  color:var(--blue);
+  border-top:1px solid #f0f2fb;
   transition:color .12s,background .12s;
 }
-.flyout-view-all:hover{color:#fff;background:rgba(255,255,255,.07)}
+.flyout-view-all:hover{color:var(--blue);background:rgba(40,58,130,.05)}
 
 /* Mobile Products accordion */
 .mob-prod-acc{border-bottom:1px solid #f0f2fb}
