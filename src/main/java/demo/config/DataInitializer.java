@@ -5,7 +5,6 @@ import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,18 +18,20 @@ public class DataInitializer implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final String adminUsername;
+    private final String adminPassword;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Value("${ADMIN_USERNAME:admin}")
-    private String adminUsername;
-
-    // ✅ SỬA: Dùng giá trị rỗng thay vì #{null}
-    @Value("${ADMIN_PASSWORD:}")
-    private String adminPassword;
+    public DataInitializer(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           @Value("${ADMIN_USERNAME:admin}") String adminUsername,
+                           @Value("${ADMIN_PASSWORD:}") String adminPassword) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.adminUsername = adminUsername;
+        this.adminPassword = adminPassword;
+    }
 
     @Override
     public void run(String... args) {
