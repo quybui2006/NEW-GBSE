@@ -10,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
  *   spring.cache.caffeine.spec=maximumSize=500,expireAfterWrite=600s
  *
  * Cache "products" holds the full product list for up to 10 minutes.
- * It is evicted on any save or delete in SanPhamService so the public
- * product catalogue always reflects the latest admin changes within seconds.
+ * Products are managed via Flyway migrations; the cache refreshes on restart.
  */
 @Configuration
 @EnableCaching

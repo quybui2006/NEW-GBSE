@@ -45,7 +45,7 @@ public class SanPham {
     @Column(columnDefinition = "varchar(500)")
     private String link;
 
-    // Groups this product under a named range (e.g. "omeax", "gbse", "partners").
+    // Groups this product under a named range (e.g. "grundfos", "oceancooling", "partners").
     @Column(columnDefinition = "varchar(50)")
     private String rangeId;
 

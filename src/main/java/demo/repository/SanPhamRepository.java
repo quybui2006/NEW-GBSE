@@ -2,10 +2,7 @@ package demo.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import demo.model.SanPham;
@@ -13,15 +10,5 @@ import demo.model.SanPham;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 
-    @Query("SELECT s FROM SanPham s WHERE "
-         + "LOWER(s.ten) LIKE LOWER(CONCAT('%', :keyword, '%')) "
-         + "OR LOWER(s.moTa) LIKE LOWER(CONCAT('%', :keyword, '%')) "
-         + "OR LOWER(s.danhMuc) LIKE LOWER(CONCAT('%', :keyword, '%'))")
-    List<SanPham> timKiem(@Param("keyword") String keyword);
-
     List<SanPham> findByRangeIdIsNull();
-
-    // Lightweight projection for dropdowns — fetches only id + ten columns.
-    // Use this instead of findAll() when you only need product names.
-    List<SanPhamDropdown> findAllProjectedBy(Sort sort);
 }

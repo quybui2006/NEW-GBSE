@@ -19,7 +19,28 @@
   <div class="container header-inner">
     <a href="/" class="logo"><img src="/images/logo.png" alt="OMEAX" class="logo-img" fetchpriority="high" decoding="async"/></a>
     <nav class="nav">
-      <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
+      <!-- Products with mega-menu -->
+      <div class="nav-mega">
+        <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">
+          Products <span class="mega-caret">▾</span>
+        </a>
+        <div class="mega-panel" th:if="${navRanges != null and !#lists.isEmpty(navRanges)}">
+          <div class="mega-left">
+            <div class="mega-range-item" th:each="r : ${navRanges}" th:data-range="${r.id}">
+              <span th:text="${r.brand}">Brand</span>
+              <span class="mega-arr">›</span>
+            </div>
+          </div>
+          <div class="mega-right">
+            <div class="mega-prods" th:each="r : ${navRanges}" th:data-range="${r.id}">
+              <a class="mega-prod-link" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}">
+                <img th:src="${p.image}" th:alt="${p.name}" loading="lazy"/>
+                <span th:text="${p.name}">Product</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
       <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
       <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
@@ -31,6 +52,9 @@
   </div>
   <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <a th:class="${#strings.startsWith(currentUri, '/products') or #strings.startsWith(currentUri, '/product/') ? 'active' : ''}" href="/products">Products</a>
+    <th:block th:each="r : ${navRanges}">
+      <a class="mobile-sub" th:href="@{'/products#range-' + ${r.id}}" th:text="${r.brand}">Range</a>
+    </th:block>
     <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>
     <a th:class="${currentUri == '/projects' ? 'active' : ''}" href="/projects">Projects</a>
     <a th:class="${currentUri == '/news' ? 'active' : ''}" href="/news">News</a>
@@ -62,6 +86,23 @@
           menu.setAttribute('aria-hidden', 'true');
         }
       });
+      // Mega-menu range switching
+      var megaPanel = document.querySelector('.mega-panel');
+      if (megaPanel) {
+        var rangeItems = megaPanel.querySelectorAll('.mega-range-item');
+        var prodPanels = megaPanel.querySelectorAll('.mega-prods');
+        function activateRange(rangeId) {
+          rangeItems.forEach(function(r){ r.classList.toggle('mega-active', r.dataset.range === rangeId); });
+          prodPanels.forEach(function(p){ p.classList.toggle('mega-active', p.dataset.range === rangeId); });
+        }
+        rangeItems.forEach(function(r){ r.addEventListener('mouseenter', function(){ activateRange(r.dataset.range); }); });
+        var navMega = document.querySelector('.nav-mega');
+        if (navMega) {
+          navMega.addEventListener('mouseenter', function(){
+            if (rangeItems.length > 0) activateRange(rangeItems[0].dataset.range);
+          });
+        }
+      }
     })();
   </script>
 </header>

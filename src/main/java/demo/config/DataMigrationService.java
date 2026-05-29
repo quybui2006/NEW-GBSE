@@ -25,9 +25,9 @@ public class DataMigrationService implements CommandLineRunner {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private static final Map<String, String> BRAND_TO_RANGE = Map.of(
-        "OMEAX",    "omeax",
-        "GBSE",     "gbse",
-        "PARTNERS", "partners"
+        "GRUNDFOS",             "grundfos",
+        "OCEAN COOLING TOWER",  "oceancooling",
+        "PARTNERS",             "partners"
     );
 
     @Autowired
@@ -100,16 +100,16 @@ public class DataMigrationService implements CommandLineRunner {
 
     private List<SanPham> buildSeedData() {
         return List.of(
-            // ── OMEAX — Pumps ────────────────────────────────────────────────
-            sp("Booster Pump",           "pumps",  "/images/pump1.jpg", "OMEAX", "omeax",
+            // ── Grundfos Pumps — Pumps ───────────────────────────────────────
+            sp("Booster Pump",           "pumps",  "/images/pump1.jpg", "Grundfos", "grundfos",
                "Bơm tăng áp biến tần",
-               "Hệ tăng áp biến tần OMEAX dành cho tòa nhà cao tầng, cấp nước sinh hoạt ổn định, tiết kiệm điện năng tới 40%.",
+               "Hệ tăng áp biến tần Grundfos dành cho tòa nhà cao tầng, cấp nước sinh hoạt ổn định, tiết kiệm điện năng tới 40%.",
                arr("Inverter điều khiển PID", "Vỏ inox 304", "Áp suất tối đa 16 bar", "Lưu lượng tới 80 m³/h"),
                arr("Tòa nhà văn phòng", "Khu chung cư", "Khách sạn"),
                specs("Lưu lượng","5 – 80 m³/h", "Cột áp","20 – 160 m", "Công suất","1.5 – 30 kW", "Nguồn","3P / 380V / 50Hz"),
                null),
 
-            sp("Transfer Pump",          "pumps",  "/images/pump2.jpg", "OMEAX", "omeax",
+            sp("Transfer Pump",          "pumps",  "/images/pump2.jpg", "Grundfos", "grundfos",
                "Bơm chuyển nước",
                "Bơm trục ngang công suất lớn, chuyên cấp & chuyển nước giữa các bể chứa.",
                arr("Cánh đồng thau", "Hiệu suất cao IE3", "Vận hành êm < 60 dB"),
@@ -117,7 +117,7 @@ public class DataMigrationService implements CommandLineRunner {
                specs("Lưu lượng","10 – 300 m³/h", "Cột áp","10 – 100 m", "Công suất","2.2 – 75 kW"),
                null),
 
-            sp("HVAC Pump",              "pumps",  "/images/pump3.jpg", "OMEAX", "omeax",
+            sp("HVAC Pump",              "pumps",  "/images/pump3.jpg", "Grundfos", "grundfos",
                "Bơm tuần hoàn HVAC",
                "Bơm tuần hoàn nước lạnh / nóng cho hệ thống chiller và AHU.",
                arr("Mặt bích DN50–DN300", "Thân gang đúc", "Phớt cơ khí"),
@@ -125,7 +125,7 @@ public class DataMigrationService implements CommandLineRunner {
                specs("Cỡ kết nối","DN50 – DN300", "Nhiệt độ","-10°C – 120°C"),
                null),
 
-            sp("Drainage Pump",          "pumps",  "/images/pump4.jpg", "OMEAX", "omeax",
+            sp("Drainage Pump",          "pumps",  "/images/pump4.jpg", "Grundfos", "grundfos",
                "Bơm chìm thoát nước",
                "Bơm chìm chuyên thoát nước hố ga, nước thải sinh hoạt.",
                arr("IP68", "Cánh xé rác", "Phao tự động"),
@@ -133,7 +133,7 @@ public class DataMigrationService implements CommandLineRunner {
                specs("Cấp bảo vệ","IP68", "Lưu lượng","5 – 50 m³/h"),
                null),
 
-            sp("Fire Fighting Pump",     "pumps",  "/images/pump5.jpg", "OMEAX", "omeax",
+            sp("Fire Fighting Pump",     "pumps",  "/images/pump5.jpg", "Grundfos", "grundfos",
                "Bơm chữa cháy UL/FM",
                "Cụm bơm chữa cháy đạt tiêu chuẩn UL/FM cho công trình thương mại.",
                arr("Bơm chính + bù áp", "Tủ điều khiển tự động", "Theo NFPA 20"),
@@ -141,8 +141,8 @@ public class DataMigrationService implements CommandLineRunner {
                specs("Tiêu chuẩn","UL / FM / NFPA 20"),
                null),
 
-            // ── OMEAX — Valves ───────────────────────────────────────────────
-            sp("General Valves",         "valves", "/images/valve5.jpg", "OMEAX", "omeax",
+            // ── Grundfos Pumps — Valves ──────────────────────────────────────
+            sp("General Valves",         "valves", "/images/valve5.jpg", "Grundfos", "grundfos",
                "Van chặn đa năng",
                "Van cổng, van bi, van một chiều dùng cho hệ nước & PCCC.",
                arr("DN15–DN600", "Gang / inox / đồng", "PN16 – PN25"),
@@ -150,67 +150,67 @@ public class DataMigrationService implements CommandLineRunner {
                specs("Kích cỡ","DN15 – DN600", "Áp suất","PN16 – PN25"),
                null),
 
-            sp("Hydraulic Control Valve","valves", "/images/valve3.jpg", "OMEAX", "omeax",
+            sp("Hydraulic Control Valve","valves", "/images/valve3.jpg", "Grundfos", "grundfos",
                "Van điều khiển thủy lực",
                "Van điều khiển thủy lực giảm áp, duy trì áp suất, ngắt khi quá tải.",
                arr("Pilot tự động", "Không cần điện", "Bền 20+ năm"),
                arr("Mạng cấp nước đô thị", "Trạm bơm"),
                null, null),
 
-            sp("Special Application Valve","valves","/images/valve1.jpg","OMEAX","omeax",
+            sp("Special Application Valve","valves","/images/valve1.jpg","Grundfos","grundfos",
                "Van ứng dụng đặc biệt",
                "Van bướm, van dao chuyên dùng cho môi trường ăn mòn, nước biển.",
                arr("Body inox 316", "Chống ăn mòn", "Wafer / Lug"),
                arr("Hóa chất", "Xử lý nước thải"),
                null, null),
 
-            // ── GBSE — Valves ────────────────────────────────────────────────
-            sp("PICV / Manual Balancing Valve","valves","/images/valve2.jpg","GBSE","gbse",
+            // ── Ocean Cooling Tower — Valves ─────────────────────────────────
+            sp("PICV / Manual Balancing Valve","valves","/images/valve2.jpg","Ocean Cooling Tower","oceancooling",
                "Van cân bằng PICV",
                "Van cân bằng áp suất độc lập (PICV) đảm bảo lưu lượng ổn định cho FCU/AHU.",
                arr("Pre-setting lưu lượng", "Range 0.05–4.0 m³/h", "Đồng thau"),
                arr("Hệ chiller", "FCU văn phòng"),
                null, null),
 
-            sp("Motorized Valve",        "valves", "/images/valve4.jpg", "GBSE", "gbse",
+            sp("Motorized Valve",        "valves", "/images/valve4.jpg", "Ocean Cooling Tower", "oceancooling",
                "Van điều khiển động cơ",
                "Van điều khiển modulating 0–10V tích hợp BMS.",
                arr("Tín hiệu 0–10V / Modbus", "Lực đóng 600N", "Fail-safe"),
                arr("BMS tòa nhà", "Hệ chiller"),
                null, null),
 
-            // ── GBSE — Heatpump ──────────────────────────────────────────────
-            sp("Air to Water Heatpump",  "heatpump","/images/ct1.jpg","GBSE","gbse",
+            // ── Ocean Cooling Tower — Heatpump ───────────────────────────────
+            sp("Air to Water Heatpump",  "heatpump","/images/ct1.jpg","Ocean Cooling Tower","oceancooling",
                "Heatpump không khí – nước",
                "Bơm nhiệt không khí – nước tạo nước nóng tới 65°C, COP > 4.5.",
                arr("Inverter DC", "R32 thân thiện môi trường", "Công suất 7–80 kW"),
                arr("Khách sạn", "Bể bơi", "Spa"),
                null, null),
 
-            sp("All-in-one Heatpump",    "heatpump","/images/ct2.jpg","GBSE","gbse",
+            sp("All-in-one Heatpump",    "heatpump","/images/ct2.jpg","Ocean Cooling Tower","oceancooling",
                "Heatpump tích hợp bồn",
                "Bơm nhiệt all-in-one tích hợp bồn 200L, gọn nhẹ cho hộ gia đình.",
                arr("Bồn inox 200L", "WiFi điều khiển", "Plug & play"),
                arr("Biệt thự", "Căn hộ"),
                null, null),
 
-            // ── GBSE — Measurement ───────────────────────────────────────────
-            sp("Water Meter (Cold/Hot)", "measure", "/images/valve6.jpg","GBSE","gbse",
+            // ── Ocean Cooling Tower — Measurement ────────────────────────────
+            sp("Water Meter (Cold/Hot)", "measure", "/images/valve6.jpg","Ocean Cooling Tower","oceancooling",
                "Đồng hồ nước nóng / lạnh",
                "Đồng hồ đo lưu lượng nước nóng và lạnh, cấp chính xác R160.",
                arr("DN15–DN50", "Chịu nhiệt 90°C", "MID Class 2"),
                arr("Chung cư", "Tòa nhà"),
                null, null),
 
-            sp("Ultrasonic BTU Meter",   "measure", "/images/valve3.jpg","GBSE","gbse",
+            sp("Ultrasonic BTU Meter",   "measure", "/images/valve3.jpg","Ocean Cooling Tower","oceancooling",
                "Đồng hồ nhiệt lượng siêu âm",
                "Đồng hồ nhiệt lượng siêu âm, không có chi tiết chuyển động, độ bền cao.",
                arr("Truyền M-Bus / Modbus", "Pin 10 năm", "Cấp 2 EN1434"),
                arr("Tính tiền BTU chung cư", "District cooling"),
                null, null),
 
-            // ── GBSE — Plate Heat Exchanger ──────────────────────────────────
-            sp("Plate Heat Exchanger",   "phe",    "/images/ct3.jpg",  "GBSE","gbse",
+            // ── Ocean Cooling Tower — Plate Heat Exchanger ───────────────────
+            sp("Plate Heat Exchanger",   "phe",    "/images/ct3.jpg",  "Ocean Cooling Tower","oceancooling",
                "Trao đổi nhiệt dạng tấm",
                "PHE inox 316L, gasket NBR/EPDM, hiệu suất truyền nhiệt cao.",
                arr("Công suất 10 kW – 5 MW", "Inox 316L", "Tháo lắp dễ dàng"),
@@ -237,7 +237,7 @@ public class DataMigrationService implements CommandLineRunner {
                "Hệ thống nước làm mát, nước cấp, nước xử lý cho nhà máy sản xuất.",
                arr("Cooling tower", "Hệ lọc đa tầng", "Hóa chất xử lý"),
                arr("Nhà máy thép", "Nhà máy hoá chất"),
-               null, "https://omeax.com/")
+               null, null)
         );
     }
 
