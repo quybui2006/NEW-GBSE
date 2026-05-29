@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,50 +11,49 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import demo.dto.AdminYeuCauUpdateDto;
-import demo.model.YeuCau;
-import demo.repository.YeuCauRepository;
+import demo.dto.ContactUpdateDto;
+import demo.model.ContactRequest;
+import demo.repository.ContactRequestRepository;
 
 @Service
-public class YeuCauService {
+public class ContactRequestService {
 
-    @Autowired
-    private YeuCauRepository yeuCauRepository;
+    private final ContactRequestRepository contactRequestRepository;
+    private final EmailService emailService;
 
-    @Autowired
-    private EmailService emailService;
+    public ContactRequestService(ContactRequestRepository contactRequestRepository,
+                                 EmailService emailService) {
+        this.contactRequestRepository = contactRequestRepository;
+        this.emailService = emailService;
+    }
 
     /**
      * Persists the request then fires the async email notification.
      * @Transactional ensures the DB write either fully succeeds or rolls back.
-     * The email fires after the transaction commits — if the email fails,
-     * the persisted record is not rolled back (data is never lost).
+     * If the email fails, the persisted record is not rolled back (data is never lost).
      */
     @Transactional
-    public YeuCau luuYeuCau(YeuCau yeuCau) {
-        YeuCau saved = yeuCauRepository.save(yeuCau);
-        emailService.guiThongBao(saved);
+    public ContactRequest save(ContactRequest request) {
+        ContactRequest saved = contactRequestRepository.save(request);
+        emailService.sendNotification(saved);
         return saved;
     }
 
     @Transactional
-    public void updateContactStatus(Long id, AdminYeuCauUpdateDto dto) {
-
-        YeuCau yeuCau = yeuCauRepository.findById(id)
-            .orElseThrow(() ->
-                    new IllegalArgumentException("YeuCau not found: " + id));
-
-    yeuCau.setContacted(dto.isContacted());
-    yeuCau.setAdminNote(dto.getAdminNote());
+    public void updateContactStatus(Long id, ContactUpdateDto dto) {
+        ContactRequest request = contactRequestRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ContactRequest not found: " + id));
+        request.setContacted(dto.isContacted());
+        request.setAdminNote(dto.getAdminNote());
     }
 
     @Transactional(readOnly = true)
-    public List<YeuCau> layTatCa() {
-        return yeuCauRepository.findAll(Sort.by("thoiGian").descending());
+    public List<ContactRequest> findAll() {
+        return contactRequestRepository.findAll(Sort.by("createdAt").descending());
     }
 
     @Transactional(readOnly = true)
-    public List<YeuCau> locTheoThoiGian(String period, String from, String to) {
+    public List<ContactRequest> filterByPeriod(String period, String from, String to) {
         LocalDateTime fromDateTime;
         LocalDateTime toDateTime = null;
 
@@ -75,8 +73,8 @@ public class YeuCauService {
         }
 
         return (toDateTime != null)
-                ? yeuCauRepository.findByDateRange(fromDateTime, toDateTime)
-                : yeuCauRepository.findByDateRangeFrom(fromDateTime);
+                ? contactRequestRepository.findByDateRange(fromDateTime, toDateTime)
+                : contactRequestRepository.findByDateRangeFrom(fromDateTime);
     }
 
     /**
@@ -84,19 +82,19 @@ public class YeuCauService {
      * Invalid date strings silently fall back to an unfiltered query.
      */
     @Transactional(readOnly = true)
-    public Page<YeuCau> layTrangCoLoc(String from, String to, int page) {
-        Pageable pageable = PageRequest.of(page, 20, Sort.by("thoiGian").descending());
+    public Page<ContactRequest> findPage(String from, String to, int page) {
+        Pageable pageable = PageRequest.of(page, 20, Sort.by("createdAt").descending());
         if (from != null && !from.isEmpty()) {
             try {
                 LocalDateTime fromDt = LocalDate.parse(from).atStartOfDay();
                 LocalDateTime toDt = (to != null && !to.isEmpty())
                         ? LocalDate.parse(to).plusDays(1).atStartOfDay()
                         : LocalDate.now().plusDays(1).atStartOfDay();
-                return yeuCauRepository.findByDateRangePaged(fromDt, toDt, pageable);
+                return contactRequestRepository.findByDateRangePaged(fromDt, toDt, pageable);
             } catch (Exception ignored) {
                 // bad date format — fall through to unfiltered
             }
         }
-        return yeuCauRepository.findAll(pageable);
+        return contactRequestRepository.findAll(pageable);
     }
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import demo.model.YeuCau;
+import demo.model.ContactRequest;
 
 @Service
 public class EmailService {
@@ -41,7 +41,7 @@ public class EmailService {
     }
 
     @Async
-    public void guiThongBao(YeuCau yeuCau) {
+    public void sendNotification(ContactRequest request) {
         if (apiKey == null || apiKey.isBlank()) {
             log.warn("[EmailService] RESEND_API_KEY not configured — skipping notification.");
             return;
@@ -60,32 +60,32 @@ public class EmailService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(apiKey);
 
-            String time = yeuCau.getThoiGian() != null
-                    ? yeuCau.getThoiGian().format(FMT) : "—";
+            String time = request.getCreatedAt() != null
+                    ? request.getCreatedAt().format(FMT) : "—";
 
             Map<String, Object> body = Map.of(
                 "from",    emailFrom,
                 "to",      List.of(emailNhan),
-                "subject", "[OMEAX] New quote request from " + yeuCau.getHoTen(),
-                "html",    buildHtml(yeuCau, time)
+                "subject", "[OMEAX] New quote request from " + request.getFullName(),
+                "html",    buildHtml(request, time)
             );
 
             restTemplate.postForObject(RESEND_URL, new HttpEntity<>(body, headers), String.class);
-            log.info("[EmailService] Notification sent for request id={}", yeuCau.getId());
+            log.info("[EmailService] Notification sent for request id={}", request.getId());
 
         } catch (RestClientException e) {
             // Request is already persisted in DB — no data is lost.
             // Logged with stack trace for manual follow-up via Railway logs.
             log.error("[EmailService] Failed to send notification (id={}): {}",
-                      yeuCau.getId(), e.getMessage(), e);
+                      request.getId(), e.getMessage(), e);
         }
     }
 
-    private String buildHtml(YeuCau yc, String time) {
-        String message = yc.getNoiDung() != null
-                ? yc.getNoiDung().replace("&", "&amp;").replace("<", "&lt;").replace("\n", "<br>")
+    private String buildHtml(ContactRequest request, String time) {
+        String message = request.getMessage() != null
+                ? request.getMessage().replace("&", "&amp;").replace("<", "&lt;").replace("\n", "<br>")
                 : "—";
-        String email = yc.getEmail() != null ? yc.getEmail() : "—";
+        String email = request.getEmail() != null ? request.getEmail() : "—";
 
         return "<div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto\">"
              + "<div style=\"background:#283A82;padding:24px 32px;border-radius:8px 8px 0 0\">"
@@ -94,8 +94,8 @@ public class EmailService {
              + "</div>"
              + "<div style=\"background:#f8fafc;padding:32px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 8px 8px\">"
              + "<table style=\"width:100%;border-collapse:collapse\">"
-             + row("Full name", "<strong>" + yc.getHoTen() + "</strong>")
-             + row("Phone",     "<strong>" + yc.getSoDienThoai() + "</strong>")
+             + row("Full name", "<strong>" + request.getFullName() + "</strong>")
+             + row("Phone",     "<strong>" + request.getPhone() + "</strong>")
              + row("Email",     email)
              + row("Message",   message)
              + row("Time",      time)

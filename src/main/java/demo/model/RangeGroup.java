@@ -2,23 +2,23 @@ package demo.model;
 
 import java.util.List;
 
-/** View-layer DTO that groups SanPham records under a named brand range. */
+/** View-layer DTO that groups Product records under a named brand range. */
 public class RangeGroup {
 
     private final String id;
     private final String brand;
     private final String tagline;
-    private final List<SanPham> products;
+    private final List<Product> products;
 
-    public RangeGroup(String id, String brand, String tagline, List<SanPham> products) {
+    public RangeGroup(String id, String brand, String tagline, List<Product> products) {
         this.id       = id;
         this.brand    = brand;
         this.tagline  = tagline;
         this.products = products;
     }
 
-    public String getId()             { return id; }
-    public String getBrand()          { return brand; }
-    public String getTagline()        { return tagline; }
-    public List<SanPham> getProducts(){ return products; }
+    public String getId()              { return id; }
+    public String getBrand()           { return brand; }
+    public String getTagline()         { return tagline; }
+    public List<Product> getProducts() { return products; }
 }

@@ -12,25 +12,26 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "yeu_cau")
-public class YeuCau {
+public class ContactRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "varchar(255)")
-    private String hoTen;
+    @Column(name = "ho_ten", columnDefinition = "varchar(255)")
+    private String fullName;
 
-    @Column(columnDefinition = "varchar(20)")
-    private String soDienThoai;
+    @Column(name = "so_dien_thoai", columnDefinition = "varchar(20)")
+    private String phone;
 
     @Column(columnDefinition = "varchar(255)")
     private String email;
 
-    @Column(columnDefinition = "varchar(1000)")
-    private String noiDung;
+    @Column(name = "noi_dung", columnDefinition = "varchar(1000)")
+    private String message;
 
-    private LocalDateTime thoiGian;
+    @Column(name = "thoi_gian")
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private boolean contacted;
@@ -39,26 +40,26 @@ public class YeuCau {
 
     @PrePersist
     public void prePersist() {
-        thoiGian = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getHoTen() { return hoTen; }
-    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
 
-    public String getSoDienThoai() { return soDienThoai; }
-    public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getNoiDung() { return noiDung; }
-    public void setNoiDung(String noiDung) { this.noiDung = noiDung; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
 
-    public LocalDateTime getThoiGian() { return thoiGian; }
-    public void setThoiGian(LocalDateTime thoiGian) { this.thoiGian = thoiGian; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public boolean isContacted() { return contacted; }
     public void setContacted(boolean contacted) { this.contacted = contacted; }

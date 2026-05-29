@@ -8,21 +8,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import demo.repository.YeuCauRepository;
+import demo.repository.ContactRequestRepository;
 
 @Service
 public class DashboardService {
 
-    @Autowired
-    private YeuCauRepository yeuCauRepository;
+    private final ContactRequestRepository contactRequestRepository;
+
+    public DashboardService(ContactRequestRepository contactRequestRepository) {
+        this.contactRequestRepository = contactRequestRepository;
+    }
 
     /**
      * Builds dashboard stats for the given date range.
      * Chart data is aggregated in the database with GROUP BY DATE — only one
-     * lightweight row per day is transferred, not all YeuCau entities.
+     * lightweight row per day is transferred, not all ContactRequest entities.
      */
     public Map<String, Object> getDashboardData(String from, String to) {
         LocalDate fromDate = parseDate(from, LocalDate.now().minusDays(6));
@@ -36,7 +38,7 @@ public class DashboardService {
         LocalDateTime endDateTime   = toDate.plusDays(1).atStartOfDay();
 
         // Aggregate in the DB — one row per day, not full entity load
-        List<Object[]> dayCounts = yeuCauRepository.countByDay(startDateTime, endDateTime);
+        List<Object[]> dayCounts = contactRequestRepository.countByDay(startDateTime, endDateTime);
 
         // Build a label→count lookup from the DB result
         Map<String, Long> countByLabel = new HashMap<>();
@@ -63,7 +65,7 @@ public class DashboardService {
         }
 
         Map<String, Object> result = new HashMap<>();
-        result.put("tongYeuCau",       totalRequests);
+        result.put("totalRequests",    totalRequests);
         result.put("hasData",          totalRequests > 0);
         result.put("chartLabels",      labels);
         result.put("chartRequestData", requestData);

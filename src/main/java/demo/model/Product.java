@@ -16,7 +16,7 @@ import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "san_pham")
-public class SanPham {
+public class Product {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -24,20 +24,20 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "varchar(255)")
-    private String ten;
+    @Column(name = "ten", columnDefinition = "varchar(255)")
+    private String name;
 
-    @Column(columnDefinition = "varchar(500)")
-    private String moTa;
+    @Column(name = "mo_ta", columnDefinition = "varchar(500)")
+    private String description;
 
     @Column(columnDefinition = "varchar(500)")
     private String shortText;
 
-    @Column(columnDefinition = "varchar(255)")
-    private String hinhAnh;
+    @Column(name = "hinh_anh", columnDefinition = "varchar(255)")
+    private String imagePath;
 
-    @Column(columnDefinition = "varchar(100)")
-    private String danhMuc;
+    @Column(name = "danh_muc", columnDefinition = "varchar(100)")
+    private String category;
 
     @Column(columnDefinition = "varchar(100)")
     private String brand;
@@ -82,27 +82,16 @@ public class SanPham {
         }
     }
 
-    // Convenience aliases used by Thymeleaf templates and JS serialization.
-
-    @Transient
-    public String getName() { return ten; }
-
-    @Transient
-    public String getDescription() { return moTa; }
-
-    @Transient
-    public String getCategory() { return danhMuc; }
-
     /**
      * Returns a usable image URL for templates.
-     * Migrated products store the full path ("/images/pump1.jpg"); uploaded
+     * Seeded products store the full path ("/images/pump1.jpg"); uploaded
      * products store just the filename ("uuid_name.jpg").
      */
     @Transient
     public String getImage() {
-        if (hinhAnh == null || hinhAnh.isBlank()) return "/images/placeholder.png";
-        if (hinhAnh.startsWith("/")) return hinhAnh;
-        return "/uploads/" + hinhAnh;
+        if (imagePath == null || imagePath.isBlank()) return "/images/placeholder.png";
+        if (imagePath.startsWith("/")) return imagePath;
+        return "/uploads/" + imagePath;
     }
 
     private List<String> parseStringList(String json) {
@@ -126,20 +115,20 @@ public class SanPham {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getTen() { return ten; }
-    public void setTen(String ten) { this.ten = ten; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getMoTa() { return moTa; }
-    public void setMoTa(String moTa) { this.moTa = moTa; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     public String getShortText() { return shortText; }
     public void setShortText(String shortText) { this.shortText = shortText; }
 
-    public String getHinhAnh() { return hinhAnh; }
-    public void setHinhAnh(String hinhAnh) { this.hinhAnh = hinhAnh; }
+    public String getImagePath() { return imagePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 
-    public String getDanhMuc() { return danhMuc; }
-    public void setDanhMuc(String danhMuc) { this.danhMuc = danhMuc; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
     public String getBrand() { return brand; }
     public void setBrand(String brand) { this.brand = brand; }

@@ -2,7 +2,6 @@ package demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,27 +12,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import demo.dto.YeuCauFormDto;
-import demo.model.SanPham;
-import demo.model.YeuCau;
+import demo.dto.ContactFormDto;
+import demo.model.Product;
+import demo.model.ContactRequest;
 import demo.service.ContactRateLimiter;
-import demo.service.SanPhamService;
-import demo.service.YeuCauService;
+import demo.service.ContactRequestService;
+import demo.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublicController {
 
-    private final SanPhamService sanPhamService;
-    private final YeuCauService yeuCauService;
+    private final ProductService productService;
+    private final ContactRequestService contactRequestService;
     private final ContactRateLimiter contactRateLimiter;
 
-    @Autowired
-    public PublicController(SanPhamService sanPhamService,
-                            YeuCauService yeuCauService,
+    public PublicController(ProductService productService,
+                            ContactRequestService contactRequestService,
                             ContactRateLimiter contactRateLimiter) {
-        this.sanPhamService = sanPhamService;
-        this.yeuCauService = yeuCauService;
+        this.productService = productService;
+        this.contactRequestService = contactRequestService;
         this.contactRateLimiter = contactRateLimiter;
     }
 
@@ -51,34 +49,34 @@ public class PublicController {
 
     @GetMapping("/products")
     public String products(Model model) {
-        List<SanPham> all = sanPhamService.layTatCa();
-        model.addAttribute("ranges", sanPhamService.getRangeGroups(all));
+        List<Product> all = productService.findAll();
+        model.addAttribute("ranges", productService.getRangeGroups(all));
         model.addAttribute("allProducts", all);
         return "products";
     }
 
     @GetMapping("/products/{id}")
     public String productDetail(@PathVariable Long id, Model model) {
-        SanPham sp = sanPhamService.timTheoId(id).orElse(null);
-        if (sp == null) return "redirect:/products";
-        model.addAttribute("product", sp);
+        Product product = productService.findById(id).orElse(null);
+        if (product == null) return "redirect:/products";
+        model.addAttribute("product", product);
         return "product-detail";
     }
 
     @GetMapping("/contact")
     public String contact(Model model) {
-        model.addAttribute("contactForm", new YeuCauFormDto());
+        model.addAttribute("contactForm", new ContactFormDto());
         return "contact";
     }
 
     @PostMapping("/contact")
-    public String submitContact(@ModelAttribute("contactForm") YeuCauFormDto form,
+    public String submitContact(@ModelAttribute("contactForm") ContactFormDto form,
                                 @RequestParam(name = "website", required = false) String honeypot,
                                 HttpServletRequest request,
                                 Model model) {
         if (honeypot != null && !honeypot.isBlank()) {
-            model.addAttribute("thanhCong", true);
-            model.addAttribute("contactForm", new YeuCauFormDto());
+            model.addAttribute("success", true);
+            model.addAttribute("contactForm", new ContactFormDto());
             return "contact";
         }
 
@@ -88,16 +86,16 @@ public class PublicController {
             return "contact";
         }
 
-        YeuCau yeuCau = new YeuCau();
-        yeuCau.setHoTen(form.getHoTen());
-        yeuCau.setSoDienThoai(form.getSoDienThoai());
-        yeuCau.setEmail(form.getEmail());
-        yeuCau.setNoiDung(form.getNoiDung());
+        ContactRequest contactRequest = new ContactRequest();
+        contactRequest.setFullName(form.getFullName());
+        contactRequest.setPhone(form.getPhone());
+        contactRequest.setEmail(form.getEmail());
+        contactRequest.setMessage(form.getMessage());
 
-        yeuCauService.luuYeuCau(yeuCau);
+        contactRequestService.save(contactRequest);
 
-        model.addAttribute("thanhCong", true);
-        model.addAttribute("contactForm", new YeuCauFormDto());
+        model.addAttribute("success", true);
+        model.addAttribute("contactForm", new ContactFormDto());
         return "contact";
     }
 

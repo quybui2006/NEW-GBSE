@@ -7,15 +7,14 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import demo.model.SanPham;
-import demo.repository.SanPhamRepository;
+import demo.model.Product;
+import demo.repository.ProductRepository;
 
 @Component
 @Order(2)
@@ -30,12 +29,15 @@ public class DataMigrationService implements CommandLineRunner {
         "PARTNERS",             "partners"
     );
 
-    @Autowired
-    private SanPhamRepository sanPhamRepository;
+    private final ProductRepository productRepository;
+
+    public DataMigrationService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public void run(String... args) {
-        if (sanPhamRepository.count() == 0) {
+        if (productRepository.count() == 0) {
             seed();
             // After a fresh seed all products have rangeId set — no backfill needed.
             return;
@@ -44,7 +46,7 @@ public class DataMigrationService implements CommandLineRunner {
 
         // Only run the backfill query if there are actually rows with null rangeId.
         // This avoids a full table scan on every startup once the data is clean.
-        long nullCount = sanPhamRepository.findByRangeIdIsNull().size();
+        long nullCount = productRepository.findByRangeIdIsNull().size();
         if (nullCount == 0) {
             log.info("[DataMigration] Backfill: all rows already have rangeId — skipping.");
             return;
@@ -55,15 +57,15 @@ public class DataMigrationService implements CommandLineRunner {
     // ── Seed ────────────────────────────────────────────────────────────────
 
     private void seed() {
-        List<SanPham> products = buildSeedData();
+        List<Product> products = buildSeedData();
         log.info("[DataMigration] Table is empty. Seeding {} products...", products.size());
         int count = 0;
-        for (SanPham sp : products) {
+        for (Product sp : products) {
             try {
-                sanPhamRepository.save(sp);
+                productRepository.save(sp);
                 count++;
             } catch (Exception e) {
-                log.error("[DataMigration] Failed to seed '{}': {}", sp.getTen(), e.getMessage());
+                log.error("[DataMigration] Failed to seed '{}': {}", sp.getName(), e.getMessage());
             }
         }
         log.info("[DataMigration] Seed complete — {} products inserted.", count);
@@ -72,19 +74,19 @@ public class DataMigrationService implements CommandLineRunner {
     // ── Backfill ─────────────────────────────────────────────────────────────
 
     private void backfillRangeIds() {
-        List<SanPham> nullRows = sanPhamRepository.findByRangeIdIsNull();
+        List<Product> nullRows = productRepository.findByRangeIdIsNull();
         if (nullRows.isEmpty()) {
             log.info("[DataMigration] Backfill: all rows already have rangeId — nothing to update.");
             return;
         }
         log.info("[DataMigration] Backfill: found {} row(s) with null rangeId.", nullRows.size());
         int updated = 0;
-        for (SanPham sp : nullRows) {
+        for (Product sp : nullRows) {
             String brand = sp.getBrand() != null ? sp.getBrand().toUpperCase() : "";
             String rangeId = BRAND_TO_RANGE.get(brand);
             if (rangeId != null) {
                 sp.setRangeId(rangeId);
-                sanPhamRepository.save(sp);
+                productRepository.save(sp);
                 updated++;
             } else {
                 log.warn("[DataMigration] Backfill: no rangeId mapping for brand '{}' (id={}) — skipped.",
@@ -98,7 +100,7 @@ public class DataMigrationService implements CommandLineRunner {
     // Single source of truth for initial product catalogue.
     // Add rows here and they will be inserted on first startup (empty table only).
 
-    private List<SanPham> buildSeedData() {
+    private List<Product> buildSeedData() {
         return List.of(
             // ── Grundfos Pumps — Pumps ───────────────────────────────────────
             sp("Booster Pump",           "pumps",  "/images/pump1.jpg", "Grundfos", "grundfos",
@@ -243,18 +245,18 @@ public class DataMigrationService implements CommandLineRunner {
 
     // ── Builder helpers ───────────────────────────────────────────────────────
 
-    private SanPham sp(String ten, String danhMuc, String hinhAnh, String brand, String rangeId,
+    private Product sp(String ten, String danhMuc, String hinhAnh, String brand, String rangeId,
                        String shortText, String moTa,
                        String[] features, String[] applications,
                        String[][] specs, String link) {
-        SanPham s = new SanPham();
-        s.setTen(ten);
-        s.setDanhMuc(danhMuc);
-        s.setHinhAnh(hinhAnh);
+        Product s = new Product();
+        s.setName(ten);
+        s.setCategory(danhMuc);
+        s.setImagePath(hinhAnh);
         s.setBrand(brand);
         s.setRangeId(rangeId);
         s.setShortText(shortText);
-        s.setMoTa(moTa);
+        s.setDescription(moTa);
         s.setLink(link);
         try {
             s.setFeatures(mapper.writeValueAsString(Arrays.asList(features)));

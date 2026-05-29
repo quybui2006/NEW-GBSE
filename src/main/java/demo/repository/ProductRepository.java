@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import demo.model.SanPham;
+import demo.model.Product;
 
 @Repository
-public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<SanPham> findByRangeIdIsNull();
+    List<Product> findByRangeIdIsNull();
 }

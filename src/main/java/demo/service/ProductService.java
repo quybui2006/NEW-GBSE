@@ -6,21 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import demo.model.Product;
 import demo.model.RangeGroup;
-import demo.model.SanPham;
-import demo.repository.SanPhamRepository;
+import demo.repository.ProductRepository;
 
 @Service
-public class SanPhamService {
+public class ProductService {
 
     private static final List<String> RANGE_ORDER = List.of("grundfos", "oceancooling", "partners");
 
@@ -36,31 +32,32 @@ public class SanPhamService {
         "partners",     "Hệ thống ứng dụng — liên kết hãng"
     );
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private SanPhamRepository sanPhamRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     // ── Public catalogue ─────────────────────────────────────────────────────
 
     @Cacheable("products")
     @Transactional(readOnly = true)
-    public List<SanPham> layTatCa() {
-        return sanPhamRepository.findAll(Sort.by("id").ascending());
+    public List<Product> findAll() {
+        return productRepository.findAll(Sort.by("id").ascending());
     }
 
     /** Groups a pre-fetched product list by rangeId in canonical order. */
-    public List<RangeGroup> getRangeGroups(List<SanPham> all) {
-        Map<String, List<SanPham>> byRange = new LinkedHashMap<>();
-        for (SanPham sp : all) {
-            String rId = sp.getRangeId();
+    public List<RangeGroup> getRangeGroups(List<Product> all) {
+        Map<String, List<Product>> byRange = new LinkedHashMap<>();
+        for (Product product : all) {
+            String rId = product.getRangeId();
             String key = (rId == null || rId.isBlank()) ? "__other__" : rId.trim().toLowerCase();
-            byRange.computeIfAbsent(key, k -> new ArrayList<>()).add(sp);
+            byRange.computeIfAbsent(key, k -> new ArrayList<>()).add(product);
         }
 
         List<RangeGroup> groups = new ArrayList<>();
         for (String rangeId : RANGE_ORDER) {
-            List<SanPham> products = byRange.get(rangeId);
+            List<Product> products = byRange.get(rangeId);
             if (products != null && !products.isEmpty()) {
                 groups.add(new RangeGroup(
                     rangeId,
@@ -81,7 +78,7 @@ public class SanPhamService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<SanPham> timTheoId(Long id) {
-        return sanPhamRepository.findById(id);
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
     }
 }
