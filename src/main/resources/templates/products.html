@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="~{fragments/layout :: head('Products | OMEAX')}"></th:block>
 </head>
@@ -43,7 +43,7 @@
         </button>
         <div class="range-body">
           <div class="product-grid">
-            <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.danhMuc}">
+            <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
               <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
               <div class="pbody">
                 <h4 th:text="${p.name}">Name</h4>

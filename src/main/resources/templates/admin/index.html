@@ -60,7 +60,7 @@
         <div class="chart-box mb-4">
             <div class="chart-title">
                 Quote Requests — Last 7 Days
-                <span th:if="${hasData}" class="badge-count" th:text="${tongYeuCau} + ' requests'"></span>
+                <span th:if="${hasData}" class="badge-count" th:text="${totalRequests} + ' requests'"></span>
             </div>
             <div th:if="${hasData}">
                 <canvas id="requestChart" class="chart-canvas"></canvas>
@@ -85,7 +85,7 @@
                     <button class="btn-filter" onclick="applyFilter()">Filter</button>
                     <button class="btn-reset"  onclick="resetFilter()">Clear</button>
                     <button class="btn-today"  onclick="setToday()">Today</button>
-                    <form th:action="@{/admin/bao-cao/excel}" method="post" style="margin:0">
+                    <form th:action="@{/admin/reports/excel}" method="post" style="margin:0">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <input type="hidden" name="period" th:value="${(from != null and !from.isEmpty()) ? 'custom' : 'all'}"/>
                         <input type="hidden" name="from" th:value="${from}"/>
@@ -125,54 +125,54 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="yc, stat : ${danhSachYeuCau}">
+                        <tr th:each="req, stat : ${requests}">
                             <td th:text="${currentPage * 20 + stat.index + 1}"></td>
-                            <td th:text="${yc.hoTen}"></td>
-                            <td class="nowrap-cell" th:text="${yc.soDienThoai}"></td>
-                            <td th:text="${yc.email}"></td>
-                            <td class="msg-cell" th:text="${yc.noiDung}"></td>
-                            <td class="date-cell" th:text="${#temporals.format(yc.thoiGian, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${req.fullName}"></td>
+                            <td class="nowrap-cell" th:text="${req.phone}"></td>
+                            <td th:text="${req.email}"></td>
+                            <td class="msg-cell" th:text="${req.message}"></td>
+                            <td class="date-cell" th:text="${#temporals.format(req.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
 
                             <td class="status-cell">
-                                <form th:id="${'form-' + yc.id}"
-                                      th:action="@{/admin/yeu-cau/{id}/cap-nhat(id=${yc.id})}"
+                                <form th:id="${'form-' + req.id}"
+                                      th:action="@{/admin/requests/{id}/update(id=${req.id})}"
                                       method="post">
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                     <input type="hidden" name="page" th:value="${currentPage}"/>
                                     <input type="hidden" name="from" th:value="${from}"/>
                                     <input type="hidden" name="to"   th:value="${to}"/>
                                     <input type="hidden"
-                                           th:id="${'note-hidden-' + yc.id}"
+                                           th:id="${'note-hidden-' + req.id}"
                                            name="adminNote"
-                                           th:value="${yc.adminNote}"/>
+                                           th:value="${req.adminNote}"/>
                                     <label class="status-toggle">
                                         <input type="checkbox"
                                                name="contacted"
                                                value="true"
-                                               th:checked="${yc.contacted}"
-                                               th:attr="onchange='submitRow(' + ${yc.id} + ')'"/>
-                                        <span th:class="${yc.contacted ? 'status-badge contacted' : 'status-badge pending'}"
-                                              th:text="${yc.contacted ? 'Contacted' : 'Not Contacted'}"></span>
+                                               th:checked="${req.contacted}"
+                                               th:attr="onchange='submitRow(' + ${req.id} + ')'"/>
+                                        <span th:class="${req.contacted ? 'status-badge contacted' : 'status-badge pending'}"
+                                              th:text="${req.contacted ? 'Contacted' : 'Not Contacted'}"></span>
                                     </label>
                                 </form>
                             </td>
 
                             <td class="note-cell">
-                                <span th:id="${'note-display-' + yc.id}"
+                                <span th:id="${'note-display-' + req.id}"
                                       class="note-display"
-                                      th:classappend="${(yc.adminNote == null or #strings.isEmpty(yc.adminNote)) ? ' note-empty' : ''}"
-                                      th:text="${yc.adminNote}"></span>
+                                      th:classappend="${(req.adminNote == null or #strings.isEmpty(req.adminNote)) ? ' note-empty' : ''}"
+                                      th:text="${req.adminNote}"></span>
                                 <button type="button"
-                                        th:id="${'btn-edit-' + yc.id}"
+                                        th:id="${'btn-edit-' + req.id}"
                                         class="btn-edit-note"
                                         title="Edit note"
-                                        th:attr="onclick='startEdit(' + ${yc.id} + ')'">✏</button>
-                                <textarea th:id="${'note-textarea-' + yc.id}"
+                                        th:attr="onclick='startEdit(' + ${req.id} + ')'">✏</button>
+                                <textarea th:id="${'note-textarea-' + req.id}"
                                           class="note-input"
                                           maxlength="1000"
                                           rows="2"
-                                          th:text="${yc.adminNote}"
-                                          th:attr="onkeydown='handleNoteKey(event,' + ${yc.id} + ')'"></textarea>
+                                          th:text="${req.adminNote}"
+                                          th:attr="onkeydown='handleNoteKey(event,' + ${req.id} + ')'"></textarea>
                             </td>
                         </tr>
                     </tbody>
