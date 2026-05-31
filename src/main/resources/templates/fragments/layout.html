@@ -30,7 +30,7 @@
           <div class="mega-cat-item"
                th:each="r : ${navRanges}"
                th:data-range="${r.id}"
-               href="/products">
+               th:href="@{/products}">
             <span th:text="${r.brand}">Brand</span>
             <span class="mega-cat-arr">›</span>
           </div>
