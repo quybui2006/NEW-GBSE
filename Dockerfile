@@ -8,6 +8,8 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 RUN mkdir -p uploads logs \
     && useradd -r -u 1001 appuser \
+
+    
     && chown -R appuser /app
 COPY --from=build /target/*.jar app.jar
 USER appuser

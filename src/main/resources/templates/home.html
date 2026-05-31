@@ -5,36 +5,36 @@
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>
-<main>
+<main id="main">
 
 <section class="hero">
   <div class="container">
-    <p style="margin:0 0 1rem;font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.4em;color:#e2e8f0;text-align:center;text-transform:uppercase">COMPANY INTRODUCTION</p>
-    <h1 style="margin:0;font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(1.1rem,3.5vw,3.25rem);line-height:1.1;color:#fff;text-align:center;letter-spacing:.02em;white-space:nowrap">OMEAX JOINT STOCK COMPANY</h1>
-    <p style="margin:1.5rem auto 0;color:#e2e8f0;font-size:clamp(1rem,1.5vw,1.25rem);max-width:40rem;text-align:center;letter-spacing:.03em;line-height:1.75">Your partner for mechanical and electrical equipment</p>
-    <div style="margin-top:2.5rem;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap">
-      <a class="btn btn-light" href="/products" style="padding:.875rem 2.25rem;font-size:.95rem;letter-spacing:.02em">Explore Products →</a>
-      <a class="btn btn-ghost-light" href="/contact" style="padding:.875rem 2.25rem;font-size:.95rem;letter-spacing:.02em">Contact Us</a>
+    <p class="hero-eyebrow">COMPANY INTRODUCTION</p>
+    <h1 class="hero-title">OMEAX JOINT STOCK COMPANY</h1>
+    <p class="hero-lead">Your partner for mechanical and electrical equipment</p>
+    <div class="hero-actions">
+      <a class="btn btn-light btn-hero" href="/products">Explore Products →</a>
+      <a class="btn btn-ghost-light btn-hero" href="/contact">Contact Us</a>
     </div>
   </div>
 </section>
 
-<section style="padding:5rem 0">
-  <div class="container" style="max-width:48rem;text-align:center">
+<section class="home-section">
+  <div class="container home-intro">
     <p class="eyebrow">About Us</p>
     <h2 class="section-title">Who We Are</h2>
-    <p style="margin-top:1.5rem;color:#334155;font-size:1.1rem;line-height:1.7">OMEAX Joint Stock Company is a Vietnam-based partner for mechanical and electrical equipment serving HVAC, plumbing, and fire protection projects. With over 15 years of experience and a global network, we deliver end-to-end solutions from design consulting and equipment supply to after-sales support.</p>
-    <a class="btn btn-primary" href="/about" style="margin-top:2rem">Learn more →</a>
+    <p class="home-intro-body">OMEAX Joint Stock Company is a Vietnam-based partner for mechanical and electrical equipment serving HVAC, plumbing, and fire protection projects. With over 15 years of experience and a global network, we deliver end-to-end solutions from design consulting and equipment supply to after-sales support.</p>
+    <a class="btn btn-primary mt-2" href="/about">Learn more →</a>
   </div>
 </section>
 
-<section class="bg-secondary" style="padding:5rem 0">
+<section class="bg-secondary home-section">
   <div class="container cust-container">
-    <div style="text-align:center">
+    <div class="text-center">
       <h2 class="section-title">Strategic Customers</h2>
-      <p class="muted" style="margin-top:.75rem">Developers, Contractors &amp; Designers</p>
+      <p class="muted cust-head-sub">Developers, Contractors &amp; Designers</p>
     </div>
-    <div style="margin-top:2rem">
+    <div class="mt-2">
       <div class="cust-group">
         <h3>Developers</h3>
         <div class="cust-wrapper">

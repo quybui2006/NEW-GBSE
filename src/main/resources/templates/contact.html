@@ -7,7 +7,7 @@
 
 <body>
   <div th:replace="~{fragments/layout :: navbar}"></div>
-  <main>
+  <main id="main">
 
     <section class="crumb">
       <div class="container">
@@ -55,7 +55,7 @@
           <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
           <!-- Honeypot — bots fill this, humans don't -->
-          <div style="display:none" aria-hidden="true">
+          <div class="is-hidden" aria-hidden="true">
             <label for="website">Leave blank</label>
             <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
           </div>

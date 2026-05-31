@@ -5,7 +5,7 @@
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>
-<main>
+<main id="main">
 
 <section class="page-header">
   <div class="container">
@@ -18,13 +18,13 @@
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
-    <span style="color:#152352;font-weight:600" href="/products">Products</span>
+    <span class="crumb-current" href="/products">Products</span>
   </div>
 </section>
 
-<section style="padding:2.5rem 0;background:#fff">
+<section class="section-search">
   <div class="container">
-    <p style="font-size:1.1rem;font-weight:600;color:#152352;margin-bottom:0.75rem;text-align:center;">What are you looking for?</p>
+    <p class="search-prompt">What are you looking for?</p>
     <div class="search-wrap">
       <span class="search-icon"></span>
       <input id="search" type="text" autocomplete="off" placeholder="Search products..."/>
@@ -33,7 +33,7 @@
   </div>
 </section>
 
-<section style="background:#fff;padding:0 0 4rem">
+<section class="section-ranges">
   <div class="container">
     <div class="range-list">
       <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
@@ -82,7 +82,7 @@
     sug.innerHTML = items.map(p =>
       '<a href="/products/' + p.id + '">'
       + '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '"/>'
-      + '<div style="min-width:0;flex:1">'
+      + '<div class="sug-text">'
       + '<div class="name">' + esc(p.name) + '</div>'
       + '<div class="short">' + esc(p.shortText) + '</div>'
       + '</div>'

@@ -5,36 +5,36 @@
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>
-<main>
+<main id="main">
 
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
     <a href="/products">Products</a><span class="sep">/</span>
-    <span style="color:#152352;font-weight:600" th:text="${product.name}">Product</span>
+    <span class="crumb-current" th:text="${product.name}">Product</span>
   </div>
 </section>
 
-<section style="padding:3rem 0">
+<section class="section-pad-3">
   <div class="container">
     <div class="detail-hero">
       <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
       <div>
         <p class="eyebrow" th:text="${product.brand}">Brand</p>
         <h1 th:text="${product.name}">Name</h1>
-        <p style="margin-top:1rem;font-size:1.1rem;color:#334155" th:text="${product.shortText}">short</p>
-        <p style="margin-top:1rem;color:#475569;line-height:1.7" th:text="${product.description}">desc</p>
+        <p class="pd-short" th:text="${product.shortText}">short</p>
+        <p class="pd-desc" th:text="${product.description}">desc</p>
         <div class="tags">
           <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
         </div>
         <a th:if="${'partners'.equals(product.rangeId) and product.link != null and !product.link.isBlank()}"
-           th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top:1.5rem">Visit Website →</a>
+           th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary btn-mt">Visit Website →</a>
       </div>
     </div>
   </div>
 </section>
 
-<section style="padding:0 0 5rem">
+<section class="section-pb-5">
   <div class="container">
     <div class="grid grid-2">
       <div class="spec-card">
@@ -51,12 +51,12 @@
             <div class="val" th:text="${s.value}">value</div>
           </th:block>
         </div>
-        <p th:if="${#lists.isEmpty(product.specsList)}" style="color:#64748b;font-size:.875rem">Contact us for detailed specifications tailored to your project.</p>
-        <a href="/contact" class="btn btn-primary" style="margin-top:1.5rem">Request a quote →</a>
+        <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
+        <a href="/contact" class="btn btn-primary btn-mt">Request a quote →</a>
       </div>
     </div>
-    <div style="margin-top:2rem">
-      <a href="/products" style="color:#1e3a8a;font-weight:600">← Back to products</a>
+    <div class="mt-2">
+      <a href="/products" class="text-navy-bold">← Back to products</a>
     </div>
   </div>
 </section>
