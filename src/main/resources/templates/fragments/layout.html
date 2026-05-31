@@ -137,6 +137,7 @@
             navMega.classList.remove('mega-open');
             if (flyoutSub) flyoutSub.classList.remove('flyout-open');
             if (backdrop) backdrop.classList.remove('mega-open');
+            megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){ c.classList.remove('mega-active'); });
           }, 200);
         }
         function showFlyout(catItem) {
@@ -172,6 +173,7 @@
           navMega.classList.remove('mega-open');
           if (flyoutSub) flyoutSub.classList.remove('flyout-open');
           backdrop.classList.remove('mega-open');
+          megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){ c.classList.remove('mega-active'); });
         });
         megaPanel.querySelectorAll('.mega-cat-item').forEach(function(c){
           c.addEventListener('mouseenter', function(){ showFlyout(c); });

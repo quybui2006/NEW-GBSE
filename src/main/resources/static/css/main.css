@@ -113,6 +113,7 @@ a{color:inherit;text-decoration:none}
   border-bottom:1px solid #f0f2fb;border-left:3px solid transparent;
   transition:background .14s,color .14s,padding-left .14s,border-left-color .14s;
 }
+.mega-cat-item::after{display:none}
 .mega-cat-item:last-child{border-bottom:none}
 .mega-cat-item:hover,.mega-cat-item.mega-active{
   background:rgba(40,58,130,.08);color:var(--blue);border-left-color:var(--blue);padding-left:18px;
