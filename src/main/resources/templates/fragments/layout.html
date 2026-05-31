@@ -27,13 +27,13 @@
           Products <span class="mega-caret">▾</span>
         </a>
         <div class="mega-panel" id="megaPanel" th:if="${navRanges != null and !#lists.isEmpty(navRanges)}">
-          <div class="mega-cat-item"
-               th:each="r : ${navRanges}"
-               th:data-range="${r.id}"
-               th:href="@{/products}">
+          <a class="mega-cat-item"
+             th:each="r : ${navRanges}"
+             th:data-range="${r.id}"
+             th:href="@{/products}">
             <span th:text="${r.brand}">Brand</span>
             <span class="mega-cat-arr">›</span>
-          </div>
+          </a>
         </div>
       </div>
       <a th:class="${currentUri == '/about' ? 'active' : ''}" href="/about">About</a>

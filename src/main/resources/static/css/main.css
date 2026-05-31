@@ -107,7 +107,7 @@ a{color:inherit;text-decoration:none}
 
 .mega-cat-item{
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px;cursor:pointer;
+  padding:10px 14px;cursor:pointer;text-decoration:none;
   font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:600;
   color:var(--navy);letter-spacing:.04em;
   border-bottom:1px solid #f0f2fb;border-left:3px solid transparent;
