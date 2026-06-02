@@ -1,0 +1,30 @@
+# Local development database only — NOT used in production.
+# Production runs on Supabase; this gives local dev the same Postgres engine.
+#
+# Usage:
+#   docker compose up -d        # start the database
+#   docker compose down         # stop (keeps data)
+#   docker compose down -v      # stop and wipe data (clean slate for migrations)
+#
+# IMPORTANT: match the image major version to your Supabase Postgres version
+# (Supabase dashboard → Settings → Database). Adjust the tag below if needed.
+services:
+  db:
+    image: postgres:16
+    container_name: vanbom_db_local
+    environment:
+      POSTGRES_DB: vanbom_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vanbom_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
