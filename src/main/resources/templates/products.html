@@ -35,10 +35,21 @@
 
 <section class="section-ranges">
   <div class="container">
-    <div class="range-list">
+    <div class="cat-layout">
+
+      <!-- Sticky range index -->
+      <nav class="cat-index" aria-label="Product ranges">
+        <p class="cat-index-title">Ranges</p>
+        <a th:each="r,it : ${ranges}" th:href="|#range-${r.id}|" class="cat-index-link" th:data-range="${r.id}">
+          <span class="n" th:text="${it.count}">1</span>
+          <span th:text="${r.brand}">Brand</span>
+        </a>
+      </nav>
+
+      <div class="range-list">
       <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
-          <span><h3 th:text="${r.brand}">Brand</h3></span>
+          <h3 th:data-n="${it.count}" th:text="${r.brand}">Brand</h3>
           <span class="chevron"></span>
         </button>
         <div class="range-body">
@@ -53,6 +64,8 @@
           </div>
         </div>
       </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -103,6 +116,19 @@
   input.addEventListener('input', e => { renderSug(searchAll(e.target.value)); filterCards(e.target.value); });
   input.addEventListener('focus', e => renderSug(searchAll(e.target.value)));
   input.addEventListener('blur', () => setTimeout(()=>sug.classList.remove('open'),150));
+</script>
+<script>
+  // Range index → open target range + smooth-scroll
+  document.querySelectorAll('.cat-index-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var id = link.getAttribute('href').slice(1);
+      var range = document.getElementById(id);
+      if (!range) return;
+      e.preventDefault();
+      range.classList.add('open');
+      range.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 </script>
 <div th:replace="~{fragments/layout :: ticker-home}"></div>
 <div th:replace="~{fragments/layout :: footer}"></div>
