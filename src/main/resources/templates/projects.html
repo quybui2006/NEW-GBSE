@@ -246,7 +246,16 @@ function scrollProj(id, dir) {
   var gap = parseFloat(getComputedStyle(row).columnGap) || 0;
   var step = Math.round(card.getBoundingClientRect().width + gap);
   var target = Math.round(row.scrollLeft / step + dir) * step;
-  row.scrollTo({ left: Math.max(0, Math.min(target, row.scrollWidth - row.clientWidth)), behavior: 'smooth' });
+  target = Math.max(0, Math.min(target, row.scrollWidth - row.clientWidth));
+  // iOS Safari/WebKit ignores or reverts programmatic scroll while scroll-snap is
+  // active, so the arrows appear dead. Turn snapping off for the scroll, then restore.
+  row.style.scrollSnapType = 'none';
+  row.scrollTo({ left: target, behavior: 'smooth' });
+  clearTimeout(row._snapRestore);
+  row._snapRestore = setTimeout(function () {
+    row.style.scrollSnapType = '';
+    updateProjNav(row);
+  }, 500);
 }
 
 document.addEventListener('DOMContentLoaded', function () {

@@ -264,27 +264,31 @@ a{color:inherit;text-decoration:none}
 /* Slider is a plain block — arrows live below the row, not beside it.
    This ensures .proj-row always fills 100% width regardless of arrow visibility. */
 .proj-slider{position:relative;overflow:hidden}
-.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
+/* proximity (not mandatory): when a row overflows by less than one card (e.g. 3 cards
+   at 2-per-row), the last snap point sits just past max scroll. mandatory would refuse
+   to rest there and snap back to start, making the arrows look broken — proximity lets
+   the row rest at the end so the final card is reachable. */
+.proj-row{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
 .proj-row::-webkit-scrollbar{display:none}
 /* Desktop: 3 cards. gap cost = 2×1.5rem = 3rem */
 .proj-row .card{flex:0 0 calc((100% - 3rem)/3);scroll-snap-align:start;min-width:0}
 /* ≤900 px: 2 cards. gap cost = 1×1.5rem = 1.5rem */
 @media(max-width:900px){.proj-row .card{flex:0 0 calc((100% - 1.5rem)/2)}}
-/* ≤560 px: 1 card full-width — eliminates snap misalignment on small phones */
-@media(max-width:560px){.proj-row{gap:0;scroll-snap-type:x mandatory}.proj-row .card{flex:0 0 100%;scroll-snap-stop:always}}
+/* ≤560 px: still 2 cards, tighter gap so both fit on small phones. gap cost = 1×1rem */
+@media(max-width:560px){.proj-row{gap:1rem}.proj-row .card{flex:0 0 calc((100% - 1rem)/2)}}
 /* Nav row: always rendered so height never jumps; hidden via visibility not display */
 .proj-nav{display:flex;justify-content:flex-end;gap:.5rem;margin-top:.75rem;min-height:44px;align-items:center}
 .proj-arrow{width:40px;height:40px;border-radius:50%;border:1px solid #e2e8f0;background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-size:1.25rem;box-shadow:0 2px 8px rgba(40,58,130,.15);transition:background .2s,color .2s,opacity .2s}
 .proj-arrow:hover{background:var(--navy);color:#fff}
 .proj-arrow:disabled{opacity:.3;cursor:default;pointer-events:none;box-shadow:none}
-/* Desktop (≥769 px): hide nav when ≤3 cards fit without scrolling */
-@media(min-width:769px){
+/* Desktop (≥901 px): 3 cards/row — hide nav when ≤3 cards fit without scrolling */
+@media(min-width:901px){
   .proj-slider[data-count="1"] .proj-nav,
   .proj-slider[data-count="2"] .proj-nav,
   .proj-slider[data-count="3"] .proj-nav{visibility:hidden}
 }
-/* Mobile (≤768 px): hide nav when ≤2 cards; smaller touch targets */
-@media(max-width:768px){
+/* Mobile/tablet (≤900 px): 2 cards/row — hide nav when ≤2 cards; smaller touch targets */
+@media(max-width:900px){
   .proj-slider[data-count="1"] .proj-nav,
   .proj-slider[data-count="2"] .proj-nav{visibility:hidden}
   .proj-arrow{width:36px;height:36px;font-size:1.1rem}
