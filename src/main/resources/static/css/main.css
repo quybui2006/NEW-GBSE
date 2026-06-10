@@ -421,7 +421,7 @@ form{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;padding:1.5re
 form label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.35rem}
 form input:not([type="checkbox"]),form textarea{width:100%;height:2.75rem;box-sizing:border-box;padding:.6rem .8rem;border:1px solid #e2e8f0;border-radius:.5rem;font-size:.9rem;font-family:inherit;line-height:1.55;color:#0f172a;background:#fff;outline:none}
 form input:not([type="checkbox"]):focus,form textarea:focus{border-color:var(--navy)}
-form textarea{resize:none;overflow:hidden}
+form textarea{height:auto;min-height:8rem;resize:vertical;overflow-y:auto}
 
 /* ── About info cards (giữ nguyên) ───────────────────────────────────────── */
 .info-card{background:#fff;border-radius:.75rem;padding:1.25rem;box-shadow:0 4px 20px -8px rgba(40,58,130,.15);display:flex;gap:1rem}
@@ -507,7 +507,7 @@ form textarea{resize:none;overflow:hidden}
 .home-section{padding:5rem 0}
 .home-intro{max-width:48rem;text-align:center}
 .home-intro-body{margin-top:1.5rem;color:#334155;font-size:1.1rem;line-height:1.7}
-.cust-head-sub{margin-top:.75rem}
+.cust-head-sub{margin-top:0}
 
 /* About */
 .grid-feature{gap:2.5rem;align-items:center}
