@@ -47,7 +47,7 @@ public class PublicController {
     @GetMapping("/news")
     public String news() { return "news"; }
 
-    @GetMapping("/products")
+    @GetMapping({"/products", "/products/"})
     public String products(Model model) {
         List<Product> all = productService.findAll();
         model.addAttribute("ranges", productService.getRangeGroups(all));
@@ -60,6 +60,12 @@ public class PublicController {
         Product product = productService.findById(id).orElse(null);
         if (product == null) return "redirect:/products";
         model.addAttribute("product", product);
+        String desc = (product.getDescription() != null && !product.getDescription().isBlank())
+                ? product.getDescription()
+                : (product.getShortText() != null && !product.getShortText().isBlank())
+                        ? product.getShortText()
+                        : "OMEAX – Your partner for mechanical and electrical equipment.";
+        model.addAttribute("ogDescription", desc);
         return "product-detail";
     }
 

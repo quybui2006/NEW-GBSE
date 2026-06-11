@@ -2,6 +2,56 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="~{fragments/layout :: head('Home | OMEAX')}"></th:block>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.omeax.vn/#organization",
+      "name": "OMEAX Joint Stock Company",
+      "alternateName": "OMEAX",
+      "url": "https://www.omeax.vn",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.omeax.vn/images/logo.png"
+      },
+      "email": "info@omeax.com",
+      "description": "OMEAX Joint Stock Company is a Vietnam-based distributor of mechanical and electrical equipment including Grundfos pumps, industrial valves, heat pumps, and building MEP equipment for HVAC, plumbing, and fire protection projects.",
+      "foundingDate": "2023-11-08",
+      "taxID": "0110535209",
+      "address": [
+        {
+          "@type": "PostalAddress",
+          "name": "Hanoi Office",
+          "streetAddress": "Villa 7 HDI Homes, 201 Nguyen Tuan",
+          "addressLocality": "Thanh Xuan",
+          "addressRegion": "Hanoi",
+          "addressCountry": "VN"
+        },
+        {
+          "@type": "PostalAddress",
+          "name": "Ho Chi Minh City Branch",
+          "streetAddress": "11B Hong Ha",
+          "addressLocality": "Tan Binh",
+          "addressRegion": "Ho Chi Minh City",
+          "addressCountry": "VN"
+        }
+      ],
+      "areaServed": { "@type": "Country", "name": "Vietnam" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.omeax.vn/#website",
+      "url": "https://www.omeax.vn",
+      "name": "OMEAX",
+      "description": "OMEAX – Your partner for mechanical and electrical equipment.",
+      "publisher": { "@id": "https://www.omeax.vn/#organization" },
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <div th:replace="~{fragments/layout :: navbar}"></div>

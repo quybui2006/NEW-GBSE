@@ -1,5 +1,6 @@
 package demo.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.LockedException;
@@ -38,13 +39,34 @@ public class SecurityConfig {
             // Explicit allowlist — every unmatched route is DENIED by default.
             // New controller methods are NOT accidentally public.
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/products", "/products/**",
+                .requestMatchers("/", "/products", "/products/", "/products/**",
                                  "/contact", "/about", "/projects", "/news",
                                  "/css/**", "/js/**", "/images/**", "/uploads/**",
+                                 "/robots.txt", "/sitemap.xml", "/llms.txt", "/favicon.ico",
                                  "/actuator/health",
                                  "/error", "/access-denied").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().denyAll()
+            )
+
+            // ── Exception handling ───────────────────────────────────────────
+            // Unauthenticated users hitting admin routes → login page.
+            // Everything else (truly unknown routes) → 404 instead of a login redirect.
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    if (request.getRequestURI().startsWith("/admin")) {
+                        response.sendRedirect(request.getContextPath() + "/login");
+                    } else {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    }
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    if (request.getRequestURI().startsWith("/admin")) {
+                        response.sendRedirect(request.getContextPath() + "/access-denied");
+                    } else {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    }
+                })
             )
 
             // ── Form login ───────────────────────────────────────────────────

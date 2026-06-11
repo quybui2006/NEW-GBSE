@@ -6,7 +6,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title th:text="${pageTitle}">ŌMEAX</title>
-<meta name="description" content="OMEAX – Your partner for mechanical and electrical equipment."/>
+<meta name="description" th:content="${ogDescription}"/>
+<link rel="canonical" th:href="${canonicalUrl}"/>
+<!-- Open Graph -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="OMEAX"/>
+<meta property="og:title" th:content="${pageTitle}"/>
+<meta property="og:description" th:content="${ogDescription}"/>
+<meta property="og:url" th:content="${canonicalUrl}"/>
+<meta property="og:image" content="https://www.omeax.vn/images/logo.png"/>
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" th:content="${pageTitle}"/>
+<meta name="twitter:description" th:content="${ogDescription}"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Nunito is used by .logo in main.css -->

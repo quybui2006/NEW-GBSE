@@ -24,6 +24,16 @@ public class GlobalModelAttributes {
         return request.getRequestURI();
     }
 
+    @ModelAttribute("canonicalUrl")
+    public String canonicalUrl(HttpServletRequest request) {
+        return "https://www.omeax.vn" + request.getRequestURI();
+    }
+
+    @ModelAttribute("ogDescription")
+    public String ogDescription() {
+        return "OMEAX – Your partner for mechanical and electrical equipment.";
+    }
+
     @ModelAttribute("navRanges")
     public List<RangeGroup> navRanges() {
         try {

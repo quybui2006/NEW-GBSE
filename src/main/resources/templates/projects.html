@@ -2,6 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="~{fragments/layout :: head('Projects | OMEAX')}"></th:block>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.omeax.vn/" },
+    { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://www.omeax.vn/projects" }
+  ]
+}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
