@@ -87,12 +87,14 @@ public class EmailService {
                 : "—";
         String email = request.getEmail() != null ? request.getEmail() : "—";
 
+        // Colours are literal hex on purpose: mail clients strip <style> blocks and
+        // do not support CSS custom properties, so these mirror theme.css by hand.
         return "<div style=\"font-family:Arial,sans-serif;max-width:600px;margin:0 auto\">"
-             + "<div style=\"background:#283A82;padding:24px 32px;border-radius:8px 8px 0 0\">"
+             + "<div style=\"background:#1B6D42;padding:24px 32px;border-radius:8px 8px 0 0\">"
              + "<h2 style=\"color:#fff;margin:0\">New Quote Request</h2>"
-             + "<p style=\"color:rgba(255,255,255,.7);margin:4px 0 0\">OMEAX Admin Notification</p>"
+             + "<p style=\"color:rgba(255,255,255,.78);margin:4px 0 0\">OMEAX Admin Notification</p>"
              + "</div>"
-             + "<div style=\"background:#f8fafc;padding:32px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 8px 8px\">"
+             + "<div style=\"background:#EAF6EF;padding:32px;border:1px solid #D5E3DA;border-top:none;border-radius:0 0 8px 8px\">"
              + "<table style=\"width:100%;border-collapse:collapse\">"
              + row("Full name", "<strong>" + request.getFullName() + "</strong>")
              + row("Phone",     "<strong>" + request.getPhone() + "</strong>")
@@ -105,8 +107,8 @@ public class EmailService {
 
     private static String row(String label, String value) {
         return "<tr>"
-             + "<td style=\"padding:8px 0;color:#64748b;width:120px\">" + label + "</td>"
-             + "<td style=\"padding:8px 0;color:#0f172a\">" + value + "</td>"
+             + "<td style=\"padding:8px 0;color:#6B7770;width:120px\">" + label + "</td>"
+             + "<td style=\"padding:8px 0;color:#17221B\">" + value + "</td>"
              + "</tr>";
     }
 }

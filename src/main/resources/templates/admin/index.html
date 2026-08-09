@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | OMEAX Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -210,6 +211,12 @@ const chartLabels = /*[[${chartLabels}]]*/ [];
 const chartRequestData = /*[[${chartRequestData}]]*/ [];
 const hasData = /*[[${hasData}]]*/ false;
 
+/* Chart.js cannot read CSS variables itself, so resolve them once from :root.
+   Keeps the chart on the same palette as the rest of the theme. */
+function themeColor(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 if (hasData) {
     new Chart(document.getElementById('requestChart'), {
         type: 'bar',
@@ -217,7 +224,7 @@ if (hasData) {
             labels: chartLabels,
             datasets: [{
                 data: chartRequestData,
-                backgroundColor: '#283A82',
+                backgroundColor: themeColor('--color-primary'),
                 borderRadius: 4,
                 maxBarThickness: 50
             }]
@@ -228,9 +235,9 @@ if (hasData) {
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: '#283A82',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
+                    backgroundColor: themeColor('--color-text'),
+                    titleColor: themeColor('--color-on-primary'),
+                    bodyColor: themeColor('--color-on-primary'),
                     cornerRadius: 8,
                     padding: 12,
                     displayColors: false
@@ -239,7 +246,7 @@ if (hasData) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#dce4ff' },
+                    grid: { color: themeColor('--color-border') },
                     ticks: { font: { size: 12 }, stepSize: 1 }
                 },
                 x: {

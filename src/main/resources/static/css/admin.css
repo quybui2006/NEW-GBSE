@@ -1,14 +1,9 @@
 /* ─────────────────────────────────────────────────────────────────────────── */
 /*  admin.css — OMEAX Admin Panel                                              */
-/*  Design tokens match main.css                                               */
+/*  Colour tokens live in theme.css, which must be loaded first.               */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 :root {
-  --navy:         #283A82;
-  --blue:         #729AFF;
-  --muted:        #8A97C0;
-  --light:        #f4f7ff;
-  --border:       #dce4ff;
   --ease:         cubic-bezier(.4, 0, .2, 1);
   --sidebar-w:    220px;
   --mobile-bar-h: 56px;
@@ -19,8 +14,8 @@
 
 body {
   font-family: 'Open Sans', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  color: #0f172a;
-  background: var(--light);
+  color: var(--color-text);
+  background: var(--color-background-light);
   -webkit-font-smoothing: antialiased;
   line-height: 1.55;
   margin: 0;
@@ -29,10 +24,12 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
-  color: var(--navy);
+  color: var(--color-text);
 }
 
 a { text-decoration: none; color: inherit; }
+
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 2px; }
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
 .admin-layout {
@@ -54,7 +51,7 @@ a { text-decoration: none; color: inherit; }
   left: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: var(--navy);
+  background: var(--color-primary);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 0 1.25rem;
@@ -67,10 +64,10 @@ a { text-decoration: none; color: inherit; }
   font-weight: 800;
   font-size: 0.9rem;
   letter-spacing: 0.12em;
-  color: #fff;
+  color: var(--color-on-primary);
   text-transform: uppercase;
   padding: 0 1.25rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   margin-bottom: 0.75rem;
 }
 
@@ -86,26 +83,26 @@ a { text-decoration: none; color: inherit; }
   display: block;
   padding: 0.55rem 0.75rem;
   border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-on-primary-soft);
   font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s var(--ease);
 }
 
 .sidebar-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-on-primary);
 }
 
 .sidebar-link.active {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--color-on-primary);
   font-weight: 600;
 }
 
 .sidebar-footer {
   padding: 0.75rem 0.75rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
   margin-top: auto;
 }
 
@@ -118,7 +115,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 0.5rem;
   background: none;
   border: none;
-  color: rgba(255, 100, 100, 0.8);
+  color: var(--color-danger-on-dark);
   font-size: 0.875rem;
   font-weight: 500;
   font-family: inherit;
@@ -128,8 +125,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 .sidebar-logout:hover {
-  background: rgba(255, 107, 107, 0.15);
-  color: #ff6b6b;
+  background: rgba(255, 209, 204, 0.18);
+  color: var(--color-danger-on-dark);
 }
 
 /* ── Mobile header ────────────────────────────────────────────────────────── */
@@ -140,19 +137,19 @@ a { text-decoration: none; color: inherit; }
   left: 0;
   right: 0;
   height: var(--mobile-bar-h);
-  background: var(--navy);
+  background: var(--color-primary);
   padding: 0 1.25rem;
   align-items: center;
   justify-content: space-between;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(40, 58, 130, 0.25);
+  box-shadow: 0 2px 12px rgba(var(--color-primary-rgb), 0.25);
 }
 
 .admin-mobile-header .brand {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
   font-size: 0.9rem;
-  color: #fff;
+  color: var(--color-on-primary);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -160,7 +157,7 @@ a { text-decoration: none; color: inherit; }
 .admin-mobile-header .toggle-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-on-primary);
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
@@ -170,17 +167,17 @@ a { text-decoration: none; color: inherit; }
 }
 
 .admin-mobile-header .toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 /* ── Mobile offcanvas ─────────────────────────────────────────────────────── */
 .admin-offcanvas {
-  --bs-offcanvas-bg: var(--navy);
+  --bs-offcanvas-bg: var(--color-primary);
   width: var(--sidebar-w) !important;
 }
 
 .admin-offcanvas .offcanvas-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   padding: 1.25rem;
 }
 
@@ -202,20 +199,20 @@ a { text-decoration: none; color: inherit; }
   display: block;
   padding: 0.55rem 0.75rem;
   border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-on-primary-soft);
   font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s var(--ease);
 }
 
 .admin-offcanvas .offcanvas-nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-on-primary);
 }
 
 .admin-offcanvas .offcanvas-nav a.active {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--color-on-primary);
   font-weight: 600;
 }
 
@@ -224,17 +221,17 @@ a { text-decoration: none; color: inherit; }
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 1.2rem;
-  color: var(--navy);
+  color: var(--color-text);
   margin-bottom: 1.5rem;
 }
 
 /* ── Stat cards ───────────────────────────────────────────────────────────── */
 .stat-card {
-  background: #fff;
-  border: 1px solid var(--border);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.12);
+  box-shadow: 0 4px 20px -8px rgba(var(--color-primary-rgb), 0.12);
   text-align: center;
 }
 
@@ -243,7 +240,7 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--muted);
+  color: var(--color-text-muted);
   margin-bottom: 0.5rem;
 }
 
@@ -251,23 +248,23 @@ a { text-decoration: none; color: inherit; }
   font-family: 'Montserrat', sans-serif;
   font-size: 2.75rem;
   font-weight: 800;
-  color: var(--navy);
+  color: var(--color-primary);
   line-height: 1;
 }
 
 .no-data-message {
   font-size: 0.875rem;
-  color: var(--muted);
+  color: var(--color-text-muted);
   padding: 0.25rem 0;
 }
 
 /* ── Chart box ────────────────────────────────────────────────────────────── */
 .chart-box {
-  background: #fff;
-  border: 1px solid var(--border);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.12);
+  box-shadow: 0 4px 20px -8px rgba(var(--color-primary-rgb), 0.12);
 }
 
 .chart-title {
@@ -276,7 +273,7 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--navy);
+  color: var(--color-text);
   margin-bottom: 1.25rem;
 }
 
@@ -284,12 +281,12 @@ a { text-decoration: none; color: inherit; }
 
 /* ── Filter bar ───────────────────────────────────────────────────────────── */
 .filter-bar {
-  background: #fff;
-  border: 1px solid var(--border);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 20px -8px rgba(40, 58, 130, 0.08);
+  box-shadow: 0 4px 20px -8px rgba(var(--color-primary-rgb), 0.08);
 }
 
 .filter-bar label {
@@ -298,25 +295,25 @@ a { text-decoration: none; color: inherit; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--muted);
+  color: var(--color-text-muted);
   margin-bottom: 0.3rem;
 }
 
 input[type="date"] {
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: 0.5rem;
   padding: 0.45rem 0.75rem;
   font-size: 0.875rem;
   font-family: inherit;
-  color: #0f172a;
-  background: #fff;
+  color: var(--color-text);
+  background: var(--color-surface);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input[type="date"]:focus {
-  border-color: var(--navy);
-  box-shadow: 0 0 0 3px rgba(40, 58, 130, 0.1);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.12);
 }
 
 /* ── Filter buttons ───────────────────────────────────────────────────────── */
@@ -334,35 +331,35 @@ input[type="date"]:focus {
 }
 
 .btn-filter {
-  background: var(--navy);
-  color: #fff;
-  border-color: var(--navy);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
 
-.btn-filter:hover { background: #1e2d6b; border-color: #1e2d6b; }
+.btn-filter:hover { background: var(--color-primary-hover); border-color: var(--color-primary-hover); }
 
 .btn-reset {
   background: transparent;
-  color: var(--navy);
-  border-color: var(--border);
+  color: var(--color-text);
+  border-color: var(--color-border);
 }
 
-.btn-reset:hover { border-color: var(--navy); background: var(--light); }
+.btn-reset:hover { border-color: var(--color-primary); background: var(--color-background-light); }
 
 .btn-today {
-  background: var(--light);
-  color: var(--navy);
-  border-color: var(--border);
+  background: var(--color-background-light);
+  color: var(--color-primary);
+  border-color: var(--color-border);
 }
 
-.btn-today:hover { background: var(--border); }
+.btn-today:hover { background: var(--color-border); }
 
 /* ── Badges & pagination ──────────────────────────────────────────────────── */
 .badge-count {
   display: inline-block;
-  background: var(--light);
-  color: var(--navy);
-  border: 1px solid var(--border);
+  background: var(--color-background-light);
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
   border-radius: 9999px;
   font-size: 0.7rem;
   font-weight: 600;
@@ -373,7 +370,18 @@ input[type="date"]:focus {
 
 .page-info {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: var(--color-text-muted);
+}
+
+/* Bootstrap pagination buttons — pulled onto the theme palette */
+.btn-outline-secondary {
+  --bs-btn-color: var(--color-text);
+  --bs-btn-border-color: var(--color-border);
+  --bs-btn-hover-color: var(--color-on-primary);
+  --bs-btn-hover-bg: var(--color-primary);
+  --bs-btn-hover-border-color: var(--color-primary);
+  --bs-btn-disabled-color: var(--color-text-muted);
+  --bs-btn-disabled-border-color: var(--color-border);
 }
 
 /* ── Table ────────────────────────────────────────────────────────────────── */
@@ -383,8 +391,8 @@ input[type="date"]:focus {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background: var(--navy) !important;
-  color: #fff !important;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
   border-color: rgba(255, 255, 255, 0.15) !important;
   padding: 0.75rem 1rem;
 }
@@ -393,10 +401,11 @@ input[type="date"]:focus {
   font-size: 0.875rem;
   padding: 0.65rem 1rem;
   vertical-align: middle;
-  border-color: var(--border);
+  border-color: var(--color-border);
+  color: var(--color-text);
 }
 
-.admin-table tbody tr:hover td { background: var(--light); }
+.admin-table tbody tr:hover td { background: var(--color-background-light); }
 
 /* ── Form container ───────────────────────────────────────────────────────── */
 .admin-form-container { max-width: 600px; }
@@ -420,7 +429,7 @@ input[type="date"]:focus {
   width: 1rem;
   height: 1rem;
   cursor: pointer;
-  accent-color: var(--navy);
+  accent-color: var(--color-primary);
   flex-shrink: 0;
   margin: 0;
 }
@@ -433,16 +442,23 @@ input[type="date"]:focus {
   border-radius: 9999px;
   white-space: nowrap;
   line-height: 1.4;
+  border: 1px solid transparent;
 }
 
+/* "Contacted" shares the brand hue, so the border carries the distinction too —
+   hue alone would not separate it from ordinary brand chrome. */
 .status-badge.contacted {
-  background: #dcfce7;
-  color: #15803d;
+  background: var(--color-success-surface);
+  color: var(--color-success);
+  border-color: var(--color-success-border);
 }
 
+/* Uses the darker secondary ink, not muted: muted on the tinted chip ground
+   lands at 4.14:1, just under AA. */
 .status-badge.pending {
-  background: #f1f5f9;
-  color: var(--muted);
+  background: var(--color-neutral-surface);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
 }
 
 /* ── Admin note cell ──────────────────────────────────────────────────────── */
@@ -455,7 +471,7 @@ input[type="date"]:focus {
 .note-display {
   display: block;
   font-size: 0.875rem;
-  color: #0f172a;
+  color: var(--color-text);
   line-height: 1.5;
   padding-right: 1.6rem;
   white-space: pre-wrap;
@@ -464,7 +480,7 @@ input[type="date"]:focus {
 
 .note-empty::before {
   content: "—";
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 
 .btn-edit-note {
@@ -477,7 +493,7 @@ input[type="date"]:focus {
   padding: 0.2rem 0.3rem;
   cursor: pointer;
   font-size: 0.75rem;
-  color: var(--muted);
+  color: var(--color-text-muted);
   border-radius: 0.25rem;
   opacity: 0;
   transition: opacity 0.15s, color 0.15s;
@@ -485,12 +501,14 @@ input[type="date"]:focus {
 }
 
 .note-cell:hover .btn-edit-note { opacity: 1; }
-.btn-edit-note:hover { color: var(--navy); }
+.btn-edit-note:hover { color: var(--color-primary); }
+/* Keyboard users never trigger the hover, so focus must reveal it too */
+.btn-edit-note:focus-visible { opacity: 1; }
 
 .note-input {
   display: none;
   width: 100%;
-  border: 1px solid var(--navy);
+  border: 1px solid var(--color-primary);
   border-radius: 0.375rem;
   padding: 0.35rem 0.5rem;
   font-size: 0.875rem;
@@ -498,14 +516,16 @@ input[type="date"]:focus {
   resize: vertical;
   min-height: 2.5rem;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(40, 58, 130, 0.1);
-  color: #0f172a;
-  background: #fff;
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.12);
+  color: var(--color-text);
+  background: var(--color-surface);
 }
 
 .note-input.active { display: block; }
 
 /* ── Export button ────────────────────────────────────────────────────────── */
+/* Rendered as a secondary action: the panel is now green throughout, so a green
+   fill would no longer mark this out the way it did against the old navy UI. */
 .btn-export {
   display: inline-flex;
   align-items: center;
@@ -515,13 +535,13 @@ input[type="date"]:focus {
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  border: 2px solid #16a34a;
-  background: #16a34a;
-  color: #fff;
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
   transition: all 0.2s var(--ease);
 }
 
-.btn-export:hover { background: #15803d; border-color: #15803d; }
+.btn-export:hover { background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); }
 
 /* ── Table cell helpers ───────────────────────────────────────────────────── */
 .msg-cell {
@@ -532,7 +552,7 @@ input[type="date"]:focus {
 .date-cell {
   white-space: nowrap;
   font-size: 0.8rem;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
 
 .nowrap-cell { white-space: nowrap; }
@@ -555,6 +575,6 @@ input[type="date"]:focus {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--muted);
+  color: var(--color-text-muted);
 }
-.empty-state { color: var(--muted); }
+.empty-state { color: var(--color-text-muted); }

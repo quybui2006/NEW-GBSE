@@ -1,0 +1,75 @@
+/* ─────────────────────────────────────────────────────────────────────────── */
+/*  theme.css — OMEAX design tokens                                            */
+/*                                                                             */
+/*  Single source of truth for brand colour. Loaded BEFORE main.css/admin.css  */
+/*  so every stylesheet resolves against the same palette. To re-theme the      */
+/*  whole site, change the values in this file only.                           */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Brand ──────────────────────────────────────────────────────────────
+     --color-primary        brand chrome, primary buttons, links, active states
+     --color-primary-hover  darker step; used where white text sits on the fill
+     --color-primary-accent accent for NON-TEXT roles only (see note below)   */
+  --color-primary:        #1B6D42;
+  --color-primary-hover:  #145233;
+  --color-primary-accent: #238C55;
+  --color-primary-rgb:    27, 109, 66;   /* for rgba() tints and shadows */
+
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --color-background:       #FFFFFF;
+  --color-background-light: #EAF6EF;
+  --color-surface:          #FFFFFF;
+
+  /* ── Text ───────────────────────────────────────────────────────────────
+     Headings and body copy stay near-black. Green is reserved for brand
+     moments (links, active nav, CTAs, key icons) — not for general text.    */
+  --color-text:           #17221B;
+  --color-text-secondary: #55625A;
+  --color-text-muted:     #6B7770;
+
+  /* Text/icons placed on a primary-filled surface */
+  --color-on-primary:      #FFFFFF;
+  --color-on-primary-soft: rgba(255, 255, 255, .78);
+
+  /* ── Lines ──────────────────────────────────────────────────────────────
+     --color-border         cards, inputs, tables, dividers
+     --color-border-subtle  menu-row dividers, where a full rule reads heavy */
+  --color-border:        #D5E3DA;
+  --color-border-subtle: #E4F0E9;
+
+  /* ── Focus ──────────────────────────────────────────────────────────────
+     Focus rings are non-text indicators, so the WCAG bar is 3:1.
+     #238C55 on white is 4.24:1 — comfortably clear of it.                   */
+  --color-focus: #238C55;
+
+  /* ── Status ─────────────────────────────────────────────────────────────
+     Error and warning keep their own hues: red and amber are the only
+     colours universally read as failure and caution, so they must stay
+     outside the brand ramp.
+
+     Success intentionally aliases the brand green. Adding a second, near
+     identical green purely to mean "success" would put two indistinguishable
+     hues on screen. The tradeoff is that a success alert now reads as brand
+     chrome, so success states are also marked by shape (border, chip) rather
+     than relying on hue alone.                                              */
+  --color-success:         var(--color-primary);
+  --color-success-surface: #EAF6EF;
+  --color-success-border:  #C2E2D0;
+
+  --color-error:         #B42318;
+  --color-error-surface: #FEF3F2;
+  --color-error-border:  #FDA29B;
+
+  --color-warning:         #B54708;
+  --color-warning-surface: #FFFAEB;
+  --color-warning-border:  #FEDF89;
+
+  /* Destructive action sitting on a primary-filled surface. Lightened until it
+     clears 4.5:1 against #1B6D42 (a mid salmon only reaches ~2.8:1 there);
+     the warm hue, not the lightness, is what marks it as destructive. */
+  --color-danger-on-dark: #FFD1CC;
+
+  /* Neutral, deliberately non-semantic chip/state background */
+  --color-neutral-surface: #EFF2F0;
+}
