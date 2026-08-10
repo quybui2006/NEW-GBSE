@@ -27,7 +27,7 @@ public class Product {
     @Column(name = "ten", columnDefinition = "varchar(255)")
     private String name;
 
-    @Column(name = "mo_ta", columnDefinition = "varchar(500)")
+    @Column(name = "mo_ta", columnDefinition = "text")
     private String description;
 
     @Column(columnDefinition = "varchar(500)")
@@ -60,6 +60,10 @@ public class Product {
     @Column(columnDefinition = "text")
     private String specs;
 
+    // JSON array of {label, url} objects — datasheets and selection guides.
+    @Column(columnDefinition = "text")
+    private String documents;
+
     // ── Transient helpers ────────────────────────────────────────────────────
 
     @Transient
@@ -77,6 +81,16 @@ public class Product {
         if (specs == null || specs.isBlank()) return Collections.emptyList();
         try {
             return mapper.readValue(specs, new TypeReference<List<SpecEntry>>() {});
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @Transient
+    public List<DocEntry> getDocumentsList() {
+        if (documents == null || documents.isBlank()) return Collections.emptyList();
+        try {
+            return mapper.readValue(documents, new TypeReference<List<DocEntry>>() {});
         } catch (Exception e) {
             return Collections.emptyList();
         }
@@ -108,6 +122,11 @@ public class Product {
     public static class SpecEntry {
         public String label;
         public String value;
+    }
+
+    public static class DocEntry {
+        public String label;
+        public String url;
     }
 
     // ── Getters & Setters ────────────────────────────────────────────────────
@@ -147,4 +166,7 @@ public class Product {
 
     public String getSpecs() { return specs; }
     public void setSpecs(String specs) { this.specs = specs; }
+
+    public String getDocuments() { return documents; }
+    public void setDocuments(String documents) { this.documents = documents; }
 }

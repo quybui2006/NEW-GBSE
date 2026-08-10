@@ -21,7 +21,7 @@
   <div class="container">
     <p class="eyebrow">Products</p>
     <h1>Product Catalogue</h1>
-    <p class="subtitle">Grundfos Pumps · Ocean Cooling Tower · Partners</p>
+    <p class="subtitle">Automatic Control Valve · Control valve HVAC · Heatpump · Metering and Measuring · Plate Heat Exchanger</p>
   </div>
 </section>
 
@@ -63,14 +63,17 @@
           <span class="chevron"></span>
         </button>
         <div class="range-body">
-          <div class="product-grid">
-            <a class="prod-card" th:each="p : ${r.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
-              <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
-              <div class="pbody">
-                <h4 th:text="${p.name}">Name</h4>
-                <p class="pshort" th:text="${p.shortText}">short</p>
-              </div>
-            </a>
+          <div class="subcat" th:each="c : ${r.categories}">
+            <h4 class="subcat-title" th:if="${c.name != null and !c.name.isBlank()}" th:text="${c.name}">Category</h4>
+            <div class="product-grid">
+              <a class="prod-card" th:each="p : ${c.products}" th:href="@{'/products/' + ${p.id}}" th:data-name="${p.name}" th:data-short="${p.shortText}" th:data-cat="${p.category}">
+                <div class="pimg"><img th:src="${p.image}" th:alt="${p.name}" loading="lazy" decoding="async"></div>
+                <div class="pbody">
+                  <h4 th:text="${p.name}">Name</h4>
+                  <p class="pshort" th:text="${p.shortText}">short</p>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -120,6 +123,13 @@
     document.querySelectorAll('.prod-card').forEach(c => {
       const t = (c.dataset.name + ' ' + c.dataset.short).toLowerCase();
       c.style.display = !q || t.includes(q) ? '' : 'none';
+    });
+    // Hide a child-category block once every card inside it is filtered out,
+    // so its heading never sits above an empty grid.
+    document.querySelectorAll('.subcat').forEach(s => {
+      const anyVisible = Array.from(s.querySelectorAll('.prod-card'))
+        .some(c => c.style.display !== 'none');
+      s.style.display = anyVisible ? '' : 'none';
     });
   }
 

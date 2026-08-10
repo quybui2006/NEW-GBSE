@@ -48,11 +48,9 @@
         <h1 th:text="${product.name}">Name</h1>
         <p class="pd-short" th:text="${product.shortText}">short</p>
         <p class="pd-desc" th:text="${product.description}">desc</p>
-        <div class="tags">
+        <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
           <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
         </div>
-        <a th:if="${'partners'.equals(product.rangeId) and product.link != null and !product.link.isBlank()}"
-           th:href="${product.link}" target="_blank" rel="noopener" class="btn btn-primary btn-mt">Visit Website →</a>
       </div>
     </div>
   </div>
@@ -61,7 +59,7 @@
 <section class="section-pb-5">
   <div class="container">
     <div class="grid grid-2">
-      <div class="spec-card">
+      <div class="spec-card" th:if="${not #lists.isEmpty(product.featuresList)}">
         <h2>Key Features</h2>
         <ul>
           <li th:each="f : ${product.featuresList}" th:text="${f}">feat</li>
@@ -78,6 +76,14 @@
         <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
         <a href="/contact" class="btn btn-primary btn-mt">Contact Us</a>
       </div>
+    </div>
+    <div class="spec-card mt-2" th:if="${not #lists.isEmpty(product.documentsList)}">
+      <h2>Documents</h2>
+      <ul class="doc-list">
+        <li th:each="d : ${product.documentsList}">
+          <a th:href="${d.url}" th:text="${d.label}" target="_blank" rel="noopener">datasheet</a>
+        </li>
+      </ul>
     </div>
     <div class="mt-2">
       <a href="/products" class="text-navy-bold">← Back to products</a>

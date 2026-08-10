@@ -41,7 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/products", "/products/", "/products/**",
                                  "/contact", "/about", "/projects", "/news",
-                                 "/css/**", "/js/**", "/images/**", "/uploads/**",
+                                 "/css/**", "/js/**", "/images/**", "/uploads/**", "/docs/**",
                                  "/robots.txt", "/sitemap.xml", "/llms.txt", "/favicon.ico",
                                  "/actuator/health",
                                  "/error", "/access-denied").permitAll()
