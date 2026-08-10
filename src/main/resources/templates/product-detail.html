@@ -8,11 +8,7 @@
   "@type": "Product",
   "name": /*[[${product.name}]]*/"",
   "url": /*[[${canonicalUrl}]]*/"",
-  "image": /*[[${#strings.startsWith(product.image, 'http') ? product.image : 'https://www.omeax.vn' + product.image}]]*/"",
-  "brand": {
-    "@type": "Brand",
-    "name": /*[[${product.brand}]]*/""
-  }
+  "image": /*[[${#strings.startsWith(product.image, 'http') ? product.image : 'https://www.omeax.vn' + product.image}]]*/""
 }
 </script>
 <script type="application/ld+json" th:inline="javascript">
@@ -39,51 +35,39 @@
   </div>
 </section>
 
-<section class="section-pad-3">
+<section class="section-pad-3 section-pb-5">
   <div class="container">
     <div class="detail-hero">
-      <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
+      <!-- Left column: artwork and datasheets -->
+      <div class="detail-media">
+        <div class="img-box"><img th:src="${product.image}" th:alt="${product.name}" fetchpriority="high" decoding="async"/></div>
+        <div class="spec-card" th:if="${not #lists.isEmpty(product.documentsList)}">
+          <h2>Documents</h2>
+          <ul class="doc-list">
+            <li th:each="d : ${product.documentsList}">
+              <a th:href="${d.url}" th:text="${d.label}" target="_blank" rel="noopener">datasheet</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Right column: name, applications, specifications -->
       <div>
-        <p class="eyebrow" th:text="${product.brand}">Brand</p>
         <h1 th:text="${product.name}">Name</h1>
-        <p class="pd-short" th:text="${product.shortText}">short</p>
-        <p class="pd-desc" th:text="${product.description}">desc</p>
         <div class="tags" th:if="${not #lists.isEmpty(product.applicationsList)}">
           <span class="tag" th:each="a : ${product.applicationsList}" th:text="${a}">app</span>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section-pb-5">
-  <div class="container">
-    <div class="grid grid-2">
-      <div class="spec-card" th:if="${not #lists.isEmpty(product.featuresList)}">
-        <h2>Key Features</h2>
-        <ul>
-          <li th:each="f : ${product.featuresList}" th:text="${f}">feat</li>
-        </ul>
-      </div>
-      <div class="spec-card">
-        <h2>Technical Specs</h2>
-        <div th:if="${not #lists.isEmpty(product.specsList)}" class="spec-table">
-          <th:block th:each="s : ${product.specsList}">
-            <div class="lbl" th:text="${s.label}">label</div>
-            <div class="val" th:text="${s.value}">value</div>
-          </th:block>
+        <div class="spec-card mt-2">
+          <h2>Technical Specs</h2>
+          <div th:if="${not #lists.isEmpty(product.specsList)}" class="spec-table">
+            <th:block th:each="s : ${product.specsList}">
+              <div class="lbl" th:text="${s.label}">label</div>
+              <div class="val" th:text="${s.value}">value</div>
+            </th:block>
+          </div>
+          <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
+          <a href="/contact" class="btn btn-primary btn-mt">Contact Us</a>
         </div>
-        <p th:if="${#lists.isEmpty(product.specsList)}" class="pd-nospec">Contact us for detailed specifications tailored to your project.</p>
-        <a href="/contact" class="btn btn-primary btn-mt">Contact Us</a>
       </div>
-    </div>
-    <div class="spec-card mt-2" th:if="${not #lists.isEmpty(product.documentsList)}">
-      <h2>Documents</h2>
-      <ul class="doc-list">
-        <li th:each="d : ${product.documentsList}">
-          <a th:href="${d.url}" th:text="${d.label}" target="_blank" rel="noopener">datasheet</a>
-        </li>
-      </ul>
     </div>
     <div class="mt-2">
       <a href="/products" class="text-navy-bold">← Back to products</a>
