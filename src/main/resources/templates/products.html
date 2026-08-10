@@ -17,14 +17,6 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main id="main">
 
-<section class="page-header">
-  <div class="container">
-    <p class="eyebrow">Products</p>
-    <h1>Product Catalogue</h1>
-    <p class="subtitle">Automatic Control Valve · Control valve HVAC · Heatpump · Metering and Measuring · Plate Heat Exchanger</p>
-  </div>
-</section>
-
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
@@ -57,7 +49,7 @@
       </nav>
 
       <div class="range-list">
-      <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
+      <div class="range open" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
           <h3 th:data-n="${it.count}" th:text="${r.brand}">Brand</h3>
           <span class="chevron"></span>

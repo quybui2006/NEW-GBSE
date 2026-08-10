@@ -43,7 +43,7 @@
           <a class="mega-cat-item"
              th:each="r : ${navRanges}"
              th:data-range="${r.id}"
-             th:href="@{/products}">
+             th:href="@{'/products#range-' + ${r.id}}">
             <span th:text="${r.brand}">Brand</span>
             <span class="mega-cat-arr">›</span>
           </a>
@@ -82,7 +82,7 @@
       <div class="mob-prod-body" id="mobProdBody">
         <a class="mob-prod-link"
            th:each="r : ${navRanges}"
-           th:href="@{/products}"
+           th:href="@{'/products#range-' + ${r.id}}"
            th:text="${r.brand}">Range</a>
       </div>
     </div>
