@@ -17,6 +17,7 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 <main id="main">
 
+
 <section class="crumb">
   <div class="container">
     <a href="/">Home</a><span class="sep">/</span>
@@ -49,7 +50,7 @@
       </nav>
 
       <div class="range-list">
-      <div class="range open" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
+      <div class="range" th:each="r,it : ${ranges}" th:id="|range-${r.id}|">
         <button class="range-header" type="button" onclick="this.parentElement.classList.toggle('open')">
           <h3 th:data-n="${it.count}" th:text="${r.brand}">Brand</h3>
           <span class="chevron"></span>
@@ -104,6 +105,7 @@
       + '<div class="name">' + esc(p.name) + '</div>'
       + '<div class="short">' + esc(p.shortText) + '</div>'
       + '</div>'
+      + '<span class="brand">' + esc(p.brand) + '</span>'
       + '</a>'
     ).join('');
     sug.classList.add('open');
